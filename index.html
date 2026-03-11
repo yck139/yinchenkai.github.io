@@ -9,6 +9,19 @@
 <body>
   <div class="grid-bg"></div>
 
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <div class="door-transition" aria-hidden="true">
+    <div class="door-panel left"></div>
+    <div class="door-core">
+      <div class="door-core-line"></div>
+      <div class="door-core-text">SYSTEM SHIFT</div>
+      <div class="door-core-line"></div>
+    </div>
+    <div class="door-panel right"></div>
+  </div>
+
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark"></span>
@@ -17,11 +30,12 @@
     </div>
 
     <div class="topbar-right">
-      <button class="sound-btn" type="button">🔊</button>
+      <button class="sound-btn" id="soundToggle" type="button">🔊</button>
       <nav class="topnav">
-        <a class="nav-btn active" href="#home">HOME</a>
-        <a class="nav-btn" href="#archive">ARCHIVE</a>
-        <a class="nav-btn" href="#future">ADMIN</a>
+        <a class="nav-btn active transition-link" href="#home">HOME</a>
+        <a class="nav-btn transition-link" href="#archive">ARCHIVE</a>
+        <a class="nav-btn transition-link" href="#heart">RECORD</a>
+        <a class="nav-btn transition-link" href="#future">ADMIN</a>
       </nav>
     </div>
   </header>
