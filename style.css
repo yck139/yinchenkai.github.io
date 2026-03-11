@@ -1,0 +1,206 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background: #f5f5f5;
+  color: #111;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 0, 0, 0.14), transparent 25%),
+    radial-gradient(circle at left center, rgba(255, 255, 255, 0.95), transparent 30%),
+    linear-gradient(135deg, #ffffff 0%, #f7f7f7 50%, #ffe9e9 100%);
+}
+
+.hero-frame {
+  width: min(1100px, 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.98));
+  border: 2px solid #d50000;
+  padding: 40px 28px;
+  clip-path: polygon(0 0, 96% 0, 100% 12%, 100% 100%, 4% 100%, 0 88%);
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,0.9) inset,
+    0 20px 60px rgba(213, 0, 0, 0.18);
+}
+
+.hero-topline {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(52px, 10vw, 108px);
+  line-height: 1;
+  color: #ffffff;
+  text-shadow:
+    0 0 0 #fff,
+    2px 2px 0 #d50000,
+    6px 6px 18px rgba(213, 0, 0, 0.28);
+  -webkit-text-stroke: 1px #c40000;
+}
+
+.subtitle {
+  margin-top: 18px;
+  font-size: clamp(22px, 3vw, 34px);
+  color: #d00000;
+  font-weight: 700;
+}
+
+.desc {
+  max-width: 760px;
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #444;
+}
+
+.hero-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.mecha-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 12px 18px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #ff1a1a, #b80000);
+  border: 2px solid #ffffff;
+  clip-path: polygon(0 0, 92% 0, 100% 24%, 100% 100%, 8% 100%, 0 76%);
+  box-shadow:
+    0 0 0 2px #d50000 inset,
+    0 0 14px rgba(255, 0, 0, 0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  animation: breathe 2.4s infinite ease-in-out;
+}
+
+.mecha-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 2px #ffffff inset,
+    0 0 24px rgba(255, 0, 0, 0.4);
+  filter: brightness(1.05);
+}
+
+.container {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 80px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.panel {
+  background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(250,250,250,0.94));
+  border: 2px solid #d50000;
+  padding: 24px;
+  min-height: 220px;
+  clip-path: polygon(0 0, 94% 0, 100% 12%, 100% 100%, 6% 100%, 0 88%);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.08),
+    0 0 0 3px rgba(255,255,255,0.8) inset;
+  position: relative;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 4px;
+  background: #d50000;
+  box-shadow: 0 0 10px rgba(255,0,0,0.3);
+}
+
+.panel-title {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 10px 18px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #ff1f1f, #b50000);
+  clip-path: polygon(0 0, 92% 0, 100% 30%, 100% 100%, 8% 100%, 0 70%);
+  box-shadow: 0 0 14px rgba(255,0,0,0.2);
+}
+
+.panel p {
+  margin: 0;
+  line-height: 1.9;
+  color: #333;
+}
+
+.panel-wide {
+  grid-column: span 2;
+}
+
+.footer {
+  padding: 28px 20px 40px;
+  text-align: center;
+  color: #666;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px #d50000 inset,
+      0 0 10px rgba(255, 0, 0, 0.14);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px #ffffff inset,
+      0 0 20px rgba(255, 0, 0, 0.34);
+  }
+}
+
+@media (max-width: 860px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-wide {
+    grid-column: span 1;
+  }
+
+  .hero-frame {
+    padding: 28px 20px;
+  }
+}
