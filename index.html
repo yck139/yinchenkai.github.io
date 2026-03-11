@@ -1,67 +1,99 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>私の記録</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="grid-bg"></div>
 
-  <header class="hero">
-    <div class="hero-frame">
-      <div class="hero-topline">SYSTEM ONLINE / PERSONAL LIFE ARCHIVE</div>
-      <h1>私の記録</h1>
-      <p class="subtitle">人生の軌跡と心の記録を刻む場所</p>
-      <p class="desc">大切な人、好きなもの、心が動いた瞬間、そして未来への歩みをここに残します。</p>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-text">私の記録</span>
+    </div>
 
-      <nav class="hero-nav">
+    <nav class="topnav">
+      <a class="nav-btn active" href="#">HOME</a>
+      <a class="nav-btn" href="#archive">ARCHIVE</a>
+      <a class="nav-btn" href="#future">FUTURE</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <section class="hero-core">
+      <div class="hero-frame">
+        <div class="frame-line top-left"></div>
+        <div class="frame-line top-right"></div>
+        <div class="frame-line bottom-left"></div>
+        <div class="frame-line bottom-right"></div>
+
+        <div class="hero-deco">
+          <span></span>
+          <i></i>
+          <span></span>
+        </div>
+
+        <h1>私の記録</h1>
+
+        <div class="hero-submark">
+          <span></span>
+          <b>MY RECORD</b>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="subtitle-box">パーソナル・ライフ・アーカイブ</div>
+      <p class="hero-desc">人生の軌跡と心の記録を刻む場所</p>
+
+      <div class="center-deco">
+        <span></span>
+        <i></i>
+        <span></span>
+      </div>
+
+      <div class="entry-buttons">
         <a href="#archive" class="mecha-btn">アーカイブ</a>
         <a href="#trajectory" class="mecha-btn">軌跡</a>
         <a href="#people" class="mecha-btn">大切な人</a>
         <a href="#favorite" class="mecha-btn">好きなもの</a>
         <a href="#heart" class="mecha-btn">心の記録</a>
         <a href="#future" class="mecha-btn">未来図</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section id="archive" class="panel">
-      <div class="panel-title">アーカイブ</div>
-      <p>このサイト全体の記録入口です。最近の更新、日々の断片、そして今の自分をここから辿れます。</p>
+      </div>
     </section>
 
-    <section id="trajectory" class="panel">
-      <div class="panel-title">軌跡</div>
-      <p>これまで歩いてきた人生の段階、転機、積み重ねてきた時間を整理して残す場所です。</p>
+    <section id="archive" class="content-panel">
+      <h2>アーカイブ</h2>
+      <p>最近の更新と、このサイト全体の記録入口。</p>
     </section>
 
-    <section id="people" class="panel">
-      <div class="panel-title">大切な人</div>
-      <p>自分にとって大切な人たち。支えてくれた存在、忘れたくないぬくもりを静かに記録します。</p>
+    <section id="trajectory" class="content-panel">
+      <h2>軌跡</h2>
+      <p>歩んできた時間、人生の転機、過去から今までの流れ。</p>
     </section>
 
-    <section id="favorite" class="panel">
-      <div class="panel-title">好きなもの</div>
-      <p>本、映画、音楽、食べ物、美しいと思ったもの。自分の感性を形作ってきた世界です。</p>
+    <section id="people" class="content-panel">
+      <h2>大切な人</h2>
+      <p>自分にとって大切な人たちを、静かに記録する場所。</p>
     </section>
 
-    <section id="heart" class="panel panel-wide">
-      <div class="panel-title">心の記録</div>
-      <p>心が動いた瞬間、忘れたくない出来事、写真とともに残したい日々の感情をここに記録します。</p>
+    <section id="favorite" class="content-panel">
+      <h2>好きなもの</h2>
+      <p>本、映画、音楽、食べ物、美意識、好きな世界。</p>
     </section>
 
-    <section id="future" class="panel">
-      <div class="panel-title">未来図</div>
-      <p>これから目指したい場所、実現したいこと、まだ途中にある自分の未来への設計図です。</p>
+    <section id="heart" class="content-panel">
+      <h2>心の記録</h2>
+      <p>心が動いた瞬間、残しておきたい感情や出来事。</p>
+    </section>
+
+    <section id="future" class="content-panel">
+      <h2>未来図</h2>
+      <p>これから目指したい場所と、まだ途中にある未来。</p>
     </section>
   </main>
-
-  <footer class="footer">
-    <p>© 私の記録 / YIN CHENKAI</p>
-  </footer>
 
   <script src="script.js"></script>
 </body>
