@@ -8,50 +8,28 @@
 </head>
 <body>
   <div class="grid-bg"></div>
-  <div class="ambient ambient-1"></div>
-  <div class="ambient ambient-2"></div>
-
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
-
-  <div class="door-transition" aria-hidden="true">
-    <div class="door-panel left"></div>
-    <div class="door-core">
-      <div class="door-core-line"></div>
-      <div class="door-core-text">SYSTEM SHIFT</div>
-      <div class="door-core-line"></div>
-    </div>
-    <div class="door-panel right"></div>
-  </div>
 
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark"></span>
       <span class="brand-text">私の記録</span>
+      <span class="brand-line"></span>
     </div>
 
     <div class="topbar-right">
-      <button class="sound-toggle mecha-small-btn" id="soundToggle" type="button">SOUND ON</button>
+      <button class="sound-btn" type="button">🔊</button>
       <nav class="topnav">
-        <a class="nav-btn active transition-link" href="#home">HOME</a>
-        <a class="nav-btn transition-link" href="#archive">ARCHIVE</a>
-        <a class="nav-btn transition-link" href="#heart">RECORD</a>
-        <a class="nav-btn transition-link" href="#future">FUTURE</a>
+        <a class="nav-btn active" href="#home">HOME</a>
+        <a class="nav-btn" href="#archive">ARCHIVE</a>
+        <a class="nav-btn" href="#future">ADMIN</a>
       </nav>
     </div>
   </header>
 
   <main class="page-shell" id="home">
     <section class="hero">
-      <div class="hero-frame">
-        <div class="frame-corner tl"></div>
-        <div class="frame-corner tr"></div>
-        <div class="frame-corner bl"></div>
-        <div class="frame-corner br"></div>
-
-        <div class="hero-topline">SYSTEM ONLINE / PERSONAL LIFE ARCHIVE</div>
-
-        <div class="hero-deco">
+      <div class="hero-core-frame">
+        <div class="hero-top-deco">
           <span></span>
           <i></i>
           <span></span>
@@ -59,81 +37,200 @@
 
         <h1>私の記録</h1>
 
-        <div class="hero-submark">
+        <div class="hero-sub-deco">
           <span></span>
           <b>MY RECORD</b>
           <span></span>
         </div>
       </div>
 
-      <div class="subtitle-box">パーソナル・ライフ・アーカイブ</div>
+      <div class="hero-subtitle-box">パーソナル・ライフ・アーカイブ</div>
       <p class="hero-desc">人生の軌跡と心の記録を刻む場所</p>
 
-      <div class="center-deco">
+      <div class="hero-center-deco">
         <span></span>
         <i></i>
         <span></span>
       </div>
 
-      <div class="entry-buttons">
-        <a href="#archive" class="mecha-btn transition-link">アーカイブ</a>
-        <a href="#trajectory" class="mecha-btn transition-link">軌跡</a>
-        <a href="#people" class="mecha-btn transition-link">大切な人</a>
-        <a href="#favorite" class="mecha-btn transition-link">好きなもの</a>
-        <a href="#heart" class="mecha-btn transition-link">心の記録</a>
-        <a href="#future" class="mecha-btn transition-link">未来図</a>
+      <div class="scroll-indicator">▼ SCROLL ▼</div>
+    </section>
+
+    <section class="archive-grid">
+      <article id="archive" class="archive-section">
+        <div class="section-header dark">
+          <span class="sec-no">SEC.01</span>
+          <span class="sec-title">アーカイブ</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">ARCHIVE — OVERVIEW</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="section-body">
+            <p>
+              このサイトは、私の人生の記録を残すためのパーソナルアーカイブです。
+              日々の想い、出来事、好きなもの、大切な人々――すべてをここに刻んでいきます。
+            </p>
+
+            <div class="black-module">
+              <div class="black-module-title">LATEST UPDATES</div>
+              <div class="black-module-row">
+                <span class="date-red">2024-02-28</span>
+                <span>サイト開設</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="trajectory" class="archive-section">
+        <div class="section-header dark">
+          <span class="sec-no">SEC.02</span>
+          <span class="sec-title">軌跡</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">TRAJECTORY — LIFE STAGES</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="timeline-card">
+            <div class="timeline-left">
+              <span class="diamond"></span>
+              <span class="vertical-line"></span>
+            </div>
+            <div class="timeline-content">
+              <div class="date-red">2024-03-08</div>
+              <h3>人生の転機</h3>
+              <p>大学を卒業し、新しい道を歩み始めた日。不安と期待が入り混じる。</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="people" class="archive-section">
+        <div class="section-header light">
+          <span class="sec-no">SEC.03</span>
+          <span class="sec-title">大切な人</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">IMPORTANT PEOPLE</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="soft-panel">
+            ここには、私の人生において大切な人々への想いを記します。
+            言葉にできない感謝と、伝えきれない気持ちを。
+          </div>
+        </div>
+      </article>
+
+      <article id="favorite" class="archive-section">
+        <div class="section-header light">
+          <span class="sec-no">SEC.04</span>
+          <span class="sec-title">好きなもの</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">FAVORITES</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="timeline-card favorite-card">
+            <div class="timeline-left">
+              <span class="diamond filled"></span>
+              <span class="vertical-line"></span>
+            </div>
+            <div class="timeline-content">
+              <h3>読書の記録</h3>
+              <p>『ノルウェイの森』を再読。何度読んでも新しい発見がある。</p>
+              <div class="tags">
+                <span>読書</span>
+                <span>村上春樹</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="heart" class="archive-section full">
+        <div class="section-header light">
+          <span class="sec-no">SEC.05</span>
+          <span class="sec-title">心の記録</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box wide-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">EMOTIONAL RECORD — MOMENTS & MEMORY</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="record-grid">
+            <div class="record-card">
+              <div class="date-red">2024-03-10</div>
+              <h3>静かな夜の記憶</h3>
+              <p>街の灯りを見ながら、自分が今どこにいるのかを少しだけ理解した夜。</p>
+            </div>
+            <div class="record-card">
+              <div class="date-red">2024-03-12</div>
+              <h3>忘れたくない言葉</h3>
+              <p>何気ない一言が、長い間心の中で灯りとして残ることがある。</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="future" class="archive-section full">
+        <div class="section-header light">
+          <span class="sec-no">SEC.06</span>
+          <span class="sec-title">未来図</span>
+        </div>
+        <div class="section-line"></div>
+
+        <div class="frame-box wide-box">
+          <div class="inner-head">
+            <span class="square"></span>
+            <span class="inner-label">FUTURE VISION — GOALS & ASPIRATIONS</span>
+            <span class="inner-rule"></span>
+          </div>
+
+          <div class="future-card">
+            <div class="future-left-bar"></div>
+            <div class="future-content">
+              <div class="date-red">2024-03-01</div>
+              <h3>プログラミングの世界を極める</h3>
+              <p>技術を磨き続け、自分だけの作品を生み出していきたい。</p>
+              <div class="future-note">◆ 情熱</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-line"></div>
+      <div class="footer-inner">
+        <span>PERSONAL ARCHIVE SYSTEM</span>
+        <span>私の記録 — 2026</span>
       </div>
-    </section>
-
-    <section class="content-grid">
-      <section id="archive" class="content-panel mecha-card">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.01</span>
-          <h2>アーカイブ</h2>
-        </div>
-        <p>最近の更新、全体の入口、今の自分に関する総合記録。</p>
-      </section>
-
-      <section id="trajectory" class="content-panel mecha-card">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.02</span>
-          <h2>軌跡</h2>
-        </div>
-        <p>歩んできた道、転機、人生の節目を機体ログのように残す場所。</p>
-      </section>
-
-      <section id="people" class="content-panel mecha-card">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.03</span>
-          <h2>大切な人</h2>
-        </div>
-        <p>自分にとって意味のある人たちを、静かに、しかし確かに記録する。</p>
-      </section>
-
-      <section id="favorite" class="content-panel mecha-card">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.04</span>
-          <h2>好きなもの</h2>
-        </div>
-        <p>本、音楽、映画、食べ物、美意識。自分を構成する小さな中枢群。</p>
-      </section>
-
-      <section id="heart" class="content-panel mecha-card wide">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.05</span>
-          <h2>心の記録</h2>
-        </div>
-        <p>心が動いた瞬間や忘れたくない出来事。ここがこのサイトの感情中枢。</p>
-      </section>
-
-      <section id="future" class="content-panel mecha-card">
-        <div class="panel-head">
-          <span class="panel-tag">SEC.06</span>
-          <h2>未来図</h2>
-        </div>
-        <p>これから向かう方向、積み上げたい力、守りたいもの、その先の設計図。</p>
-      </section>
-    </section>
+    </footer>
   </main>
 
   <script src="script.js"></script>
