@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="grid-bg"></div>
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <div class="door-transition" aria-hidden="true">
+    <div class="door-panel left"></div>
+    <div class="door-core">
+      <div class="door-core-line"></div>
+      <div class="door-core-text">SYSTEM SHIFT</div>
+      <div class="door-core-line"></div>
+    </div>
+    <div class="door-panel right"></div>
+  </div>
 
   <header class="topbar">
     <div class="brand">
@@ -15,20 +30,26 @@
       <span class="brand-text">私の記録</span>
     </div>
 
-    <nav class="topnav">
-      <a class="nav-btn active" href="#">HOME</a>
-      <a class="nav-btn" href="#archive">ARCHIVE</a>
-      <a class="nav-btn" href="#future">FUTURE</a>
-    </nav>
+    <div class="topbar-right">
+      <button class="sound-toggle mecha-small-btn" id="soundToggle" type="button">SOUND ON</button>
+      <nav class="topnav">
+        <a class="nav-btn active transition-link" href="#home">HOME</a>
+        <a class="nav-btn transition-link" href="#archive">ARCHIVE</a>
+        <a class="nav-btn transition-link" href="#heart">RECORD</a>
+        <a class="nav-btn transition-link" href="#future">FUTURE</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="hero">
-    <section class="hero-core">
+  <main class="page-shell" id="home">
+    <section class="hero">
       <div class="hero-frame">
-        <div class="frame-line top-left"></div>
-        <div class="frame-line top-right"></div>
-        <div class="frame-line bottom-left"></div>
-        <div class="frame-line bottom-right"></div>
+        <div class="frame-corner tl"></div>
+        <div class="frame-corner tr"></div>
+        <div class="frame-corner bl"></div>
+        <div class="frame-corner br"></div>
+
+        <div class="hero-topline">SYSTEM ONLINE / PERSONAL LIFE ARCHIVE</div>
 
         <div class="hero-deco">
           <span></span>
@@ -55,43 +76,63 @@
       </div>
 
       <div class="entry-buttons">
-        <a href="#archive" class="mecha-btn">アーカイブ</a>
-        <a href="#trajectory" class="mecha-btn">軌跡</a>
-        <a href="#people" class="mecha-btn">大切な人</a>
-        <a href="#favorite" class="mecha-btn">好きなもの</a>
-        <a href="#heart" class="mecha-btn">心の記録</a>
-        <a href="#future" class="mecha-btn">未来図</a>
+        <a href="#archive" class="mecha-btn transition-link">アーカイブ</a>
+        <a href="#trajectory" class="mecha-btn transition-link">軌跡</a>
+        <a href="#people" class="mecha-btn transition-link">大切な人</a>
+        <a href="#favorite" class="mecha-btn transition-link">好きなもの</a>
+        <a href="#heart" class="mecha-btn transition-link">心の記録</a>
+        <a href="#future" class="mecha-btn transition-link">未来図</a>
       </div>
     </section>
 
-    <section id="archive" class="content-panel">
-      <h2>アーカイブ</h2>
-      <p>最近の更新と、このサイト全体の記録入口。</p>
-    </section>
+    <section class="content-grid">
+      <section id="archive" class="content-panel mecha-card">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.01</span>
+          <h2>アーカイブ</h2>
+        </div>
+        <p>最近の更新、全体の入口、今の自分に関する総合記録。</p>
+      </section>
 
-    <section id="trajectory" class="content-panel">
-      <h2>軌跡</h2>
-      <p>歩んできた時間、人生の転機、過去から今までの流れ。</p>
-    </section>
+      <section id="trajectory" class="content-panel mecha-card">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.02</span>
+          <h2>軌跡</h2>
+        </div>
+        <p>歩んできた道、転機、人生の節目を機体ログのように残す場所。</p>
+      </section>
 
-    <section id="people" class="content-panel">
-      <h2>大切な人</h2>
-      <p>自分にとって大切な人たちを、静かに記録する場所。</p>
-    </section>
+      <section id="people" class="content-panel mecha-card">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.03</span>
+          <h2>大切な人</h2>
+        </div>
+        <p>自分にとって意味のある人たちを、静かに、しかし確かに記録する。</p>
+      </section>
 
-    <section id="favorite" class="content-panel">
-      <h2>好きなもの</h2>
-      <p>本、映画、音楽、食べ物、美意識、好きな世界。</p>
-    </section>
+      <section id="favorite" class="content-panel mecha-card">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.04</span>
+          <h2>好きなもの</h2>
+        </div>
+        <p>本、音楽、映画、食べ物、美意識。自分を構成する小さな中枢群。</p>
+      </section>
 
-    <section id="heart" class="content-panel">
-      <h2>心の記録</h2>
-      <p>心が動いた瞬間、残しておきたい感情や出来事。</p>
-    </section>
+      <section id="heart" class="content-panel mecha-card wide">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.05</span>
+          <h2>心の記録</h2>
+        </div>
+        <p>心が動いた瞬間や忘れたくない出来事。ここがこのサイトの感情中枢。</p>
+      </section>
 
-    <section id="future" class="content-panel">
-      <h2>未来図</h2>
-      <p>これから目指したい場所と、まだ途中にある未来。</p>
+      <section id="future" class="content-panel mecha-card">
+        <div class="panel-head">
+          <span class="panel-tag">SEC.06</span>
+          <h2>未来図</h2>
+        </div>
+        <p>これから向かう方向、積み上げたい力、守りたいもの、その先の設計図。</p>
+      </section>
     </section>
   </main>
 
