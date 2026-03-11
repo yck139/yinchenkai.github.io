@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MECHA ARMOR CORE</title>
+  <title>RED WHITE PANEL ARCHIVE</title>
   <style>
     :root{
-      --bg:#0a0b0e;
-      --bg2:#11141a;
-      --panel:#141922;
-      --panel2:#1a202b;
-      --red:#d8161f;
-      --red2:#ff2b34;
-      --white:#f3f5f8;
-      --white2:#dfe5ec;
-      --black:#07080b;
-      --line:#2a313d;
-      --line2:#3c4656;
-      --text:#f5f7fb;
-      --muted:#a9b3c2;
-      --glow:rgba(255,43,52,.25);
-      --radius:22px;
-      --shadow:0 14px 40px rgba(0,0,0,.32);
+      --bg:#eef1f4;
+      --bg2:#f8f9fb;
+      --shell:#ffffff;
+      --shell-2:#f2f4f7;
+      --shell-3:#e8edf2;
+      --red:#ef3b35;
+      --red-deep:#cf241f;
+      --red-soft:#ffd8d6;
+      --line:#dfe5eb;
+      --line-2:#cfd7df;
+      --text:#27313d;
+      --text-soft:#6a7685;
+      --dark:#202833;
+      --glass:rgba(255,255,255,.72);
+      --shadow:0 14px 34px rgba(166,177,190,.18);
+      --shadow-soft:0 8px 20px rgba(166,177,190,.12);
+      --radius:26px;
+      --radius-sm:18px;
     }
 
     *{box-sizing:border-box}
@@ -29,15 +31,12 @@
       margin:0;
       min-height:100%;
       background:
-        linear-gradient(180deg,#d8dbe0 0%, #cfd4da 100%);
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,.95), transparent 30%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
       color:var(--text);
       font-family:"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-      overflow-x:hidden;
       scroll-behavior:smooth;
-    }
-
-    body{
-      position:relative;
+      overflow-x:hidden;
     }
 
     body::before{
@@ -46,35 +45,35 @@
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size:56px 56px;
-      opacity:.22;
+        linear-gradient(rgba(255,255,255,.45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.45) 1px, transparent 1px);
+      background-size:54px 54px;
+      opacity:.25;
       mask-image:radial-gradient(circle at center, black 45%, transparent 100%);
+      z-index:0;
     }
 
     .app{
       width:min(1460px, calc(100% - 28px));
-      margin:16px auto 36px;
+      margin:16px auto 34px;
       position:relative;
       z-index:2;
     }
 
-    /* 顶部导航 */
     .topbar{
       position:sticky;
       top:12px;
-      z-index:50;
+      z-index:60;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:16px;
-      padding:14px 16px;
+      padding:12px 14px;
       border-radius:999px;
-      background:rgba(12,15,20,.88);
-      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.9);
       box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
     }
 
     .brand{
@@ -85,41 +84,56 @@
     }
 
     .brand-core{
-      width:46px;
-      height:46px;
-      border-radius:14px;
+      width:48px;
+      height:48px;
+      border-radius:16px;
       position:relative;
-      background:
-        linear-gradient(145deg,var(--white) 0 36%, var(--red) 36% 68%, #651014 100%);
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:0 0 18px rgba(216,22,31,.18);
       overflow:hidden;
+      background:
+        linear-gradient(180deg, #fff, #f1f4f7);
+      border:1px solid #e2e8ee;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 6px 16px rgba(197,207,217,.18);
     }
 
     .brand-core::before{
       content:"";
       position:absolute;
-      inset:6px;
-      clip-path:polygon(18% 0,82% 0,100% 20%,100% 80%,82% 100%,18% 100%,0 80%,0 20%);
-      border:1px solid rgba(0,0,0,.2);
+      inset:7px;
+      border-radius:12px;
       background:
-        linear-gradient(180deg,rgba(255,255,255,.18),transparent);
+        linear-gradient(90deg, #fff 0 56%, var(--red) 56% 100%);
+      border:1px solid rgba(207,36,31,.18);
+    }
+
+    .brand-core::after{
+      content:"";
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      background:var(--dark);
+      box-shadow:0 0 0 4px #eaf0f6, 0 0 0 6px rgba(239,59,53,.45);
     }
 
     .brand h1{
       margin:0;
       font-size:15px;
-      letter-spacing:.2em;
+      letter-spacing:.18em;
       text-transform:uppercase;
-      color:#fff;
+      color:#24303a;
       white-space:nowrap;
     }
 
     .brand p{
       margin:3px 0 0;
-      color:#bcc6d4;
+      color:var(--text-soft);
       font-size:12px;
-      letter-spacing:.1em;
+      letter-spacing:.08em;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -137,82 +151,87 @@
     .mini-btn{
       appearance:none;
       border:none;
-      color:#fff;
       cursor:pointer;
       border-radius:999px;
       padding:10px 14px;
-      background:
-        linear-gradient(180deg,#232a36,#141920);
-      border:1px solid rgba(255,255,255,.08);
-      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+      font:inherit;
+      color:#33404c;
+      background:linear-gradient(180deg,#ffffff,#edf2f6);
+      border:1px solid #dde5ec;
+      box-shadow:var(--shadow-soft);
+      transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
     }
 
     .nav button:hover,
     .btn:hover,
     .mini-btn:hover{
       transform:translateY(-2px);
-      border-color:rgba(255,255,255,.18);
+      border-color:#cfd8e2;
+      box-shadow:0 12px 24px rgba(185,196,207,.18);
     }
 
     .nav button.active{
-      background:
-        linear-gradient(180deg,var(--red2),#8a1118);
-      box-shadow:0 0 18px rgba(255,43,52,.2);
+      color:#fff;
+      background:linear-gradient(180deg, var(--red), var(--red-deep));
+      border-color:#d7332d;
+      box-shadow:0 10px 22px rgba(239,59,53,.22);
     }
 
-    /* 主视觉 */
+    .btn.primary{
+      color:#fff;
+      background:linear-gradient(180deg, var(--red), var(--red-deep));
+      border-color:#d7332d;
+    }
+
     .hero{
-      margin-top:18px;
       display:grid;
-      grid-template-columns:1.15fr .85fr;
+      grid-template-columns:1.08fr .92fr;
       gap:18px;
+      margin-top:18px;
     }
 
     .panel{
       position:relative;
+      border-radius:30px;
       overflow:hidden;
-      border-radius:28px;
+      background:linear-gradient(180deg, #ffffff, #f3f6f9);
+      border:1px solid #e0e7ee;
       box-shadow:var(--shadow);
-      border:1px solid rgba(0,0,0,.1);
-      transform-style:preserve-3d;
       transition:transform .16s ease;
+      transform-style:preserve-3d;
     }
 
-    .armor-panel{
-      background:
-        linear-gradient(180deg,#1a1f29 0%, #12161d 100%);
-      color:#fff;
-    }
-
-    .armor-panel::before{
+    .panel::before{
       content:"";
       position:absolute;
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(135deg, rgba(255,255,255,.05), transparent 24%),
-        linear-gradient(225deg, rgba(255,43,52,.08), transparent 30%);
+        linear-gradient(135deg, rgba(255,255,255,.9), transparent 24%),
+        linear-gradient(225deg, rgba(239,59,53,.05), transparent 32%);
     }
 
     .hero-left{
-      min-height:470px;
+      min-height:500px;
       padding:28px;
       background:
-        linear-gradient(180deg,#11161d 0%, #0c1015 100%);
+        radial-gradient(circle at 85% 14%, rgba(239,59,53,.09), transparent 20%),
+        linear-gradient(180deg, #ffffff, #f2f5f8);
     }
 
     .hero-badge{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      padding:8px 14px;
+      padding:9px 14px;
       border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:#d9e0ea;
+      background:linear-gradient(180deg,#fff,#f3f6f9);
+      border:1px solid #e3e9ef;
+      color:#5f6d7a;
+      font-size:12px;
       letter-spacing:.14em;
       text-transform:uppercase;
-      font-size:12px;
+      box-shadow:var(--shadow-soft);
     }
 
     .hero-badge::before{
@@ -220,48 +239,44 @@
       width:10px;
       height:10px;
       border-radius:50%;
-      background:var(--red2);
-      box-shadow:0 0 10px rgba(255,43,52,.4);
+      background:var(--red);
+      box-shadow:0 0 0 5px rgba(239,59,53,.14);
     }
 
     .hero-left h2{
       margin:18px 0 10px;
-      font-size:clamp(34px,5vw,76px);
-      line-height:.95;
-      letter-spacing:.06em;
+      font-size:clamp(34px,5vw,74px);
+      line-height:.94;
+      letter-spacing:.05em;
       text-transform:uppercase;
+      color:#23303a;
     }
 
-    .hero-left h2 .white{
-      color:#fff;
-    }
-
-    .hero-left h2 .red{
-      color:var(--red2);
-      text-shadow:0 0 16px rgba(255,43,52,.15);
+    .hero-left h2 .r{
+      color:var(--red);
     }
 
     .hero-desc{
       max-width:760px;
+      color:#61707f;
+      line-height:1.9;
       font-size:15px;
-      line-height:1.85;
-      color:#c1cad7;
     }
 
     .hero-stats{
-      margin-top:22px;
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:14px;
+      margin-top:24px;
     }
 
     .stat{
-      border-radius:20px;
-      padding:16px;
-      background:
-        linear-gradient(180deg,#1d2430,#131821);
-      border:1px solid rgba(255,255,255,.06);
       position:relative;
+      border-radius:22px;
+      padding:16px 16px 16px 18px;
+      background:linear-gradient(180deg,#ffffff,#f1f5f8);
+      border:1px solid #e1e8ef;
+      box-shadow:var(--shadow-soft);
     }
 
     .stat::before{
@@ -271,14 +286,14 @@
       top:0;
       bottom:0;
       width:5px;
-      background:
-        linear-gradient(180deg,#fff, var(--red2));
+      border-radius:6px;
+      background:linear-gradient(180deg, var(--red-soft), var(--red));
     }
 
     .stat small{
       display:block;
-      color:#9facbf;
       font-size:11px;
+      color:#83909d;
       letter-spacing:.14em;
       text-transform:uppercase;
       margin-bottom:6px;
@@ -286,15 +301,12 @@
 
     .stat strong{
       font-size:28px;
-      color:#fff;
+      color:#26323c;
     }
 
-    /* 右侧红白装甲 */
     .hero-right{
-      min-height:470px;
+      min-height:500px;
       padding:20px;
-      background:
-        linear-gradient(180deg,#0f1319 0%, #090c10 100%);
       display:grid;
       grid-template-rows:auto 1fr auto;
       gap:14px;
@@ -312,155 +324,105 @@
       font-size:15px;
       letter-spacing:.18em;
       text-transform:uppercase;
-      color:#fff;
+      color:#2b3742;
     }
 
-    .chest{
+    .mecha-board{
       position:relative;
-      min-height:260px;
-      border-radius:24px;
+      min-height:300px;
+      border-radius:26px;
       overflow:hidden;
       background:
-        linear-gradient(180deg,#151a22 0%, #0c1016 100%);
-      border:1px solid rgba(255,255,255,.06);
+        linear-gradient(180deg, #fbfcfd, #eef3f7);
+      border:1px solid #e2e8ef;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
     }
 
-    .chest .core-bg{
+    .mecha-board .gridline{
       position:absolute;
       inset:0;
       background:
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,.08), transparent 18%),
-        linear-gradient(180deg, rgba(255,255,255,.02), transparent);
-    }
-
-    .chest .frame{
-      position:absolute;
-      inset:16px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.05);
-      clip-path:polygon(12% 0,88% 0,100% 14%,100% 86%,88% 100%,12% 100%,0 86%,0 14%);
+        linear-gradient(rgba(255,255,255,.55) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.55) 1px, transparent 1px);
+      background-size:34px 34px;
+      opacity:.32;
     }
 
     .plate{
       position:absolute;
-      border-radius:18px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+      background:linear-gradient(180deg,#ffffff,#edf2f6);
+      border:1px solid #dde5ec;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 6px 14px rgba(199,208,218,.14);
     }
 
     .plate.red{
-      background:linear-gradient(180deg,#ff2c36 0%, #cb141d 70%, #8d0f15 100%);
-      border:1px solid rgba(0,0,0,.18);
+      background:linear-gradient(180deg,#ff6b64,#ef3b35 44%, #d92c26 100%);
+      border-color:#dd4a44;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.36),
+        0 8px 16px rgba(239,59,53,.18);
     }
 
-    .plate.white{
-      background:linear-gradient(180deg,#ffffff 0%, #edf1f5 48%, #cdd5de 100%);
-      border:1px solid rgba(0,0,0,.08);
+    .plate.trans{
+      background:linear-gradient(180deg, rgba(255,255,255,.62), rgba(241,246,250,.78));
+      backdrop-filter:blur(3px);
     }
 
-    .plate.dark{
-      background:linear-gradient(180deg,#1a2028 0%, #0b0e13 100%);
-      border:1px solid rgba(255,255,255,.03);
-    }
-
-    /* 参考你图里的胸甲布局 */
-    .plate.p-top-l{
-      left:12%;
-      top:10%;
-      width:22%;
-      height:28%;
-      clip-path:polygon(12% 0,100% 0,84% 100%,0 84%);
-    }
-    .plate.p-top-r{
-      right:12%;
-      top:10%;
-      width:22%;
-      height:28%;
-      clip-path:polygon(0 0,88% 0,100% 84%,16% 100%);
-    }
-    .plate.p-shoulder-l{
-      left:2%;
-      top:14%;
-      width:19%;
-      height:34%;
-      clip-path:polygon(10% 0,100% 8%,88% 100%,0 84%);
-    }
-    .plate.p-shoulder-r{
-      right:2%;
-      top:14%;
-      width:19%;
-      height:34%;
-      clip-path:polygon(0 8%,90% 0,100% 84%,12% 100%);
-    }
-    .plate.p-center{
-      left:50%;
-      top:18%;
-      transform:translateX(-50%);
-      width:30%;
-      height:36%;
-      clip-path:polygon(18% 0,82% 0,100% 18%,84% 100%,16% 100%,0 18%);
-    }
-    .plate.p-mid-l{
-      left:20%;
-      top:42%;
-      width:20%;
-      height:22%;
-      clip-path:polygon(14% 0,100% 14%,84% 100%,0 84%);
-    }
-    .plate.p-mid-r{
-      right:20%;
-      top:42%;
-      width:20%;
-      height:22%;
-      clip-path:polygon(0 14%,86% 0,100% 84%,16% 100%);
-    }
-    .plate.p-core{
-      left:50%;
-      bottom:14%;
-      transform:translateX(-50%);
-      width:16%;
-      height:18%;
-      clip-path:polygon(18% 0,82% 0,100% 26%,80% 100%,20% 100%,0 26%);
-    }
-    .plate.p-arm-l{
-      left:0;
-      top:44%;
-      width:16%;
-      height:40%;
-      clip-path:polygon(24% 0,100% 10%,80% 100%,0 88%);
-    }
-    .plate.p-arm-r{
-      right:0;
-      top:44%;
-      width:16%;
-      height:40%;
-      clip-path:polygon(0 10%,76% 0,100% 88%,20% 100%);
-    }
-
-    .joint{
+    .line-red{
       position:absolute;
-      background:linear-gradient(180deg,#212833,#090c10);
+      background:linear-gradient(180deg,#ff8c86,#ef3b35);
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.03);
+      box-shadow:0 2px 8px rgba(239,59,53,.18);
     }
 
-    .joint.j1{ left:23%; top:46%; width:10%; height:8%; }
-    .joint.j2{ right:23%; top:46%; width:10%; height:8%; }
-    .joint.j3{ left:41%; top:58%; width:18%; height:8%; }
-
-    .light{
+    .port{
       position:absolute;
-      background:linear-gradient(90deg,#fff,#ffd4d6);
-      border-radius:999px;
-      box-shadow:0 0 10px rgba(255,255,255,.15);
-      opacity:.9;
+      border-radius:50%;
+      background:radial-gradient(circle at 38% 35%, #7dd4ff 0 18%, #1f2f40 30%, #0a1620 62%, #edf3f8 64%, #f7fafd 100%);
+      border:1px solid #d6e0e9;
+      box-shadow:0 0 0 6px rgba(239,59,53,.12);
     }
 
-    .light.l1{ left:29%; top:24%; width:26px; height:6px; transform:rotate(-28deg); }
-    .light.l2{ right:29%; top:24%; width:26px; height:6px; transform:rotate(28deg); }
-    .light.l3{ left:50%; top:24%; transform:translateX(-50%); width:44px; height:8px; }
-    .light.l4{ left:50%; top:48%; transform:translateX(-50%); width:80px; height:3px; }
+    .dot{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--red);
+      box-shadow:0 0 0 4px rgba(239,59,53,.14);
+    }
 
-    .hero-log{
+    .cut{
+      clip-path:polygon(0 10%,10% 0,90% 0,100% 10%,100% 90%,90% 100%,10% 100%,0 90%);
+      border-radius:20px;
+    }
+
+    /* 中央参考图风格布局 */
+    .p1{left:8%; top:8%; width:28%; height:34%}
+    .p2{left:38%; top:8%; width:21%; height:18%}
+    .p3{left:38%; top:27%; width:21%; height:16%}
+    .p4{right:8%; top:8%; width:18%; height:30%}
+    .p5{left:8%; top:44%; width:33%; height:20%}
+    .p6{left:43%; top:44%; width:18%; height:20%}
+    .p7{right:8%; top:42%; width:23%; height:26%}
+    .p8{left:10%; bottom:10%; width:28%; height:18%}
+    .p9{left:42%; bottom:10%; width:21%; height:18%}
+    .p10{right:8%; bottom:6%; width:12%; height:56%}
+    .p11{left:0; top:22%; width:12%; height:54%; border-radius:0 18px 18px 0}
+    .p12{left:63%; top:72%; width:18%; height:12%}
+
+    .lr1{left:27%; top:44%; width:7px; height:16%}
+    .lr2{left:27%; top:58%; width:24%; height:7px}
+    .lr3{left:49%; top:58%; width:7px; height:15%}
+    .lr4{left:54%; top:73%; width:20%; height:5px; transform:rotate(-32deg); transform-origin:left center}
+    .lr5{right:10%; top:76%; width:7px; height:18%}
+    .lr6{left:7%; top:82%; width:24%; height:5px; transform:rotate(-30deg); transform-origin:left center}
+    .lr7{left:7%; top:39%; width:23%; height:6px}
+    .lr8{left:21%; top:39%; width:6px; height:14%}
+
+    .system-log{
       display:grid;
       gap:10px;
     }
@@ -470,28 +432,26 @@
       justify-content:space-between;
       align-items:center;
       padding:12px 14px;
-      border-radius:16px;
-      background:linear-gradient(180deg,#1b222d,#121821);
-      border:1px solid rgba(255,255,255,.05);
-      color:#b9c2d1;
+      border-radius:18px;
+      background:linear-gradient(180deg,#fff,#f2f6f9);
+      border:1px solid #e1e8ef;
+      box-shadow:var(--shadow-soft);
       font-size:13px;
+      color:#657382;
     }
 
-    .log-row strong{ color:#fff; }
+    .log-row strong{ color:#27313b; }
 
-    /* 中段 */
     .main-grid{
       margin-top:18px;
       display:grid;
-      grid-template-columns:1.06fr .94fr;
+      grid-template-columns:1.05fr .95fr;
       gap:18px;
     }
 
     .section{
-      padding:20px;
-      background:
-        linear-gradient(180deg,#10151c 0%, #0a0d12 100%);
       min-height:420px;
+      padding:20px;
     }
 
     .section-title{
@@ -504,16 +464,16 @@
 
     .section-title h3{
       margin:0;
-      color:#fff;
       font-size:15px;
       letter-spacing:.18em;
       text-transform:uppercase;
+      color:#2b3742;
     }
 
     .section-desc{
-      color:#a8b2c1;
+      color:#72808d;
       font-size:14px;
-      line-height:1.8;
+      line-height:1.85;
       margin-bottom:14px;
     }
 
@@ -527,28 +487,44 @@
     }
 
     .entries::-webkit-scrollbar,
-    .gallery::-webkit-scrollbar{
+    .gallery::-webkit-scrollbar,
+    .modal-body::-webkit-scrollbar{
       width:8px;
+      height:8px;
     }
 
     .entries::-webkit-scrollbar-thumb,
-    .gallery::-webkit-scrollbar-thumb{
-      background:rgba(255,255,255,.12);
+    .gallery::-webkit-scrollbar-thumb,
+    .modal-body::-webkit-scrollbar-thumb{
+      background:#d7e0e8;
       border-radius:999px;
     }
 
     .entry{
-      border-radius:22px;
+      position:relative;
+      border-radius:24px;
       padding:18px;
-      background:
-        linear-gradient(180deg,#1a2029,#11161d);
-      border:1px solid rgba(255,255,255,.05);
-      transition:transform .16s ease, border-color .16s ease;
+      background:linear-gradient(180deg,#ffffff,#f3f6f9);
+      border:1px solid #e0e7ee;
+      box-shadow:var(--shadow-soft);
+      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+      overflow:hidden;
+    }
+
+    .entry::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:6px;
+      background:linear-gradient(90deg, var(--red-soft), var(--red), transparent 75%);
     }
 
     .entry:hover{
       transform:translateY(-2px);
-      border-color:rgba(255,255,255,.12);
+      border-color:#d4dde6;
+      box-shadow:0 14px 30px rgba(180,191,203,.18);
     }
 
     .entry-head{
@@ -561,20 +537,20 @@
 
     .entry h4{
       margin:0;
-      color:#fff;
       font-size:20px;
+      color:#25313b;
     }
 
     .entry time{
-      color:#aab4c2;
+      color:#8693a0;
       font-size:12px;
       white-space:nowrap;
     }
 
     .entry p{
       margin:0;
-      color:#d0d7e0;
-      line-height:1.85;
+      color:#5f6e7b;
+      line-height:1.9;
       white-space:pre-wrap;
     }
 
@@ -582,9 +558,10 @@
       width:100%;
       max-height:320px;
       object-fit:cover;
-      border-radius:16px;
+      border-radius:18px;
       margin-top:12px;
-      border:1px solid rgba(255,255,255,.06);
+      border:1px solid #e3e9ef;
+      background:#fff;
     }
 
     .entry-actions{
@@ -595,13 +572,14 @@
     }
 
     .mini-btn{
-      font-size:12px;
       padding:8px 12px;
-      background:linear-gradient(180deg,#252d3a,#161b23);
+      font-size:12px;
     }
 
     .mini-btn.danger{
-      background:linear-gradient(180deg,#c31b23,#730f15);
+      color:#fff;
+      background:linear-gradient(180deg,var(--red),var(--red-deep));
+      border-color:#d7332d;
     }
 
     .gallery{
@@ -611,16 +589,17 @@
     .gallery-item{
       position:relative;
       min-height:260px;
-      border-radius:22px;
+      border-radius:24px;
       overflow:hidden;
-      background:#12161c;
-      border:1px solid rgba(255,255,255,.05);
-      transition:transform .16s ease, border-color .16s ease;
+      background:linear-gradient(180deg,#fff,#f3f6f9);
+      border:1px solid #e1e8ef;
+      box-shadow:var(--shadow-soft);
+      transition:transform .16s ease, box-shadow .16s ease;
     }
 
     .gallery-item:hover{
       transform:translateY(-2px);
-      border-color:rgba(255,255,255,.12);
+      box-shadow:0 14px 28px rgba(180,191,203,.18);
     }
 
     .gallery-item img{
@@ -635,7 +614,7 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(180deg,transparent 20%, rgba(0,0,0,.72) 100%);
+      background:linear-gradient(180deg,transparent 35%, rgba(255,255,255,.15) 50%, rgba(241,244,248,.94) 100%);
     }
 
     .gallery-info{
@@ -644,16 +623,21 @@
       right:14px;
       bottom:14px;
       z-index:2;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,255,255,.92);
     }
 
     .gallery-info h4{
-      margin:0 0 5px;
+      margin:0 0 4px;
       font-size:16px;
-      color:#fff;
+      color:#25313b;
     }
 
     .gallery-info small{
-      color:#d8dde6;
+      color:#72808d;
     }
 
     .empty{
@@ -661,15 +645,14 @@
       display:grid;
       place-items:center;
       text-align:center;
-      color:#aab4c2;
-      border-radius:22px;
-      background:linear-gradient(180deg,#181d25,#10141a);
-      border:1px dashed rgba(255,255,255,.08);
+      color:#7a8794;
+      border-radius:24px;
+      background:linear-gradient(180deg,#fff,#f2f6f9);
+      border:1px dashed #d9e2ea;
       padding:24px;
-      line-height:1.8;
+      line-height:1.9;
     }
 
-    /* 底部 */
     .bottom{
       margin-top:18px;
       display:grid;
@@ -678,17 +661,16 @@
     }
 
     .sub-panel{
-      padding:20px;
-      background:linear-gradient(180deg,#10151c 0%, #0a0d12 100%);
       min-height:210px;
+      padding:20px;
     }
 
     .sub-panel h3{
       margin:0 0 14px;
       font-size:15px;
-      color:#fff;
       letter-spacing:.16em;
       text-transform:uppercase;
+      color:#2b3742;
     }
 
     .bars{
@@ -700,7 +682,7 @@
       display:flex;
       justify-content:space-between;
       font-size:13px;
-      color:#b4becc;
+      color:#768391;
       margin-bottom:6px;
     }
 
@@ -708,47 +690,48 @@
       height:12px;
       border-radius:999px;
       overflow:hidden;
-      background:#1c2330;
-      border:1px solid rgba(255,255,255,.05);
+      background:#edf2f6;
+      border:1px solid #dfe7ee;
     }
 
     .bar i{
       display:block;
       height:100%;
       border-radius:999px;
-      background:linear-gradient(90deg,#fff 0%, var(--red2) 65%, #861018 100%);
+      background:linear-gradient(90deg, #ffd3d1, var(--red) 60%, var(--red-deep) 100%);
     }
 
     .quote{
-      color:#d5dbe4;
-      line-height:1.9;
-      background:linear-gradient(180deg,#1a2029,#11161d);
-      border-radius:18px;
       padding:16px;
-      border:1px solid rgba(255,255,255,.05);
+      border-radius:20px;
+      background:linear-gradient(180deg,#fff,#f2f6f9);
+      border:1px solid #e1e8ef;
+      color:#5d6c79;
+      line-height:1.95;
+      box-shadow:var(--shadow-soft);
     }
 
-    /* 模态框 */
     .modal-wrap{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.5);
+      z-index:120;
       display:none;
       align-items:center;
       justify-content:center;
       padding:20px;
-      z-index:100;
+      background:rgba(235,240,245,.52);
+      backdrop-filter:blur(10px);
     }
 
-    .modal-wrap.show{ display:flex; }
+    .modal-wrap.show{display:flex}
 
     .modal{
       width:min(860px,100%);
-      border-radius:28px;
+      border-radius:30px;
       overflow:hidden;
-      background:linear-gradient(180deg,#11161d,#0b0f14);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:0 22px 70px rgba(0,0,0,.42);
+      background:linear-gradient(180deg,#ffffff,#f3f6f9);
+      border:1px solid #e0e7ee;
+      box-shadow:0 26px 60px rgba(176,188,200,.28);
     }
 
     .modal-head{
@@ -757,7 +740,8 @@
       align-items:center;
       gap:12px;
       padding:18px 20px;
-      border-bottom:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid #e4ebf1;
+      background:linear-gradient(180deg,#fff,#f7f9fb);
     }
 
     .modal-head h3{
@@ -765,13 +749,15 @@
       font-size:15px;
       letter-spacing:.16em;
       text-transform:uppercase;
-      color:#fff;
+      color:#2b3742;
     }
 
     .modal-body{
-      padding:20px;
       display:grid;
       gap:14px;
+      padding:20px;
+      max-height:80vh;
+      overflow:auto;
     }
 
     .row-2{
@@ -784,40 +770,30 @@
       width:100%;
       border:none;
       outline:none;
-      color:#fff;
-      border-radius:16px;
-      padding:14px 16px;
-      background:linear-gradient(180deg,#1d2330,#131821);
-      border:1px solid rgba(255,255,255,.06);
       font:inherit;
+      color:#2d3a45;
+      border-radius:18px;
+      padding:14px 16px;
+      background:linear-gradient(180deg,#ffffff,#f3f6f9);
+      border:1px solid #dfe7ee;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
       resize:vertical;
     }
 
     input:focus,textarea:focus{
-      border-color:rgba(255,255,255,.14);
+      border-color:#f0a19d;
+      box-shadow:0 0 0 4px rgba(239,59,53,.08);
     }
 
-    .footer-note{
-      margin-top:18px;
-      text-align:center;
-      color:#687487;
-      font-size:12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-
-    /* 舱门 */
     .door{
       position:fixed;
       inset:0;
+      z-index:100;
       pointer-events:none;
-      z-index:80;
       opacity:0;
     }
 
-    .door.show{
-      opacity:1;
-    }
+    .door.show{opacity:1}
 
     .door-half{
       position:absolute;
@@ -825,8 +801,28 @@
       width:50.2%;
       height:100%;
       background:
-        linear-gradient(180deg,#fbfcfe 0%, #d5dbe4 22%, #7b8594 48%, #262c36 72%, #090b0f 100%);
-      box-shadow:inset 0 0 30px rgba(255,255,255,.14);
+        linear-gradient(180deg,#ffffff 0%, #f0f4f8 38%, #e5ebf1 100%);
+      border-color:#dde6ed;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+      overflow:hidden;
+    }
+
+    .door-half::before{
+      content:"";
+      position:absolute;
+      inset:18px;
+      background:
+        linear-gradient(180deg,#fff,#f4f7fa);
+      border:1px solid #e2e8ef;
+      border-radius:26px;
+    }
+
+    .door-half::after{
+      content:"";
+      position:absolute;
+      background:linear-gradient(180deg,#ff766f,#ef3b35);
+      border-radius:999px;
+      box-shadow:0 4px 12px rgba(239,59,53,.16);
     }
 
     .door-half.left{
@@ -835,46 +831,67 @@
       transform:translateX(-105%);
     }
 
+    .door-half.left::after{
+      width:8px;
+      height:50%;
+      right:12%;
+      top:25%;
+    }
+
     .door-half.right{
       right:0;
       clip-path:polygon(16% 50%,0 0,100% 0,100% 100%,0 100%);
       transform:translateX(105%);
     }
 
-    .door.show.close .door-half.left{ animation:doorCloseL .85s forwards cubic-bezier(.7,0,.3,1); }
-    .door.show.close .door-half.right{ animation:doorCloseR .85s forwards cubic-bezier(.7,0,.3,1); }
-    .door.show.open .door-half.left{ animation:doorOpenL .85s forwards cubic-bezier(.7,0,.3,1); }
-    .door.show.open .door-half.right{ animation:doorOpenR .85s forwards cubic-bezier(.7,0,.3,1); }
+    .door-half.right::after{
+      width:8px;
+      height:50%;
+      left:12%;
+      top:25%;
+    }
 
-    @keyframes doorCloseL{ from{transform:translateX(-105%)} to{transform:translateX(0)} }
-    @keyframes doorCloseR{ from{transform:translateX(105%)} to{transform:translateX(0)} }
-    @keyframes doorOpenL{ from{transform:translateX(0)} to{transform:translateX(-105%)} }
-    @keyframes doorOpenR{ from{transform:translateX(0)} to{transform:translateX(105%)} }
+    .door.show.close .door-half.left{animation:doorCloseL .82s cubic-bezier(.7,0,.3,1) forwards}
+    .door.show.close .door-half.right{animation:doorCloseR .82s cubic-bezier(.7,0,.3,1) forwards}
+    .door.show.open .door-half.left{animation:doorOpenL .82s cubic-bezier(.7,0,.3,1) forwards}
+    .door.show.open .door-half.right{animation:doorOpenR .82s cubic-bezier(.7,0,.3,1) forwards}
 
-    /* 蒸汽，简化版 */
+    @keyframes doorCloseL{from{transform:translateX(-105%)}to{transform:translateX(0)}}
+    @keyframes doorCloseR{from{transform:translateX(105%)}to{transform:translateX(0)}}
+    @keyframes doorOpenL{from{transform:translateX(0)}to{transform:translateX(-105%)}}
+    @keyframes doorOpenR{from{transform:translateX(0)}to{transform:translateX(105%)}}
+
     .steam-layer{
       position:fixed;
       inset:0;
+      z-index:90;
       pointer-events:none;
-      z-index:70;
       overflow:hidden;
     }
 
     .steam{
       position:absolute;
       bottom:-120px;
-      width:160px;
-      height:160px;
+      width:180px;
+      height:180px;
       border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,.2), rgba(255,255,255,.06), transparent 70%);
-      animation:steamRise 1.6s linear forwards;
-      will-change:transform, opacity;
+      background:radial-gradient(circle, rgba(255,255,255,.65), rgba(255,255,255,.22), transparent 72%);
+      animation:steamRise 1.5s linear forwards;
     }
 
     @keyframes steamRise{
-      0%{transform:translateY(0) scale(.7); opacity:0}
-      15%{opacity:.6}
-      100%{transform:translateY(-100vh) scale(1.4); opacity:0}
+      0%{transform:translateY(0) scale(.65); opacity:0}
+      12%{opacity:.56}
+      100%{transform:translateY(-100vh) scale(1.38); opacity:0}
+    }
+
+    .footer-note{
+      margin-top:18px;
+      text-align:center;
+      color:#8d99a5;
+      font-size:12px;
+      letter-spacing:.15em;
+      text-transform:uppercase;
     }
 
     @media (max-width:1200px){
@@ -884,14 +901,13 @@
     }
 
     @media (max-width:760px){
-      .app{ width:min(100% - 16px,100%); }
+      .app{width:min(100% - 16px,100%)}
       .topbar{
         flex-direction:column;
         align-items:flex-start;
         border-radius:26px;
       }
-      .hero-stats,
-      .row-2{
+      .hero-stats,.row-2{
         grid-template-columns:1fr;
       }
       .gallery{
@@ -915,8 +931,8 @@
       <div class="brand">
         <div class="brand-core"></div>
         <div>
-          <h1>MECHA ARMOR CORE</h1>
-          <p>红白胸甲机甲风 · 优化版单文件网页</p>
+          <h1>RED WHITE PANEL ARCHIVE</h1>
+          <p>红白精密装甲面板风 · 全站统一风格版</p>
         </div>
       </div>
       <nav class="nav">
@@ -928,16 +944,16 @@
     </header>
 
     <section class="hero" id="hero">
-      <article class="panel armor-panel hero-left" data-tilt>
-        <div class="hero-badge">Armor Link Online</div>
+      <article class="panel hero-left" data-tilt>
+        <div class="hero-badge">Panel System Online</div>
         <h2>
-          <span class="white">RED / WHITE</span><br>
-          <span class="red">CHEST ARMOR UI</span>
+          <span>RED / WHITE</span><br>
+          <span class="r">PRECISION ARMOR</span>
         </h2>
         <p class="hero-desc">
-          这次按你给的图重做了方向。不是泛泛的机甲感，而是直接往“红白重装胸甲正面”靠：
-          大面积红白拼装甲、黑色结构骨架、中央驾驶舱核心、少量线性发光。
-          同时把高负载的模糊、粒子和频繁实时动画砍掉，页面会比上一版顺很多。
+          这一版已经不是黑色机甲科技风，而是完整改成红白精密机械面板风。
+          白色做主体装甲，红色做导线、功能块、警示条和动作反馈，黑色只保留极少量镜头和缝隙。
+          按钮、卡片、弹窗、日志区、相册区、转场闸门，全部统一成这种风格，文字也一起重配了。
         </p>
 
         <div class="hero-stats">
@@ -956,46 +972,48 @@
         </div>
       </article>
 
-      <aside class="panel armor-panel hero-right" data-tilt>
+      <aside class="panel hero-right" data-tilt>
         <div class="panel-head">
-          <h3>Chest Armor Core</h3>
-          <button class="btn" id="openPublish">Publish</button>
+          <h3>Panel Core</h3>
+          <button class="btn primary" id="openPublish">Publish</button>
         </div>
 
-        <div class="chest">
-          <div class="core-bg"></div>
-          <div class="frame"></div>
+        <div class="mecha-board">
+          <div class="gridline"></div>
 
-          <div class="plate white p-shoulder-l"></div>
-          <div class="plate white p-shoulder-r"></div>
+          <div class="plate cut p1"></div>
+          <div class="port" style="left:46%; top:17%; width:34px; height:34px;"></div>
+          <div class="plate red cut p2"></div>
+          <div class="plate red cut p3"></div>
+          <div class="plate red cut p4"></div>
+          <div class="plate trans cut p5"></div>
+          <div class="plate cut p6"></div>
+          <div class="plate cut p7"></div>
+          <div class="plate cut p8"></div>
+          <div class="plate cut p9"></div>
+          <div class="plate red cut p10"></div>
+          <div class="plate cut p11"></div>
+          <div class="plate trans cut p12"></div>
 
-          <div class="plate red p-top-l"></div>
-          <div class="plate red p-top-r"></div>
+          <div class="line-red lr1"></div>
+          <div class="line-red lr2"></div>
+          <div class="line-red lr3"></div>
+          <div class="line-red lr4"></div>
+          <div class="line-red lr5"></div>
+          <div class="line-red lr6"></div>
+          <div class="line-red lr7"></div>
+          <div class="line-red lr8"></div>
 
-          <div class="plate white p-center"></div>
-
-          <div class="plate red p-mid-l"></div>
-          <div class="plate red p-mid-r"></div>
-
-          <div class="plate dark p-core"></div>
-
-          <div class="plate white p-arm-l"></div>
-          <div class="plate white p-arm-r"></div>
-
-          <div class="joint j1"></div>
-          <div class="joint j2"></div>
-          <div class="joint j3"></div>
-
-          <div class="light l1"></div>
-          <div class="light l2"></div>
-          <div class="light l3"></div>
-          <div class="light l4"></div>
+          <div class="dot" style="left:18%; top:29%"></div>
+          <div class="dot" style="left:52%; top:51%"></div>
+          <div class="dot" style="right:12%; bottom:18%"></div>
+          <div class="dot" style="left:73%; top:82%"></div>
         </div>
 
-        <div class="hero-log">
-          <div class="log-row"><span>Armor Sync</span><strong>97.2%</strong></div>
-          <div class="log-row"><span>Main Frame</span><strong>Red / White</strong></div>
-          <div class="log-row"><span>System Response</span><strong>Optimized</strong></div>
+        <div class="system-log">
+          <div class="log-row"><span>Primary Tone</span><strong>White / Red</strong></div>
+          <div class="log-row"><span>Black Elements</span><strong>Minimal</strong></div>
+          <div class="log-row"><span>Transition Shell</span><strong>Matched</strong></div>
         </div>
       </aside>
     </section>
@@ -1004,10 +1022,10 @@
       <article class="panel section" id="diary">
         <div class="section-title">
           <h3>Combat Diary</h3>
-          <button class="btn" id="addDiaryBtn">New Entry</button>
+          <button class="btn primary" id="addDiaryBtn">New Entry</button>
         </div>
         <div class="section-desc">
-          写日记、记录想法、发布带图日志。数据保存在本地，刷新不会丢。
+          用统一红白装甲风来写日记和记录想法。每一条日志都会变成带机械结构感的白色面板。
         </div>
         <div class="entries" id="entries"></div>
       </article>
@@ -1015,10 +1033,10 @@
       <article class="panel section" id="gallery">
         <div class="section-title">
           <h3>Image Hangar</h3>
-          <button class="btn" id="addImageBtn">Add Image</button>
+          <button class="btn primary" id="addImageBtn">Add Image</button>
         </div>
         <div class="section-desc">
-          红白机体图像机库。日记里带图的内容会同步显示到这里。
+          图像区也改成白色机械舱板风。带图日志会自动同步到这里显示。
         </div>
         <div class="gallery" id="galleryGrid"></div>
       </article>
@@ -1029,16 +1047,16 @@
         <h3>System Status</h3>
         <div class="bars">
           <div class="bar-row">
-            <span><b>Armor Integrity</b><b>93%</b></span>
-            <div class="bar"><i style="width:93%"></i></div>
+            <span><b>Panel Integrity</b><b>94%</b></span>
+            <div class="bar"><i style="width:94%"></i></div>
           </div>
           <div class="bar-row">
-            <span><b>Memory Core</b><b>88%</b></span>
-            <div class="bar"><i style="width:88%"></i></div>
+            <span><b>Visual Consistency</b><b>97%</b></span>
+            <div class="bar"><i style="width:97%"></i></div>
           </div>
           <div class="bar-row">
-            <span><b>Visual Output</b><b>96%</b></span>
-            <div class="bar"><i style="width:96%"></i></div>
+            <span><b>Storage Sync</b><b>89%</b></span>
+            <div class="bar"><i style="width:89%"></i></div>
           </div>
         </div>
       </article>
@@ -1046,21 +1064,21 @@
       <article class="panel sub-panel">
         <h3>Pilot Note</h3>
         <div class="quote">
-          “网页不是几张普通卡片拼起来，而应该像机甲胸甲面板一样，结构分明、装甲感强、颜色凶狠。”
+          “现在整个网页都应该像一块高精密红白机械面板，而不是黑底 UI 上贴几个机甲元素。”
         </div>
       </article>
 
       <article class="panel sub-panel">
         <h3>Actions</h3>
         <div class="bars">
-          <button class="btn" id="simulateDoor">Door Transition</button>
+          <button class="btn primary" id="simulateDoor">Door Transition</button>
           <button class="btn" id="steamBurst">Steam Burst</button>
           <button class="btn" id="clearAll">Purge All</button>
         </div>
       </article>
     </section>
 
-    <div class="footer-note">MECHA ARMOR CORE // OPTIMIZED EDITION</div>
+    <div class="footer-note">RED WHITE PANEL ARCHIVE // MATCHED STYLE SYSTEM</div>
   </div>
 
   <div class="modal-wrap" id="modalWrap">
@@ -1077,7 +1095,7 @@
         <textarea id="entryContent" rows="8" placeholder="写下今天的日志内容……"></textarea>
         <input id="entryImage" type="text" placeholder="图片链接（可选）" />
         <div class="row-2">
-          <button class="btn" id="publishEntryBtn">Publish Entry</button>
+          <button class="btn primary" id="publishEntryBtn">Publish Entry</button>
           <button class="btn" id="publishImageOnlyBtn">Publish Image Only</button>
         </div>
       </div>
@@ -1085,7 +1103,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "mecha_armor_core_v3";
+    const STORAGE_KEY = "red_white_panel_archive_v4";
     const entriesEl = document.getElementById("entries");
     const galleryGrid = document.getElementById("galleryGrid");
     const entryCountEl = document.getElementById("entryCount");
@@ -1103,7 +1121,7 @@
     const steamLayer = document.getElementById("steamLayer");
 
     let audioCtx = null;
-    let tiltFrame = null;
+    let tiltRAF = null;
     let doorBusy = false;
 
     function loadEntries(){
@@ -1111,16 +1129,14 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if(raw) return JSON.parse(raw);
       }catch(e){}
-      const seed = [
-        {
-          id: crypto.randomUUID(),
-          title: "红白装甲主页启动",
-          date: new Date().toISOString().slice(0,10),
-          content: "这一版重新对准红白胸甲机体风格，并且减少了会导致卡顿的高开销特效。",
-          image: "",
-          createdAt: Date.now()
-        }
-      ];
+      const seed = [{
+        id: crypto.randomUUID(),
+        title: "红白面板系统启动",
+        date: new Date().toISOString().slice(0,10),
+        content: "这一版把整站统一成红白精密机械面板风，不再用大量黑色做主底。",
+        image: "",
+        createdAt: Date.now()
+      }];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
       return seed;
     }
@@ -1182,7 +1198,7 @@
         .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
 
       if(!imgs.length){
-        galleryGrid.innerHTML = `<div class="empty" style="grid-column:1/-1">还没有图片模块。发布带图日记或直接添加图片。</div>`;
+        galleryGrid.innerHTML = `<div class="empty" style="grid-column:1/-1">还没有图片模块。发布带图日志或直接添加图片。</div>`;
         return;
       }
 
@@ -1241,9 +1257,7 @@
 
       if(mode === "edit" && editId){
         entries = entries.map(item =>
-          item.id === editId
-            ? {...item, title, date, content, image}
-            : item
+          item.id === editId ? {...item, title, date, content, image} : item
         );
       }else{
         entries.unshift({
@@ -1284,6 +1298,8 @@
     document.getElementById("closeModal").addEventListener("click", closeModal);
     document.getElementById("publishEntryBtn").addEventListener("click", ()=>publishEntry(false));
     document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=>publishEntry(true));
+    document.getElementById("simulateDoor").addEventListener("click", triggerDoor);
+    document.getElementById("steamBurst").addEventListener("click", ()=>spawnSteam(10));
 
     modalWrap.addEventListener("click", (e)=>{
       if(e.target === modalWrap) closeModal();
@@ -1298,9 +1314,6 @@
       }
     });
 
-    document.getElementById("simulateDoor").addEventListener("click", triggerDoor);
-    document.getElementById("steamBurst").addEventListener("click", ()=>spawnSteam(10));
-
     document.querySelectorAll(".nav button").forEach(btn=>{
       btn.addEventListener("click", ()=>{
         document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
@@ -1310,7 +1323,6 @@
       });
     });
 
-    /* 音效：轻量 */
     function ensureAudio(){
       if(!audioCtx){
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1325,11 +1337,11 @@
       const gain = audioCtx.createGain();
 
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(200, t);
-      osc.frequency.exponentialRampToValueAtTime(110, t + 0.06);
+      osc.frequency.setValueAtTime(260, t);
+      osc.frequency.exponentialRampToValueAtTime(140, t + 0.05);
 
       gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.03, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.025, t + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
 
       osc.connect(gain);
@@ -1340,7 +1352,7 @@
 
     function steamSound(){
       ensureAudio();
-      const duration = 0.7;
+      const duration = 0.6;
       const bufferSize = audioCtx.sampleRate * duration;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -1355,8 +1367,8 @@
 
       source.buffer = buffer;
       filter.type = "bandpass";
-      filter.frequency.value = 700;
-      gain.gain.value = 0.04;
+      filter.frequency.value = 950;
+      gain.gain.value = 0.028;
 
       source.connect(filter);
       filter.connect(gain);
@@ -1372,11 +1384,11 @@
       const gain = audioCtx.createGain();
 
       osc.type = "sine";
-      osc.frequency.setValueAtTime(75, t);
-      osc.frequency.exponentialRampToValueAtTime(45, t + 0.18);
+      osc.frequency.setValueAtTime(95, t);
+      osc.frequency.exponentialRampToValueAtTime(56, t + 0.17);
 
       gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.09, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.07, t + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
 
       osc.connect(gain);
@@ -1385,7 +1397,6 @@
       osc.stop(t + 0.2);
     }
 
-    /* 转场 */
     function triggerDoor(){
       if(doorBusy) return;
       doorBusy = true;
@@ -1397,48 +1408,44 @@
       setTimeout(()=>{
         door.className = "door show open";
         doorImpact();
-      }, 850);
+      }, 820);
 
       setTimeout(()=>{
         door.className = "door";
         doorBusy = false;
-      }, 1700);
+      }, 1640);
     }
 
-    /* 蒸汽：减少数量，减少卡顿 */
     function spawnSteam(count=8){
       steamSound();
       for(let i=0;i<count;i++){
         const s = document.createElement("div");
         s.className = "steam";
         s.style.left = Math.random()*100 + "vw";
-        s.style.animationDuration = (1.2 + Math.random()*0.8) + "s";
-        s.style.opacity = (0.2 + Math.random()*0.35).toFixed(2);
-        s.style.transform = `translateY(0) scale(${0.7 + Math.random()*0.4})`;
+        s.style.animationDuration = (1.2 + Math.random()*0.6) + "s";
+        s.style.opacity = (0.22 + Math.random()*0.28).toFixed(2);
         steamLayer.appendChild(s);
-        setTimeout(()=>s.remove(), 1800);
+        setTimeout(()=>s.remove(), 1700);
       }
     }
 
-    /* 轻量 tilt，节流 */
     function setupTilt(){
       const cards = document.querySelectorAll("[data-tilt]");
-
       cards.forEach(card=>{
-        let targetX = 0;
-        let targetY = 0;
+        let tx = 0;
+        let ty = 0;
 
         card.addEventListener("mousemove", (e)=>{
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
-          targetY = ((x / rect.width) - 0.5) * 4;
-          targetX = ((y / rect.height) - 0.5) * -4;
+          ty = ((x / rect.width) - 0.5) * 3;
+          tx = ((y / rect.height) - 0.5) * -3;
 
-          if(!tiltFrame){
-            tiltFrame = requestAnimationFrame(()=>{
-              card.style.transform = `perspective(1200px) rotateX(${targetX}deg) rotateY(${targetY}deg)`;
-              tiltFrame = null;
+          if(!tiltRAF){
+            tiltRAF = requestAnimationFrame(()=>{
+              card.style.transform = `perspective(1200px) rotateX(${tx}deg) rotateY(${ty}deg)`;
+              tiltRAF = null;
             });
           }
         });
@@ -1458,7 +1465,7 @@
     setupTilt();
 
     window.addEventListener("load", ()=>{
-      setTimeout(()=>triggerDoor(), 180);
+      setTimeout(()=>triggerDoor(), 160);
     });
   </script>
 </body>
