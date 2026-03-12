@@ -8,17 +8,12 @@
     :root{
       --bg:#e9e9ea;
       --bg2:#f4f4f5;
-      --panel:#f7f7f8;
-      --panel2:#ededee;
-      --line:#d2d2d5;
-      --line2:#babac0;
       --text:#17181c;
       --muted:#6f7178;
       --red:#ef1010;
       --red2:#c90c0c;
       --redSoft:#ffb8b8;
       --dark:#23242a;
-      --dark2:#34353d;
       --white:#ffffff;
       --shadow:0 18px 40px rgba(0,0,0,.10);
       --shadowSoft:0 10px 22px rgba(0,0,0,.07);
@@ -32,8 +27,7 @@
     html,body{
       margin:0;
       min-height:100%;
-      background:
-        linear-gradient(180deg,var(--bg2),var(--bg));
+      background:linear-gradient(180deg,var(--bg2),var(--bg));
       color:var(--text);
       font-family:"Segoe UI","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
       overflow-x:hidden;
@@ -60,12 +54,7 @@
       transform:translate(-50%,-50%);
       pointer-events:none;
       z-index:9999;
-      transition:
-        width .12s ease,
-        height .12s ease,
-        transform .08s ease,
-        filter .12s ease,
-        opacity .12s ease;
+      transition:width .12s ease,height .12s ease,transform .08s ease,filter .12s ease,opacity .12s ease;
       filter:drop-shadow(0 0 8px rgba(239,16,16,.26));
     }
 
@@ -572,6 +561,195 @@
       white-space:pre-wrap;
     }
 
+    .section-preview{
+      display:grid;
+      gap:18px;
+    }
+
+    .section-preview-head{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    .section-preview-tag{
+      min-width:260px;
+      padding:16px 28px;
+      background:var(--metalDark);
+      color:#fff;
+      box-shadow:
+        0 12px 24px rgba(0,0,0,.16),
+        inset 0 1px 0 rgba(255,255,255,.08),
+        inset 0 -2px 0 rgba(239,16,16,.82);
+      clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+    }
+
+    .section-preview-tag small{
+      color:var(--redSoft);
+      letter-spacing:.2em;
+      margin-right:12px;
+      font-size:12px;
+    }
+
+    .section-preview-tag b{
+      font-size:20px;
+      letter-spacing:.06em;
+    }
+
+    .section-preview-line{
+      flex:1;
+      height:1px;
+      background:linear-gradient(90deg,#d9b1b1,#ef1010,#e3bcbc);
+      position:relative;
+    }
+
+    .section-preview-line::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:50%;
+      width:12px;
+      height:12px;
+      background:#efb5b5;
+      transform:translateY(-50%) rotate(45deg);
+    }
+
+    .section-preview-shell{
+      position:relative;
+      background:transparent;
+      border:4px solid #3a3a40;
+      min-height:280px;
+      padding:34px 36px;
+      clip-path:polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 34px 100%, 0 calc(100% - 34px));
+    }
+
+    .section-preview-innerline{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--red);
+      text-transform:uppercase;
+      letter-spacing:.28em;
+      font-size:12px;
+      margin-bottom:24px;
+    }
+
+    .section-preview-innerline .dot{
+      width:12px;
+      height:12px;
+      background:var(--red);
+      box-shadow:0 0 10px rgba(239,16,16,.18);
+    }
+
+    .section-preview-innerline .line{
+      flex:1;
+      height:1px;
+      background:#cfcfd4;
+    }
+
+    .section-preview-title{
+      margin:0 0 14px;
+      font-size:18px;
+      line-height:1.8;
+      color:#2a2b31;
+      font-weight:500;
+    }
+
+    .section-preview-feature{
+      margin-top:26px;
+      background:linear-gradient(90deg,#1f2026,#2d2e35);
+      color:#fff;
+      padding:20px 24px;
+      max-width:560px;
+      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+      box-shadow:
+        0 14px 28px rgba(0,0,0,.14),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .section-preview-feature .label{
+      color:var(--red);
+      text-transform:uppercase;
+      letter-spacing:.32em;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+
+    .section-preview-feature .item{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      align-items:center;
+      font-size:15px;
+    }
+
+    .section-preview-feature .date{
+      color:#ff6d6d;
+      letter-spacing:.14em;
+    }
+
+    .section-preview-mini{
+      display:grid;
+      grid-template-columns:64px 1fr;
+      gap:16px;
+      align-items:start;
+      margin-top:14px;
+    }
+
+    .section-preview-marker{
+      position:relative;
+      min-height:108px;
+    }
+
+    .section-preview-marker::before{
+      content:"";
+      position:absolute;
+      left:12px;
+      top:20px;
+      bottom:0;
+      width:4px;
+      background:linear-gradient(180deg,var(--red),#dedee2);
+    }
+
+    .section-preview-marker::after{
+      content:"";
+      position:absolute;
+      left:3px;
+      top:0;
+      width:18px;
+      height:18px;
+      border:3px solid #ef9b9b;
+      transform:rotate(45deg);
+      background:#f7f7f8;
+    }
+
+    .section-preview-card{
+      border-left:4px solid #f0b0b0;
+      background:rgba(255,255,255,.18);
+      padding:14px 16px;
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);
+    }
+
+    .section-preview-card .date{
+      color:var(--red);
+      font-size:12px;
+      letter-spacing:.14em;
+      margin-bottom:8px;
+    }
+
+    .section-preview-card h4{
+      margin:0 0 8px;
+      font-size:18px;
+      color:#25262b;
+    }
+
+    .section-preview-card p{
+      margin:0;
+      color:#73757d;
+      line-height:1.8;
+      font-size:14px;
+    }
+
     .section-page{
       margin-top:20px;
     }
@@ -968,8 +1146,7 @@
       content:"";
       position:absolute;
       inset:18px;
-      background:
-        linear-gradient(180deg,#ffffff,#eef0f2);
+      background:linear-gradient(180deg,#ffffff,#eef0f2);
       border:1px solid #d7d7dc;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.94),
@@ -988,6 +1165,44 @@
 
     .door-left::after{right:14%}
     .door-right::after{left:14%}
+
+    .door-center-fill{
+      position:absolute;
+      left:50%;
+      top:0;
+      width:0;
+      height:100%;
+      transform:translateX(-50%);
+      background:
+        linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.96),
+        0 0 26px rgba(239,16,16,.14);
+      overflow:hidden;
+    }
+
+    .door-center-fill::before{
+      content:"";
+      position:absolute;
+      inset:18px 10px;
+      background:linear-gradient(180deg,#ffffff,#eef0f2);
+      border:1px solid #d7d7dc;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.94),
+        inset 0 -1px 0 rgba(0,0,0,.03);
+    }
+
+    .door-center-fill::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:22%;
+      width:10px;
+      height:56%;
+      transform:translateX(-50%);
+      background:linear-gradient(180deg,#ff8b8b,var(--red));
+      box-shadow:0 0 20px rgba(239,16,16,.26);
+    }
 
     .door-center-lock{
       position:absolute;
@@ -1037,16 +1252,28 @@
 
     .door-overlay.closing .door-left{animation:doorCloseLeft .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.closing .door-right{animation:doorCloseRight .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.closing .door-center-fill{animation:centerFillClose .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.closing .door-center-lock{animation:centerLockIn .22s .20s ease-out forwards}
 
     .door-overlay.opening .door-left{animation:doorOpenLeft .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.opening .door-right{animation:doorOpenRight .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.opening .door-center-fill{animation:centerFillOpen .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.opening .door-center-lock{animation:centerLockOut .20s ease-in forwards}
 
     @keyframes doorCloseLeft{from{left:-52%}to{left:0}}
     @keyframes doorCloseRight{from{right:-52%}to{right:0}}
     @keyframes doorOpenLeft{from{left:0}to{left:-52%}}
     @keyframes doorOpenRight{from{right:0}to{right:-52%}}
+
+    @keyframes centerFillClose{
+      from{width:0}
+      to{width:14%}
+    }
+
+    @keyframes centerFillOpen{
+      from{width:14%}
+      to{width:0}
+    }
 
     @keyframes centerLockIn{
       from{opacity:0;transform:translate(-50%,-50%) scale(.6)}
@@ -1065,8 +1292,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      background:
-        linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
+      background:linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
       overflow:hidden;
     }
 
@@ -1231,6 +1457,7 @@
       .overview-grid,.content-grid,.gallery-grid{
         grid-template-columns:1fr;
       }
+      .section-preview-tag{min-width:220px}
     }
 
     @media (max-width: 860px){
@@ -1253,6 +1480,31 @@
       .admin-item{flex-direction:column;align-items:flex-start}
       .nav{width:100%}
       .sec-tag{min-width:unset;width:100%}
+      .section-preview-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .section-preview-tag{
+        width:100%;
+        min-width:unset;
+      }
+      .section-preview-shell{
+        padding:22px 18px;
+        border-width:3px;
+        clip-path:none;
+        border-radius:20px;
+      }
+      .section-preview-feature{
+        max-width:100%;
+        clip-path:none;
+        border-radius:16px;
+      }
+      .section-preview-mini{
+        grid-template-columns:1fr;
+      }
+      .section-preview-marker{
+        display:none;
+      }
     }
   </style>
 </head>
@@ -1273,6 +1525,7 @@
   <div class="door-overlay" id="doorOverlay">
     <div class="door-left"></div>
     <div class="door-right"></div>
+    <div class="door-center-fill"></div>
     <div class="door-center-lock"></div>
   </div>
 
@@ -1368,19 +1621,14 @@
                   <div style="font-size:36px;font-weight:900" id="imageCount">0</div>
                 </div>
               </div>
-              <div class="bars" style="margin-top:16px">
-                <div class="bar-row">
-                  <span><b>MEMORY DENSITY</b><b id="entryBarText">0%</b></span>
-                  <div class="bar"><i id="entryBar" style="width:18%"></i></div>
-                </div>
-                <div class="bar-row">
-                  <span><b>VISUAL LOGS</b><b id="imageBarText">0%</b></span>
-                  <div class="bar"><i id="imageBar" style="width:12%"></i></div>
-                </div>
-                <div class="bar-row">
-                  <span><b>LAST SYNC</b><b id="lastSync">--:--</b></span>
-                  <div class="bar"><i style="width:88%"></i></div>
-                </div>
+              <div style="margin-top:16px;color:#2a2b31;font-size:18px;font-weight:800;line-height:1.55">
+                <div>MEMORY DENSITY <span id="entryBarText">0%</span></div>
+                <div>VISUAL LOGS <span id="imageBarText">0%</span></div>
+                <div>LAST SYNC <span id="lastSync">--:--</span></div>
+              </div>
+              <div style="display:none">
+                <div class="bar"><i id="entryBar" style="width:18%"></i></div>
+                <div class="bar"><i id="imageBar" style="width:12%"></i></div>
               </div>
             </article>
           </div>
@@ -1491,7 +1739,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "mecha_archive_v8";
+    const STORAGE_KEY = "mecha_archive_v9";
     const SECTIONS = {
       archive: {
         code: "SEC.01",
@@ -1536,6 +1784,7 @@
     let entries = loadEntries();
     let audioCtx = null;
     let doorBusy = false;
+    let tiltRAF = null;
 
     const cursor = document.getElementById("cursor");
     const steamLayer = document.getElementById("steamLayer");
@@ -1569,19 +1818,28 @@
       const seed = [
         {
           id: crypto.randomUUID(),
-          section: "heart",
-          date: "2024-03-10",
-          title: "新しい旅の始まり",
-          content: "これからこの場所に、自分の記憶を少しずつ残していきたい。",
+          section: "archive",
+          date: "2024-02-28",
+          title: "サイト開設",
+          content: "この場所を、私の人生と心の記録を残すためのアーカイブとして使い始める。",
           image: "",
-          createdAt: Date.now()
+          createdAt: Date.now() - 3000
         },
         {
           id: crypto.randomUUID(),
           section: "trajectory",
           date: "2024-03-08",
           title: "人生の転機",
-          content: "不安と期待が入り混じる日。けれど、確かに前へ進み始めた。",
+          content: "大学を卒業し、新しい道を歩み始めた日。不安と期待が入り混じる。",
+          image: "",
+          createdAt: Date.now()-2000
+        },
+        {
+          id: crypto.randomUUID(),
+          section: "heart",
+          date: "2024-03-10",
+          title: "新しい旅の始まり",
+          content: "これからこの場所に、自分の記憶を少しずつ残していきたい。",
           image: "",
           createdAt: Date.now()-1000
         },
@@ -1592,7 +1850,7 @@
           title: "読書の記録",
           content: "本の中の言葉に、自分の心を救われる瞬間がある。",
           image: "",
-          createdAt: Date.now()-2000
+          createdAt: Date.now()
         }
       ];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
@@ -1632,29 +1890,92 @@
       }
     }
 
-    function renderSectionCards(){
-      const wrap = document.getElementById("sectionCards");
-      wrap.innerHTML = Object.entries(SECTIONS).map(([key, data]) => `
-        <article class="metal-card" data-tilt>
-          <div class="card-topline">
-            <div class="dot"></div>
-            <span>${escapeHtml(data.line)}</span>
-            <div class="line"></div>
-          </div>
-          <h2 class="card-title">${escapeHtml(data.label)}</h2>
-          <div class="card-text">${escapeHtml(data.desc)}</div>
-          <div style="margin-top:18px">
-            <button class="btn primary" onclick="openSection('${key}')">この区画へ入る</button>
-          </div>
-        </article>
-      `).join("");
-      setupTilt();
-    }
-
     function listBySection(section){
       return [...entries]
         .filter(x => x.section === section)
         .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+    }
+
+    function renderSectionCards(){
+      const wrap = document.getElementById("sectionCards");
+
+      wrap.innerHTML = Object.entries(SECTIONS).map(([key, data]) => {
+        const list = listBySection(key);
+        const latest = list[0];
+
+        const previewInner = latest
+          ? `
+            <div class="section-preview-mini">
+              <div class="section-preview-marker"></div>
+              <div class="section-preview-card">
+                <div class="date">${escapeHtml(latest.date || "")}</div>
+                <h4>${escapeHtml(latest.title || "無題の記録")}</h4>
+                <p>${escapeHtml((latest.content || "").slice(0, 72))}${(latest.content || "").length > 72 ? "…" : ""}</p>
+              </div>
+            </div>
+          `
+          : `
+            <div class="section-preview-feature">
+              <div class="label">No Records Yet</div>
+              <div class="item">まだ記録がありません</div>
+            </div>
+          `;
+
+        const archiveFeature = latest
+          ? `
+            <div class="section-preview-feature">
+              <div class="label">Latest Updates</div>
+              <div class="item">
+                <span class="date">${escapeHtml(latest.date || "")}</span>
+                <span>${escapeHtml(latest.title || "無題の記録")}</span>
+              </div>
+            </div>
+          `
+          : `
+            <div class="section-preview-feature">
+              <div class="label">Latest Updates</div>
+              <div class="item">
+                <span>記録はまだありません</span>
+              </div>
+            </div>
+          `;
+
+        const bodyContent = key === "archive"
+          ? `
+            <div class="section-preview-title">
+              このサイトは、私の人生の記録を残すためのパーソナルアーカイブです。<br>
+              日々の想い、出来事、好きなもの、大切な人々──すべてをここに刻んでいきます。
+            </div>
+            ${archiveFeature}
+          `
+          : previewInner;
+
+        return `
+          <article class="section-preview">
+            <div class="section-preview-head">
+              <div class="section-preview-tag">
+                <small>${escapeHtml(data.code)}</small>
+                <b>${escapeHtml(data.label)}</b>
+              </div>
+              <div class="section-preview-line"></div>
+            </div>
+
+            <div class="section-preview-shell">
+              <div class="section-preview-innerline">
+                <div class="dot"></div>
+                <span>${escapeHtml(data.line)}</span>
+                <div class="line"></div>
+              </div>
+
+              ${bodyContent}
+
+              <div style="margin-top:22px">
+                <button class="btn primary" onclick="openSection('${key}')">この区画へ入る</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
     }
 
     function renderSectionPage(section){
@@ -1709,7 +2030,6 @@
           </article>
         `).join("");
       }
-      setupTilt();
     }
 
     function renderAdminFilters(){
@@ -2013,7 +2333,7 @@
       ripple.style.left = x + "px";
       ripple.style.top = y + "px";
       document.body.appendChild(ripple);
-      setTimeout(()=> ripple.remove(), 720);
+      setTimeout(()=> ripple.remove(), 480);
     }
 
     function spawnSteam(count=10){
@@ -2040,19 +2360,19 @@
         doorOverlay.classList.remove("opening", "closing");
         doorOverlay.classList.add("active", "closing");
         playDoorSound();
-        spawnSteam(6);
+        spawnSteam(5);
 
         setTimeout(()=>{
           doorOverlay.classList.remove("closing");
           doorOverlay.classList.add("opening");
           playDoorSound();
-        }, 520);
+        }, 500);
 
         setTimeout(()=>{
           doorOverlay.classList.remove("active","opening","closing");
           doorBusy = false;
           resolve();
-        }, 1040);
+        }, 1000);
       });
     }
 
@@ -2105,7 +2425,6 @@
       doorOverlay.classList.remove("active","opening","closing");
     }
 
-    let tiltRAF = null;
     function setupTilt(){
       document.querySelectorAll("[data-tilt]").forEach(card=>{
         if(card.dataset.tiltBound === "1") return;
@@ -2142,7 +2461,7 @@
 
     document.addEventListener("click", e=>{
       createRipple(e.clientX, e.clientY);
-      if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
+      if(e.target.closest("button, a, .metal-card, .entry, .gallery-item, .section-preview-shell")) {
         playClickSound();
       }
     });
