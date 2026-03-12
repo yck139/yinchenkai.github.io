@@ -56,47 +56,73 @@
     .cursor{
       position:fixed;
       left:0;top:0;
-      width:18px;height:18px;
-      border:2px solid var(--red);
-      border-radius:50%;
+      width:26px;height:26px;
       transform:translate(-50%,-50%);
       pointer-events:none;
       z-index:9999;
-      box-shadow:
-        0 0 0 8px rgba(239,16,16,.08),
-        0 0 16px rgba(239,16,16,.22);
-      background:rgba(255,255,255,.08);
-      transition:width .14s,height .14s,box-shadow .14s,background .14s;
-      backdrop-filter:blur(2px);
+      transition:
+        width .12s ease,
+        height .12s ease,
+        transform .08s ease,
+        filter .12s ease,
+        opacity .12s ease;
+      filter:drop-shadow(0 0 8px rgba(239,16,16,.26));
     }
 
-    .cursor::before,.cursor::after{
+    .cursor::before{
       content:"";
       position:absolute;
-      inset:-12px;
-      border:1px solid rgba(239,16,16,.28);
+      inset:0;
+      border:2px solid var(--red);
       border-radius:50%;
-      animation:cursorPulse 2.1s infinite;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.88) 0 8%, rgba(239,16,16,.18) 9% 15%, transparent 16% 100%);
+      box-shadow:
+        0 0 0 5px rgba(239,16,16,.06),
+        inset 0 0 0 1px rgba(255,255,255,.55),
+        0 0 14px rgba(239,16,16,.16);
     }
 
     .cursor::after{
-      inset:-20px;
-      animation-delay:.7s;
-      border-color:rgba(239,16,16,.16);
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:44px;
+      height:44px;
+      transform:translate(-50%,-50%);
+      background:
+        linear-gradient(var(--red),var(--red)) center top / 2px 8px no-repeat,
+        linear-gradient(var(--red),var(--red)) center bottom / 2px 8px no-repeat,
+        linear-gradient(90deg,var(--red),var(--red)) left center / 8px 2px no-repeat,
+        linear-gradient(90deg,var(--red),var(--red)) right center / 8px 2px no-repeat;
+      opacity:.9;
+      animation:cursorHudBreath 1.8s ease-in-out infinite;
     }
 
     .cursor.active{
-      width:28px;height:28px;
-      background:rgba(239,16,16,.12);
-      box-shadow:
-        0 0 0 12px rgba(239,16,16,.08),
-        0 0 22px rgba(239,16,16,.32);
+      width:34px;
+      height:34px;
+      filter:
+        drop-shadow(0 0 12px rgba(239,16,16,.42))
+        drop-shadow(0 0 20px rgba(239,16,16,.18));
     }
 
-    @keyframes cursorPulse{
-      0%{transform:scale(.86);opacity:.68}
-      70%{transform:scale(1.14);opacity:0}
-      100%{transform:scale(1.14);opacity:0}
+    .cursor.active::before{
+      box-shadow:
+        0 0 0 8px rgba(239,16,16,.10),
+        inset 0 0 0 1px rgba(255,255,255,.65),
+        0 0 20px rgba(239,16,16,.24);
+    }
+
+    .cursor.active::after{
+      width:56px;
+      height:56px;
+    }
+
+    @keyframes cursorHudBreath{
+      0%,100%{opacity:.75; transform:translate(-50%,-50%) scale(.96)}
+      50%{opacity:1; transform:translate(-50%,-50%) scale(1.06)}
     }
 
     .click-ripple{
@@ -104,26 +130,28 @@
       width:18px;height:18px;
       left:0;top:0;
       transform:translate(-50%,-50%);
-      border:2px solid var(--red);
-      border-radius:50%;
       pointer-events:none;
       z-index:10000;
-      animation:ripple .72s ease-out forwards;
-      box-shadow:0 0 16px rgba(239,16,16,.24);
-      background:rgba(255,255,255,.08);
+      border-radius:50%;
+      border:2px solid var(--red);
+      animation:ripple .48s ease-out forwards;
+      box-shadow:
+        0 0 14px rgba(239,16,16,.24),
+        inset 0 0 0 1px rgba(255,255,255,.55);
+      background:rgba(255,255,255,.12);
     }
 
     .click-ripple::before{
       content:"";
       position:absolute;
       inset:-10px;
-      border:1px solid rgba(239,16,16,.45);
       border-radius:50%;
+      border:1px solid rgba(239,16,16,.52);
     }
 
     @keyframes ripple{
-      from{opacity:.95;transform:translate(-50%,-50%) scale(.5)}
-      to{opacity:0;transform:translate(-50%,-50%) scale(4.8)}
+      from{opacity:.96;transform:translate(-50%,-50%) scale(.55)}
+      to{opacity:0;transform:translate(-50%,-50%) scale(4.2)}
     }
 
     .hud-frame{
@@ -905,6 +933,7 @@
       z-index:1000;
       opacity:0;
       pointer-events:none;
+      background:rgba(238,238,240,.12);
     }
 
     .door-overlay.active{
@@ -917,53 +946,253 @@
       top:0;
       width:50.5%;
       height:100%;
-      background:linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
+      background:
+        linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.96),
-        0 0 26px rgba(239,16,16,.16);
+        0 0 30px rgba(239,16,16,.16);
       overflow:hidden;
     }
 
     .door-left{
       left:-52%;
-      clip-path:polygon(0 0,100% 0,88% 50%,100% 100%,0 100%);
+      clip-path:polygon(0 0,100% 0,90% 50%,100% 100%,0 100%);
     }
 
     .door-right{
       right:-52%;
-      clip-path:polygon(12% 50%,0 0,100% 0,100% 100%,0 100%);
+      clip-path:polygon(10% 50%,0 0,100% 0,100% 100%,0 100%);
     }
 
     .door-left::before,.door-right::before{
       content:"";
       position:absolute;
       inset:18px;
-      background:linear-gradient(180deg,#ffffff,#eef0f2);
+      background:
+        linear-gradient(180deg,#ffffff,#eef0f2);
       border:1px solid #d7d7dc;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.94),
+        inset 0 -1px 0 rgba(0,0,0,.03);
     }
 
     .door-left::after,.door-right::after{
       content:"";
       position:absolute;
-      top:24%;
+      top:22%;
       width:10px;
-      height:52%;
+      height:56%;
       background:linear-gradient(180deg,#ff8b8b,var(--red));
-      box-shadow:0 0 20px rgba(239,16,16,.22);
+      box-shadow:0 0 20px rgba(239,16,16,.26);
     }
 
     .door-left::after{right:14%}
     .door-right::after{left:14%}
 
-    .door-overlay.closing .door-left{animation:doorCloseLeft .72s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.closing .door-right{animation:doorCloseRight .72s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.opening .door-left{animation:doorOpenLeft .72s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.opening .door-right{animation:doorOpenRight .72s cubic-bezier(.75,0,.25,1) forwards}
+    .door-center-lock{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:120px;
+      height:120px;
+      transform:translate(-50%,-50%) scale(.6);
+      opacity:0;
+      border:2px solid rgba(239,16,16,.84);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.84), rgba(236,236,239,.95));
+      box-shadow:
+        0 0 26px rgba(239,16,16,.20),
+        inset 0 1px 0 rgba(255,255,255,.96);
+      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+
+    .door-center-lock::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:22px;
+      height:22px;
+      transform:translate(-50%,-50%) rotate(45deg);
+      border:2px solid var(--red);
+      background:#fff;
+      box-shadow:0 0 18px rgba(239,16,16,.24);
+    }
+
+    .door-center-lock::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:64px;
+      height:64px;
+      transform:translate(-50%,-50%);
+      background:
+        linear-gradient(var(--red),var(--red)) center top / 2px 14px no-repeat,
+        linear-gradient(var(--red),var(--red)) center bottom / 2px 14px no-repeat,
+        linear-gradient(90deg,var(--red),var(--red)) left center / 14px 2px no-repeat,
+        linear-gradient(90deg,var(--red),var(--red)) right center / 14px 2px no-repeat;
+      opacity:.9;
+    }
+
+    .door-overlay.closing .door-left{animation:doorCloseLeft .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.closing .door-right{animation:doorCloseRight .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.closing .door-center-lock{animation:centerLockIn .22s .20s ease-out forwards}
+
+    .door-overlay.opening .door-left{animation:doorOpenLeft .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.opening .door-right{animation:doorOpenRight .46s cubic-bezier(.75,0,.25,1) forwards}
+    .door-overlay.opening .door-center-lock{animation:centerLockOut .20s ease-in forwards}
 
     @keyframes doorCloseLeft{from{left:-52%}to{left:0}}
     @keyframes doorCloseRight{from{right:-52%}to{right:0}}
     @keyframes doorOpenLeft{from{left:0}to{left:-52%}}
     @keyframes doorOpenRight{from{right:0}to{right:-52%}}
+
+    @keyframes centerLockIn{
+      from{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+      to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    }
+
+    @keyframes centerLockOut{
+      from{opacity:1;transform:translate(-50%,-50%) scale(1)}
+      to{opacity:0;transform:translate(-50%,-50%) scale(.68)}
+    }
+
+    .boot-overlay{
+      position:fixed;
+      inset:0;
+      z-index:1200;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
+      overflow:hidden;
+    }
+
+    .boot-overlay.hidden{
+      display:none;
+    }
+
+    .boot-grid{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
+      background-size:54px 54px;
+      opacity:.28;
+      pointer-events:none;
+    }
+
+    .boot-shell{
+      position:relative;
+      width:min(760px, 90vw);
+      padding:38px 36px 34px;
+      background:linear-gradient(180deg,#f8f8f9,#ececee);
+      border:1px solid #d7d7dc;
+      box-shadow:
+        0 24px 48px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.96),
+        inset 0 -1px 0 rgba(0,0,0,.03);
+      clip-path:polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
+      overflow:hidden;
+    }
+
+    .boot-shell::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;top:0;
+      height:4px;
+      background:linear-gradient(90deg,transparent,var(--red),transparent);
+      box-shadow:0 0 18px rgba(239,16,16,.24);
+    }
+
+    .boot-title{
+      text-align:center;
+      font-size:18px;
+      letter-spacing:.42em;
+      color:var(--red);
+      text-transform:uppercase;
+      margin-bottom:18px;
+      font-weight:800;
+    }
+
+    .boot-main{
+      text-align:center;
+      font-size:40px;
+      line-height:1.15;
+      font-weight:900;
+      color:#16171b;
+      text-shadow:
+        4px 4px 0 rgba(0,0,0,.08),
+        0 1px 0 rgba(255,255,255,.95);
+      margin-bottom:20px;
+      letter-spacing:.06em;
+    }
+
+    .boot-sub{
+      text-align:center;
+      color:#7a7c83;
+      font-size:13px;
+      letter-spacing:.28em;
+      margin-bottom:26px;
+      text-transform:uppercase;
+    }
+
+    .boot-bar-wrap{
+      position:relative;
+      width:100%;
+      height:22px;
+      padding:4px;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid #d4d4d9;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -1px 0 rgba(0,0,0,.03);
+      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
+      overflow:hidden;
+    }
+
+    .boot-bar{
+      height:100%;
+      width:0%;
+      background:
+        linear-gradient(90deg,#ffd0d0 0%, var(--red) 55%, var(--red2) 100%);
+      box-shadow:0 0 16px rgba(239,16,16,.24);
+      transition:width .08s linear;
+      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
+    }
+
+    .boot-status{
+      margin-top:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:#707279;
+      font-size:12px;
+      letter-spacing:.14em;
+    }
+
+    .boot-verify{
+      margin-top:26px;
+      text-align:center;
+      font-size:28px;
+      line-height:1.35;
+      font-weight:900;
+      color:var(--red);
+      letter-spacing:.12em;
+      opacity:0;
+      transform:translateY(8px);
+      transition:opacity .18s ease, transform .18s ease;
+      text-shadow:0 0 16px rgba(239,16,16,.18);
+    }
+
+    .boot-verify.show{
+      opacity:1;
+      transform:translateY(0);
+    }
 
     .steam-layer{
       position:fixed;
@@ -1044,6 +1273,29 @@
   <div class="door-overlay" id="doorOverlay">
     <div class="door-left"></div>
     <div class="door-right"></div>
+    <div class="door-center-lock"></div>
+  </div>
+
+  <div class="boot-overlay" id="bootOverlay">
+    <div class="boot-grid"></div>
+    <div class="boot-shell">
+      <div class="boot-title">MECHA MEMORY SYSTEM</div>
+      <div class="boot-main">個人アーカイブ認証</div>
+      <div class="boot-sub">INITIALIZING COCKPIT INTERFACE</div>
+
+      <div class="boot-bar-wrap">
+        <div class="boot-bar" id="bootBar"></div>
+      </div>
+
+      <div class="boot-status">
+        <span>IDENTITY CHECK</span>
+        <span id="bootPercent">0%</span>
+      </div>
+
+      <div class="boot-verify" id="bootVerify">
+        IDENTITY VERIFIED<br>認証成功
+      </div>
+    </div>
   </div>
 
   <div class="steam-layer" id="steamLayer"></div>
@@ -1288,6 +1540,10 @@
     const cursor = document.getElementById("cursor");
     const steamLayer = document.getElementById("steamLayer");
     const doorOverlay = document.getElementById("doorOverlay");
+    const bootOverlay = document.getElementById("bootOverlay");
+    const bootBar = document.getElementById("bootBar");
+    const bootPercent = document.getElementById("bootPercent");
+    const bootVerify = document.getElementById("bootVerify");
 
     const entryCountEl = document.getElementById("entryCount");
     const imageCountEl = document.getElementById("imageCount");
@@ -1392,6 +1648,7 @@
           </div>
         </article>
       `).join("");
+      setupTilt();
     }
 
     function listBySection(section){
@@ -1408,7 +1665,7 @@
       document.getElementById("sectionLineTitle").textContent = meta.line;
       document.getElementById("sectionBigTitle").textContent = meta.label;
       document.getElementById("sectionDesc").textContent = meta.desc;
-      document.getElementById("sectionEntryTitle").textContent = `${meta.label.toUpperCase ? meta.label : meta.label} LOGS`;
+      document.getElementById("sectionEntryTitle").textContent = `${meta.label} LOGS`;
 
       const list = listBySection(section);
       const entriesEl = document.getElementById("sectionEntries");
@@ -1452,6 +1709,7 @@
           </article>
         `).join("");
       }
+      setupTilt();
     }
 
     function renderAdminFilters(){
@@ -1663,6 +1921,62 @@
       osc.stop(t + 0.32);
     }
 
+    function playVerifySound(){
+      ensureAudio();
+      const t = audioCtx.currentTime;
+
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(520, t);
+      osc1.frequency.exponentialRampToValueAtTime(780, t + 0.12);
+      gain1.gain.setValueAtTime(0.0001, t);
+      gain1.gain.exponentialRampToValueAtTime(0.028, t + 0.02);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+      osc1.connect(gain1);
+      gain1.connect(audioCtx.destination);
+      osc1.start(t);
+      osc1.stop(t + 0.16);
+
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(860, t + 0.08);
+      osc2.frequency.exponentialRampToValueAtTime(1120, t + 0.18);
+      gain2.gain.setValueAtTime(0.0001, t + 0.08);
+      gain2.gain.exponentialRampToValueAtTime(0.018, t + 0.10);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, t + 0.20);
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      osc2.start(t + 0.08);
+      osc2.stop(t + 0.20);
+    }
+
+    function playBootHum(){
+      ensureAudio();
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(80, t);
+      osc.frequency.exponentialRampToValueAtTime(58, t + 0.5);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(520, t);
+
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.02, t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.56);
+    }
+
     function playSteamSound(){
       ensureAudio();
       const duration = 0.68;
@@ -1726,26 +2040,77 @@
         doorOverlay.classList.remove("opening", "closing");
         doorOverlay.classList.add("active", "closing");
         playDoorSound();
-        spawnSteam(10);
+        spawnSteam(6);
 
         setTimeout(()=>{
           doorOverlay.classList.remove("closing");
           doorOverlay.classList.add("opening");
           playDoorSound();
-          spawnSteam(7);
-        }, 860);
+        }, 520);
 
         setTimeout(()=>{
           doorOverlay.classList.remove("active","opening","closing");
           doorBusy = false;
           resolve();
-        }, 1680);
+        }, 1040);
       });
+    }
+
+    async function runBootSequence(){
+      let progress = 0;
+      const totalDuration = 1800;
+      const stepTime = 45;
+      const increment = 100 / (totalDuration / stepTime);
+
+      playBootHum();
+
+      await new Promise(resolve=>{
+        const timer = setInterval(()=>{
+          progress += increment + Math.random() * 2.2;
+          if(progress > 100) progress = 100;
+
+          const p = Math.floor(progress);
+          bootBar.style.width = p + "%";
+          bootPercent.textContent = p + "%";
+
+          if(p >= 100){
+            clearInterval(timer);
+            bootBar.style.width = "100%";
+            bootPercent.textContent = "100%";
+            resolve();
+          }
+        }, stepTime);
+      });
+
+      bootVerify.classList.add("show");
+      playVerifySound();
+
+      await new Promise(r => setTimeout(r, 260));
+
+      doorOverlay.classList.remove("opening","closing");
+      doorOverlay.classList.add("active","closing");
+      playDoorSound();
+      spawnSteam(8);
+
+      await new Promise(r => setTimeout(r, 420));
+
+      bootOverlay.classList.add("hidden");
+
+      doorOverlay.classList.remove("closing");
+      doorOverlay.classList.add("opening");
+      playDoorSound();
+
+      await new Promise(r => setTimeout(r, 500));
+
+      doorOverlay.classList.remove("active","opening","closing");
     }
 
     let tiltRAF = null;
     function setupTilt(){
       document.querySelectorAll("[data-tilt]").forEach(card=>{
+        if(card.dataset.tiltBound === "1") return;
+        card.dataset.tiltBound = "1";
+
         card.addEventListener("mousemove", e=>{
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -1771,12 +2136,15 @@
       cursor.style.left = e.clientX + "px";
       cursor.style.top = e.clientY + "px";
     });
+
     document.addEventListener("mousedown", ()=> cursor.classList.add("active"));
     document.addEventListener("mouseup", ()=> cursor.classList.remove("active"));
 
     document.addEventListener("click", e=>{
       createRipple(e.clientX, e.clientY);
-      if(e.target.closest("button")) playClickSound();
+      if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
+        playClickSound();
+      }
     });
 
     document.querySelectorAll(".nav button").forEach(btn=>{
@@ -1803,8 +2171,8 @@
     updateStats();
     setupTilt();
 
-    window.addEventListener("load", ()=>{
-      setTimeout(()=> triggerDoorTransition(), 220);
+    window.addEventListener("load", async ()=>{
+      await runBootSequence();
     });
   </script>
 </body>
