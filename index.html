@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#e9e9ea;
@@ -16,7 +21,7 @@
       --muted:#6f7178;
       --red:#ef1010;
       --red2:#c90c0c;
-      --red3:#980707;
+      --red3:#920707;
       --redSoft:#ffb8b8;
       --dark:#23242a;
       --dark2:#34353d;
@@ -27,8 +32,26 @@
       --metalDark:linear-gradient(180deg,#45464f 0%, #2d2e35 45%, #1f2026 100%);
       --cutA:polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
       --cutB:polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
-      --btnCut:polygon(12px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-      --btnInnerCut:polygon(10px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+
+      --btnShape:polygon(
+        20px 0,
+        calc(100% - 22px) 0,
+        100% 18px,
+        calc(100% - 14px) 100%,
+        18px 100%,
+        0 calc(100% - 16px),
+        0 16px
+      );
+
+      --btnInnerShape:polygon(
+        16px 0,
+        calc(100% - 18px) 0,
+        100% 14px,
+        calc(100% - 10px) 100%,
+        14px 100%,
+        0 calc(100% - 12px),
+        0 12px
+      );
     }
 
     *{box-sizing:border-box}
@@ -284,7 +307,9 @@
       flex-wrap:wrap;
     }
 
-    /* ===== 机甲按钮重做开始 ===== */
+    /* =========================
+       未来机甲按钮系统（重做）
+       ========================= */
     .nav button,.btn,.mini-btn,.filter-btn{
       appearance:none;
       border:none;
@@ -296,149 +321,205 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      min-height:44px;
-      padding:12px 18px;
+      min-height:46px;
+      padding:11px 22px;
       color:#fff;
+      background:transparent;
+      clip-path:var(--btnShape);
+      font-family:"Orbitron","Rajdhani","Noto Sans JP","Yu Gothic",sans-serif;
       font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.95), rgba(220,220,226,.96));
-      border:1px solid rgba(255,255,255,.95);
-      clip-path:var(--btnCut);
+      letter-spacing:.07em;
+      text-transform:none;
       text-shadow:
-        0 1px 0 rgba(120,0,0,.25),
-        0 0 10px rgba(255,255,255,.16);
-      box-shadow:
-        0 10px 20px rgba(0,0,0,.10),
-        0 0 0 1px rgba(180,20,20,.18),
-        inset 0 1px 0 rgba(255,255,255,.98),
-        inset 0 -2px 0 rgba(120,0,0,.12);
+        0 0 8px rgba(255,255,255,.22),
+        0 1px 0 rgba(120,0,0,.22);
       transition:
-        transform .16s ease,
-        box-shadow .16s ease,
-        filter .16s ease,
-        border-color .16s ease;
+        transform .18s ease,
+        filter .18s ease,
+        box-shadow .18s ease;
     }
 
     .nav button::before,.btn::before,.mini-btn::before,.filter-btn::before{
       content:"";
       position:absolute;
-      inset:3px;
-      z-index:-1;
-      clip-path:var(--btnInnerCut);
+      inset:0;
+      z-index:-3;
+      clip-path:var(--btnShape);
       background:
-        linear-gradient(135deg, rgba(255,255,255,.95) 0 9%, rgba(255,255,255,0) 9% 100%),
-        linear-gradient(180deg, #ff8888 0%, #ef1010 48%, #b70707 100%);
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,255,255,.70) 14%, rgba(255,255,255,.12) 14.5%, rgba(255,255,255,.12) 20%, rgba(255,255,255,.90) 20.5%, rgba(255,255,255,.80) 24%, rgba(255,255,255,.10) 24.5%),
+        linear-gradient(180deg,#ffe8e8 0%, #ffd7d7 12%, #ff7b7b 28%, #ef1010 58%, #a00606 100%);
+      border:1px solid rgba(255,255,255,.92);
       box-shadow:
-        inset 0 2px 0 rgba(255,255,255,.38),
-        inset 0 -3px 0 rgba(70,0,0,.22),
-        0 0 18px rgba(239,16,16,.22);
+        0 10px 22px rgba(239,16,16,.18),
+        0 0 0 1px rgba(255,255,255,.40),
+        inset 0 1px 0 rgba(255,255,255,.90),
+        inset 0 -3px 0 rgba(110,0,0,.25);
     }
 
     .nav button::after,.btn::after,.mini-btn::after,.filter-btn::after{
       content:"";
       position:absolute;
+      inset:3px;
+      z-index:-2;
+      clip-path:var(--btnInnerShape);
+      background:
+        linear-gradient(90deg,
+          rgba(255,255,255,.12) 0 8%,
+          rgba(255,255,255,.42) 14%,
+          rgba(255,255,255,.12) 19%,
+          transparent 20% 62%,
+          rgba(255,255,255,.10) 62% 70%,
+          transparent 70% 100%),
+        linear-gradient(180deg,
+          rgba(255,255,255,.45) 0%,
+          rgba(255,255,255,.10) 22%,
+          rgba(255,255,255,0) 45%,
+          rgba(90,0,0,.08) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.45),
+        inset 0 -1px 0 rgba(70,0,0,.18);
+      opacity:.95;
+    }
+
+    .nav button > span,.btn > span,.mini-btn > span,.filter-btn > span{
+      position:relative;
+      z-index:3;
+    }
+
+    .nav button .btn-shine,.btn .btn-shine,.mini-btn .btn-shine,.filter-btn .btn-shine{
+      position:absolute;
+      inset:-8px auto -8px -40%;
+      width:36%;
+      transform:skewX(-22deg);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.44), transparent);
+      filter:blur(2px);
+      opacity:.65;
+      pointer-events:none;
+      transition:transform .35s ease, opacity .2s ease;
+      z-index:2;
+    }
+
+    .nav button .btn-edge,.btn .btn-edge,.mini-btn .btn-edge,.filter-btn .btn-edge{
+      position:absolute;
       inset:0;
       pointer-events:none;
+      z-index:1;
+    }
+
+    .nav button .btn-edge::before,.btn .btn-edge::before,.mini-btn .btn-edge::before,.filter-btn .btn-edge::before{
+      content:"";
+      position:absolute;
+      left:12px;
+      right:12px;
+      top:3px;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.92), transparent);
+      opacity:.9;
+    }
+
+    .nav button .btn-edge::after,.btn .btn-edge::after,.mini-btn .btn-edge::after,.filter-btn .btn-edge::after{
+      content:"";
+      position:absolute;
+      right:16px;
+      bottom:6px;
+      width:30px;
+      height:5px;
       background:
-        linear-gradient(115deg,
-          transparent 0 24%,
-          rgba(255,255,255,.36) 32%,
-          rgba(255,255,255,.12) 39%,
-          transparent 48%),
         linear-gradient(90deg,
-          transparent 0 74%,
-          rgba(255,255,255,.16) 74% 78%,
-          transparent 78% 82%,
-          rgba(255,255,255,.12) 82% 85%,
-          transparent 85% 100%),
-        linear-gradient(180deg,
-          rgba(255,255,255,.18),
-          transparent 45%,
-          rgba(110,0,0,.10) 100%);
-      opacity:.95;
-      transform:translateX(-8%);
-      transition:transform .26s ease, opacity .18s ease;
-      mix-blend-mode:screen;
+          rgba(255,255,255,.0) 0 10%,
+          rgba(255,255,255,.62) 10% 18%,
+          rgba(255,255,255,.0) 18% 26%,
+          rgba(255,255,255,.62) 26% 34%,
+          rgba(255,255,255,.0) 34% 42%,
+          rgba(255,255,255,.62) 42% 50%,
+          rgba(255,255,255,.0) 50% 100%);
+      opacity:.65;
     }
 
     .nav button:hover,.btn:hover,.mini-btn:hover,.filter-btn:hover{
       transform:translateY(-2px) scale(1.015);
+      filter:saturate(1.08) brightness(1.02);
       box-shadow:
-        0 16px 28px rgba(0,0,0,.13),
-        0 0 0 1px rgba(239,16,16,.28),
-        0 0 22px rgba(239,16,16,.16),
-        inset 0 1px 0 rgba(255,255,255,.98),
-        inset 0 -2px 0 rgba(120,0,0,.14);
-      filter:saturate(1.05);
+        0 0 0 1px rgba(255,255,255,.20),
+        0 0 18px rgba(255,120,120,.26),
+        0 0 32px rgba(239,16,16,.16);
     }
 
-    .nav button:hover::after,.btn:hover::after,.mini-btn:hover::after,.filter-btn:hover::after{
-      transform:translateX(5%);
+    .nav button:hover .btn-shine,.btn:hover .btn-shine,.mini-btn:hover .btn-shine,.filter-btn:hover .btn-shine{
+      transform:translateX(210%) skewX(-22deg);
+      opacity:.9;
     }
 
     .nav button:active,.btn:active,.mini-btn:active,.filter-btn:active{
       transform:translateY(1px) scale(.985);
-      box-shadow:
-        0 6px 12px rgba(0,0,0,.10),
-        0 0 0 1px rgba(239,16,16,.24),
-        inset 0 2px 0 rgba(255,255,255,.62),
-        inset 0 -1px 0 rgba(80,0,0,.20);
+      filter:brightness(.95);
     }
 
     .nav button:active::before,.btn:active::before,.mini-btn:active::before,.filter-btn:active::before{
-      filter:brightness(.94);
       box-shadow:
-        inset 0 2px 0 rgba(255,255,255,.24),
-        inset 0 -1px 0 rgba(60,0,0,.28),
-        0 0 10px rgba(239,16,16,.18);
+        0 5px 10px rgba(239,16,16,.14),
+        0 0 0 1px rgba(255,255,255,.34),
+        inset 0 1px 0 rgba(255,255,255,.70),
+        inset 0 -1px 0 rgba(80,0,0,.30);
     }
 
     .nav button.active,.btn.primary,.filter-btn.active{
       color:#fff;
-      border-color:#ffd6d6;
-      box-shadow:
-        0 16px 28px rgba(239,16,16,.20),
-        0 0 0 1px rgba(239,16,16,.34),
-        0 0 24px rgba(239,16,16,.20),
-        inset 0 1px 0 rgba(255,255,255,.98),
-        inset 0 -2px 0 rgba(120,0,0,.14);
+      text-shadow:
+        0 0 10px rgba(255,255,255,.32),
+        0 1px 0 rgba(120,0,0,.26);
     }
 
     .nav button.active::before,.btn.primary::before,.filter-btn.active::before{
       background:
-        linear-gradient(135deg, rgba(255,255,255,.98) 0 10%, rgba(255,255,255,0) 10% 100%),
-        linear-gradient(180deg, #ff9f9f 0%, #ff4e4e 22%, #ef1010 55%, #9b0606 100%);
+        linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,255,255,.75) 14%, rgba(255,255,255,.10) 14.5%, rgba(255,255,255,.10) 20%, rgba(255,255,255,.94) 20.5%, rgba(255,255,255,.82) 24%, rgba(255,255,255,.08) 24.5%),
+        linear-gradient(180deg,#fff0f0 0%, #ffdfdf 10%, #ff8b8b 24%, #ff3030 52%, #b30606 100%);
       box-shadow:
-        inset 0 2px 0 rgba(255,255,255,.44),
-        inset 0 -3px 0 rgba(66,0,0,.26),
-        0 0 20px rgba(239,16,16,.28);
+        0 10px 24px rgba(239,16,16,.24),
+        0 0 0 1px rgba(255,255,255,.54),
+        0 0 18px rgba(255,120,120,.22),
+        inset 0 1px 0 rgba(255,255,255,.92),
+        inset 0 -3px 0 rgba(90,0,0,.28);
     }
 
     .mini-btn{
       min-height:34px;
-      padding:8px 12px;
+      padding:8px 14px;
       font-size:12px;
-      letter-spacing:.06em;
-    }
-
-    .mini-btn.danger{
-      color:#fff;
-      border-color:#ffd3d3;
-      box-shadow:
-        0 12px 18px rgba(239,16,16,.18),
-        0 0 0 1px rgba(239,16,16,.30),
-        inset 0 1px 0 rgba(255,255,255,.94);
+      letter-spacing:.05em;
     }
 
     .mini-btn.danger::before{
       background:
-        linear-gradient(135deg, rgba(255,255,255,.98) 0 10%, rgba(255,255,255,0) 10% 100%),
-        linear-gradient(180deg, #ff8f8f 0%, #ff3838 36%, #df0b0b 62%, #8e0505 100%);
+        linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.68) 14%, rgba(255,255,255,.08) 14.5%, rgba(255,255,255,.08) 20%, rgba(255,255,255,.90) 20.5%, rgba(255,255,255,.78) 24%, rgba(255,255,255,.06) 24.5%),
+        linear-gradient(180deg,#ffe5e5 0%, #ffcfcf 12%, #ff7777 24%, #ea1111 56%, #8d0404 100%);
     }
-    /* ===== 机甲按钮重做结束 ===== */
+
+    .nav button.has-fx,.btn.has-fx,.mini-btn.has-fx,.filter-btn.has-fx{
+      position:relative;
+    }
+
+    .fx-pulse{
+      animation:btnPulse .42s ease-out;
+    }
+
+    @keyframes btnPulse{
+      0%{
+        box-shadow:
+          0 0 0 0 rgba(255,255,255,.0),
+          0 0 0 0 rgba(239,16,16,.0);
+      }
+      35%{
+        box-shadow:
+          0 0 0 6px rgba(255,255,255,.12),
+          0 0 0 14px rgba(239,16,16,.10);
+      }
+      100%{
+        box-shadow:
+          0 0 0 0 rgba(255,255,255,0),
+          0 0 0 0 rgba(239,16,16,0);
+      }
+    }
 
     .page{
       display:none;
@@ -1226,6 +1307,7 @@
       text-transform:uppercase;
       margin-bottom:18px;
       font-weight:800;
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
     .boot-main{
@@ -1248,6 +1330,7 @@
       letter-spacing:.28em;
       margin-bottom:26px;
       text-transform:uppercase;
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
     .boot-bar-wrap{
@@ -1283,6 +1366,7 @@
       color:#707279;
       font-size:12px;
       letter-spacing:.14em;
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
     .boot-verify{
@@ -1297,6 +1381,7 @@
       transform:translateY(8px);
       transition:opacity .18s ease, transform .18s ease;
       text-shadow:0 0 16px rgba(239,16,16,.18);
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
     .boot-verify.show{
@@ -1335,9 +1420,9 @@
       font-size:12px;
       letter-spacing:.22em;
       text-transform:uppercase;
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
-    /* 统计条（补全） */
     .bars{
       display:grid;
       gap:12px;
@@ -1356,6 +1441,7 @@
       font-size:12px;
       letter-spacing:.1em;
       color:#7c7e84;
+      font-family:"Orbitron","Rajdhani","Noto Sans JP",sans-serif;
     }
 
     .bar{
@@ -1463,8 +1549,8 @@
       </div>
 
       <nav class="nav">
-        <button class="active" data-page="home">HOME</button>
-        <button data-page="admin">ADMIN</button>
+        <button class="active has-fx" data-page="home"><span>HOME</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
+        <button class="has-fx" data-page="admin"><span>ADMIN</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
       </nav>
     </header>
 
@@ -1552,7 +1638,7 @@
 
           <div class="admin-head">
             <div class="filter-row" id="adminFilters"></div>
-            <button class="btn primary" id="newEntryBtn">+ 新しい記録</button>
+            <button class="btn primary has-fx" id="newEntryBtn"><span>+ 新しい記録</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
           </div>
 
           <div class="admin-list" id="adminList"></div>
@@ -1569,10 +1655,10 @@
           <div class="section-shell">
             <div class="section-tools">
               <div class="filter-row">
-                <button class="btn" id="backHomeBtn">HOMEへ戻る</button>
+                <button class="btn has-fx" id="backHomeBtn"><span>HOMEへ戻る</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
               </div>
               <div class="filter-row">
-                <button class="btn primary" id="addSectionEntryBtn">+ 記録を追加</button>
+                <button class="btn primary has-fx" id="addSectionEntryBtn"><span>+ 記録を追加</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
               </div>
             </div>
 
@@ -1617,7 +1703,7 @@
     <div class="modal">
       <div class="modal-head">
         <h3 id="modalTitle">NEW RECORD</h3>
-        <button class="btn" id="closeModal">閉じる</button>
+        <button class="btn has-fx" id="closeModal"><span>閉じる</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
       </div>
       <div class="modal-body">
         <div class="row-2">
@@ -1635,8 +1721,8 @@
         <textarea id="entryContent" rows="8" placeholder="ここに感想、日記、記録を書いてください……"></textarea>
         <input id="entryImage" type="text" placeholder="画像URL（任意）" />
         <div class="row-2">
-          <button class="btn primary" id="publishEntryBtn">保存する</button>
-          <button class="btn" id="publishImageOnlyBtn">画像のみ追加</button>
+          <button class="btn primary has-fx" id="publishEntryBtn"><span>保存する</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
+          <button class="btn has-fx" id="publishImageOnlyBtn"><span>画像のみ追加</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
         </div>
       </div>
     </div>
@@ -1766,6 +1852,10 @@
         .replaceAll("'","&#039;");
     }
 
+    function decorateButtonText(label){
+      return `<span>${label}</span><i class="btn-shine"></i><i class="btn-edge"></i>`;
+    }
+
     function updateStats(){
       const count = entries.length;
       const imageCount = entries.filter(x => x.image && x.image.trim()).length;
@@ -1796,11 +1886,14 @@
           <h2 class="card-title">${escapeHtml(data.label)}</h2>
           <div class="card-text">${escapeHtml(data.desc)}</div>
           <div style="margin-top:18px">
-            <button class="btn primary" onclick="openSection('${key}')">この区画へ入る</button>
+            <button class="btn primary has-fx" onclick="openSection('${key}')">
+              <span>この区画へ入る</span><i class="btn-shine"></i><i class="btn-edge"></i>
+            </button>
           </div>
         </article>
       `).join("");
       setupTilt();
+      bindFxButtons();
     }
 
     function listBySection(section){
@@ -1840,8 +1933,8 @@
             <p>${escapeHtml(item.content || "")}</p>
             ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}
             <div class="entry-actions">
-              <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-              <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
+              <button class="mini-btn has-fx" onclick="openEdit('${item.id}')"><span>編集</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
+              <button class="mini-btn danger has-fx" onclick="removeEntry('${item.id}')"><span>削除</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
             </div>
           </article>
         `).join("");
@@ -1862,14 +1955,15 @@
         `).join("");
       }
       setupTilt();
+      bindFxButtons();
     }
 
     function renderAdminFilters(){
       const wrap = document.getElementById("adminFilters");
       wrap.innerHTML = `
-        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn active has-fx" data-filter="all"><span>すべて</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
         ${Object.entries(SECTIONS).map(([key,val]) =>
-          `<button class="filter-btn" data-filter="${key}">${escapeHtml(val.label)}</button>`
+          `<button class="filter-btn has-fx" data-filter="${key}"><span>${escapeHtml(val.label)}</span><i class="btn-shine"></i><i class="btn-edge"></i></button>`
         ).join("")}
       `;
 
@@ -1880,6 +1974,8 @@
           renderAdminList(btn.dataset.filter);
         });
       });
+
+      bindFxButtons();
     }
 
     function renderAdminList(filter="all"){
@@ -1903,11 +1999,13 @@
             <h4>${escapeHtml(item.title || "無題の記録")}</h4>
           </div>
           <div class="admin-actions">
-            <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-            <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
+            <button class="mini-btn has-fx" onclick="openEdit('${item.id}')"><span>編集</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
+            <button class="mini-btn danger has-fx" onclick="removeEntry('${item.id}')"><span>削除</span><i class="btn-shine"></i><i class="btn-edge"></i></button>
           </div>
         </article>
       `).join("");
+
+      bindFxButtons();
     }
 
     function showPage(name){
@@ -2284,6 +2382,19 @@
       });
     }
 
+    function bindFxButtons(){
+      document.querySelectorAll(".has-fx").forEach(btn=>{
+        if(btn.dataset.fxBound === "1") return;
+        btn.dataset.fxBound = "1";
+
+        btn.addEventListener("click", ()=>{
+          btn.classList.remove("fx-pulse");
+          void btn.offsetWidth;
+          btn.classList.add("fx-pulse");
+        });
+      });
+    }
+
     document.addEventListener("mousemove", e=>{
       cursor.style.left = e.clientX + "px";
       cursor.style.top = e.clientY + "px";
@@ -2322,6 +2433,7 @@
     renderAdminList("all");
     updateStats();
     setupTilt();
+    bindFxButtons();
 
     window.addEventListener("load", async ()=>{
       await runBootSequence();
