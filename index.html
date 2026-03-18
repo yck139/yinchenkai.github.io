@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
       --bg:#e9e9ea;
@@ -32,8 +33,7 @@
     html,body{
       margin:0;
       min-height:100%;
-      background:
-        linear-gradient(180deg,var(--bg2),var(--bg));
+      background:linear-gradient(180deg,var(--bg2),var(--bg));
       color:var(--text);
       font-family:"Segoe UI","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
       overflow-x:hidden;
@@ -279,6 +279,7 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
     .nav button,.btn,.mini-btn,.filter-btn{
@@ -314,6 +315,25 @@
         0 14px 28px rgba(239,16,16,.24),
         inset 0 1px 0 rgba(255,255,255,.22),
         inset 0 -2px 0 rgba(0,0,0,.14);
+    }
+
+    .status-pill{
+      padding:10px 14px;
+      background:var(--metalLight);
+      border:1px solid #d5d5da;
+      box-shadow:
+        0 8px 16px rgba(0,0,0,.06),
+        inset 0 1px 0 rgba(255,255,255,.96),
+        inset 0 -1px 0 rgba(0,0,0,.03);
+      clip-path:var(--cutA);
+      font-size:12px;
+      color:#7a7d84;
+      letter-spacing:.08em;
+    }
+
+    .status-pill strong{
+      color:var(--red);
+      margin-left:6px;
     }
 
     .page{
@@ -927,6 +947,35 @@
         inset 0 1px 0 rgba(255,255,255,.96);
     }
 
+    .admin-login-box{
+      margin-bottom:18px;
+      padding:18px;
+      background:var(--metalLight);
+      border:1px solid #d7d7dc;
+      box-shadow:
+        0 14px 28px rgba(0,0,0,.06),
+        inset 0 1px 0 rgba(255,255,255,.95);
+      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+
+    .admin-login-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .hint{
+      color:#80838a;
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
     .door-overlay{
       position:fixed;
       inset:0;
@@ -968,8 +1017,7 @@
       content:"";
       position:absolute;
       inset:18px;
-      background:
-        linear-gradient(180deg,#ffffff,#eef0f2);
+      background:linear-gradient(180deg,#ffffff,#eef0f2);
       border:1px solid #d7d7dc;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.94),
@@ -1065,8 +1113,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      background:
-        linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
+      background:linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
       overflow:hidden;
     }
 
@@ -1311,8 +1358,11 @@
       </div>
 
       <nav class="nav">
+        <div class="status-pill">SYNC<strong id="authStatus">GUEST</strong></div>
         <button class="active" data-page="home">HOME</button>
         <button data-page="admin">ADMIN</button>
+        <button id="loginBtn">LOGIN</button>
+        <button id="logoutBtn" class="hidden">LOGOUT</button>
       </nav>
     </header>
 
@@ -1396,6 +1446,19 @@
           <div class="section-header">
             <div class="sec-tag"><small>ADMIN</small><b>管理パネル</b></div>
             <div class="sec-line"></div>
+          </div>
+
+          <div class="admin-login-box">
+            <div class="admin-login-row">
+              <div class="hint">
+                管理者ログイン後のみ、追加・編集・削除が可能です。<br>
+                この第一版では画像は URL 入力方式です。次の版で画像直接アップロードにします。
+              </div>
+              <div class="filter-row">
+                <button class="btn primary" id="adminLoginBtn">管理者ログイン</button>
+                <button class="btn hidden" id="adminLogoutBtn">ログアウト</button>
+              </div>
+            </div>
           </div>
 
           <div class="admin-head">
@@ -1491,7 +1554,10 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "mecha_archive_v8";
+    const SUPABASE_URL = "https://hmdqaepikgqlakpinrkc.supabase.co";
+    const SUPABASE_ANON_KEY = "把你自己的 Publishable key 粘贴到这里";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const SECTIONS = {
       archive: {
         code: "SEC.01",
@@ -1533,9 +1599,10 @@
 
     let currentPage = "home";
     let currentSection = "archive";
-    let entries = loadEntries();
+    let entries = [];
     let audioCtx = null;
     let doorBusy = false;
+    let isAdminLoggedIn = false;
 
     const cursor = document.getElementById("cursor");
     const steamLayer = document.getElementById("steamLayer");
@@ -1561,57 +1628,73 @@
     const entryContent = document.getElementById("entryContent");
     const entryImage = document.getElementById("entryImage");
 
-    function loadEntries(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(raw) return JSON.parse(raw);
-      }catch(e){}
-      const seed = [
-        {
-          id: crypto.randomUUID(),
-          section: "heart",
-          date: "2024-03-10",
-          title: "新しい旅の始まり",
-          content: "これからこの場所に、自分の記憶を少しずつ残していきたい。",
-          image: "",
-          createdAt: Date.now()
-        },
-        {
-          id: crypto.randomUUID(),
-          section: "trajectory",
-          date: "2024-03-08",
-          title: "人生の転機",
-          content: "不安と期待が入り混じる日。けれど、確かに前へ進み始めた。",
-          image: "",
-          createdAt: Date.now()-1000
-        },
-        {
-          id: crypto.randomUUID(),
-          section: "favorite",
-          date: "2024-03-05",
-          title: "読書の記録",
-          content: "本の中の言葉に、自分の心を救われる瞬間がある。",
-          image: "",
-          createdAt: Date.now()-2000
-        }
-      ];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
-      return seed;
-    }
-
-    function saveEntries(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-      lastSyncEl.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
-      updateStats();
-    }
+    const authStatus = document.getElementById("authStatus");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const newEntryBtn = document.getElementById("newEntryBtn");
+    const addSectionEntryBtn = document.getElementById("addSectionEntryBtn");
 
     function escapeHtml(str=""){
-      return str
+      return String(str)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+    }
+
+    async function getVisiblePostsQuery() {
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const hasSession = !!sessionData.session;
+
+      if (hasSession) {
+        return supabaseClient
+          .from("posts")
+          .select("*")
+          .order("entry_date", { ascending: false })
+          .order("created_at", { ascending: false });
+      }
+
+      return supabaseClient
+        .from("posts")
+        .select("*")
+        .eq("is_public", true)
+        .order("entry_date", { ascending: false })
+        .order("created_at", { ascending: false });
+    }
+
+    async function loadEntriesFromSupabase() {
+      const query = await getVisiblePostsQuery();
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("读取 posts 失败:", error);
+        return [];
+      }
+
+      return (data || []).map(item => ({
+        id: item.id,
+        section: item.section,
+        date: item.entry_date,
+        title: item.title || "",
+        content: item.content || "",
+        image: item.image_url || "",
+        is_public: item.is_public,
+        createdAt: new Date(item.created_at).getTime()
+      }));
+    }
+
+    async function refreshEntries() {
+      entries = await loadEntriesFromSupabase();
+      renderSectionCards();
+      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
+      if (currentPage === "section") {
+        renderSectionPage(currentSection);
+      }
+      updateStats();
+      lastSyncEl.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
     }
 
     function updateStats(){
@@ -1681,16 +1764,18 @@
                 <div class="entry-meta">
                   <span>${escapeHtml(item.date || "")}</span>
                   <span class="badge">${escapeHtml(SECTIONS[item.section].label)}</span>
+                  ${item.is_public ? `<span class="badge">PUBLIC</span>` : `<span class="badge">PRIVATE</span>`}
                 </div>
                 <h4>${escapeHtml(item.title || "無題の記録")}</h4>
               </div>
             </div>
             <p>${escapeHtml(item.content || "")}</p>
             ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}
+            ${isAdminLoggedIn ? `
             <div class="entry-actions">
               <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
               <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
-            </div>
+            </div>` : ""}
           </article>
         `).join("");
       }
@@ -1710,6 +1795,7 @@
         `).join("");
       }
       setupTilt();
+      syncAdminButtons();
     }
 
     function renderAdminFilters(){
@@ -1747,12 +1833,15 @@
             <div class="entry-meta">
               <span>${escapeHtml(item.date || "")}</span>
               <span class="badge">${escapeHtml(SECTIONS[item.section].label)}</span>
+              ${item.is_public ? `<span class="badge">PUBLIC</span>` : `<span class="badge">PRIVATE</span>`}
             </div>
             <h4>${escapeHtml(item.title || "無題の記録")}</h4>
           </div>
           <div class="admin-actions">
+            ${isAdminLoggedIn ? `
             <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
             <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
+            ` : `<span class="hint">ログイン後に編集可能</span>`}
           </div>
         </article>
       `).join("");
@@ -1763,7 +1852,7 @@
       document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
       document.getElementById(`page-${name}`).classList.add("active");
 
-      document.querySelectorAll(".nav button").forEach(btn=>{
+      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
         btn.classList.toggle("active", btn.dataset.page === name);
       });
     }
@@ -1772,6 +1861,7 @@
       await triggerDoorTransition();
       showPage(name);
       window.scrollTo({top:0, behavior:"smooth"});
+      syncAdminButtons();
     }
 
     async function openSection(section){
@@ -1780,6 +1870,10 @@
     }
 
     function openModal(section="archive", item=null){
+      if (!isAdminLoggedIn) {
+        alert("管理者ログインが必要です。");
+        return;
+      }
       modalWrap.classList.add("show");
       modalWrap.dataset.editId = item?.id || "";
       modalTitle.textContent = item ? "EDIT RECORD" : "NEW RECORD";
@@ -1795,7 +1889,12 @@
       modalWrap.dataset.editId = "";
     }
 
-    function publishEntry(imageOnly=false){
+    async function publishEntry(imageOnly = false){
+      if (!isAdminLoggedIn) {
+        alert("管理者ログインが必要です。");
+        return;
+      }
+
       const editId = modalWrap.dataset.editId;
       const section = entrySection.value;
       const date = entryDate.value || new Date().toISOString().slice(0,10);
@@ -1814,36 +1913,67 @@
       }
 
       if(editId){
-        entries = entries.map(item => item.id === editId ? {
-          ...item, section, date, title, content, image
-        } : item);
-      }else{
-        entries.unshift({
-          id: crypto.randomUUID(),
-          section,
-          date,
-          title: title || (imageOnly ? "画像記録" : "無題の記録"),
-          content,
-          image,
-          createdAt: Date.now()
-        });
+        const { error } = await supabaseClient
+          .from("posts")
+          .update({
+            section,
+            entry_date: date,
+            title: title || (imageOnly ? "画像記録" : "無題の記録"),
+            content,
+            image_url: image
+          })
+          .eq("id", editId);
+
+        if (error) {
+          console.error(error);
+          alert("更新に失敗しました。");
+          return;
+        }
+      } else {
+        const { error } = await supabaseClient
+          .from("posts")
+          .insert({
+            section,
+            entry_date: date,
+            title: title || (imageOnly ? "画像記録" : "無題の記録"),
+            content,
+            image_url: image,
+            is_public: true
+          });
+
+        if (error) {
+          console.error(error);
+          alert("保存に失敗しました。");
+          return;
+        }
       }
 
-      saveEntries();
-      renderSectionCards();
-      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
-      if(currentPage === "section"){
-        renderSectionPage(currentSection);
-      }
+      await refreshEntries();
       closeModal();
       triggerDoorTransition();
     }
 
-    function removeEntry(id){
-      entries = entries.filter(item => item.id !== id);
-      saveEntries();
-      renderSectionCards();
-      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
+    async function removeEntry(id){
+      if (!isAdminLoggedIn) {
+        alert("管理者ログインが必要です。");
+        return;
+      }
+
+      const ok = confirm("この記録を削除しますか？");
+      if (!ok) return;
+
+      const { error } = await supabaseClient
+        .from("posts")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("削除に失敗しました。");
+        return;
+      }
+
+      await refreshEntries();
       if(currentPage === "section"){
         renderSectionPage(currentSection);
       }
@@ -1859,6 +1989,58 @@
     window.openSection = openSection;
     window.openEdit = openEdit;
     window.removeEntry = removeEntry;
+
+    async function updateAuthUI() {
+      const { data } = await supabaseClient.auth.getSession();
+      isAdminLoggedIn = !!data.session;
+
+      authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
+      loginBtn.classList.toggle("hidden", isAdminLoggedIn);
+      logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+      adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
+      adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+      syncAdminButtons();
+    }
+
+    function syncAdminButtons() {
+      newEntryBtn.disabled = !isAdminLoggedIn;
+      addSectionEntryBtn.disabled = !isAdminLoggedIn;
+      newEntryBtn.style.opacity = isAdminLoggedIn ? "1" : ".55";
+      addSectionEntryBtn.style.opacity = isAdminLoggedIn ? "1" : ".55";
+    }
+
+    async function adminLoginFlow() {
+      const email = prompt("管理者メールアドレスを入力してください");
+      if (!email) return;
+
+      const password = prompt("管理者パスワードを入力してください");
+      if (!password) return;
+
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        console.error(error);
+        alert("ログイン失敗: " + error.message);
+        return;
+      }
+
+      alert("管理者ログイン成功");
+      await updateAuthUI();
+      await refreshEntries();
+    }
+
+    async function adminLogoutFlow() {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        console.error(error);
+        alert("ログアウト失敗");
+        return;
+      }
+
+      alert("ログアウトしました");
+      await updateAuthUI();
+      await refreshEntries();
+    }
 
     function ensureAudio(){
       if(!audioCtx){
@@ -2147,13 +2329,13 @@
       }
     });
 
-    document.querySelectorAll(".nav button").forEach(btn=>{
+    document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
       btn.addEventListener("click", ()=> switchPage(btn.dataset.page));
     });
 
-    document.getElementById("newEntryBtn").addEventListener("click", ()=> openModal(currentSection));
+    newEntryBtn.addEventListener("click", ()=> openModal(currentSection));
     document.getElementById("backHomeBtn").addEventListener("click", ()=> switchPage("home"));
-    document.getElementById("addSectionEntryBtn").addEventListener("click", ()=> openModal(currentSection));
+    addSectionEntryBtn.addEventListener("click", ()=> openModal(currentSection));
 
     document.getElementById("closeModal").addEventListener("click", closeModal);
     modalWrap.addEventListener("click", e=>{
@@ -2163,18 +2345,26 @@
     document.getElementById("publishEntryBtn").addEventListener("click", ()=> publishEntry(false));
     document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=> publishEntry(true));
 
+    loginBtn.addEventListener("click", adminLoginFlow);
+    logoutBtn.addEventListener("click", adminLogoutFlow);
+    adminLoginBtn.addEventListener("click", adminLoginFlow);
+    adminLogoutBtn.addEventListener("click", adminLogoutFlow);
+
     entryDate.value = new Date().toISOString().slice(0,10);
 
-    renderSectionCards();
     renderAdminFilters();
-    renderAdminList("all");
-    updateStats();
     setupTilt();
+
+    supabaseClient.auth.onAuthStateChange(async () => {
+      await updateAuthUI();
+      await refreshEntries();
+    });
 
     window.addEventListener("load", async ()=>{
       await runBootSequence();
+      await updateAuthUI();
+      await refreshEntries();
     });
   </script>
 </body>
 </html>
-
