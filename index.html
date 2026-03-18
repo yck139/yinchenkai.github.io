@@ -296,7 +296,7 @@
         inset 0 -1px 0 rgba(0,0,0,.03);
       padding:11px 16px;
       clip-path:var(--cutA);
-      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, opacity .16s ease;
     }
 
     .nav button:hover,.btn:hover,.mini-btn:hover,.filter-btn:hover{
@@ -315,6 +315,12 @@
         0 14px 28px rgba(239,16,16,.24),
         inset 0 1px 0 rgba(255,255,255,.22),
         inset 0 -2px 0 rgba(0,0,0,.14);
+    }
+
+    button:disabled{
+      cursor:not-allowed;
+      opacity:.55;
+      transform:none !important;
     }
 
     .status-pill{
@@ -590,6 +596,35 @@
       line-height:1.95;
       font-size:15px;
       white-space:pre-wrap;
+    }
+
+    .bars{margin-top:16px}
+    .bar-row{margin-top:12px}
+    .bar-row span{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      letter-spacing:.12em;
+      color:#7d8087;
+      margin-bottom:7px;
+    }
+    .bar{
+      width:100%;
+      height:12px;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid #d7d7dc;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+      overflow:hidden;
+      clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);
+    }
+    .bar i{
+      display:block;
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#ffd1d1,var(--red),var(--red2));
+      box-shadow:0 0 14px rgba(239,16,16,.24);
+      transition:width .25s ease;
     }
 
     .section-page{
@@ -962,8 +997,22 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
+    }
+
+    .admin-login-fields{
+      flex:1;
+      min-width:280px;
+      display:grid;
+      gap:10px;
+    }
+
+    .admin-login-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
     }
 
     .hint{
@@ -971,6 +1020,19 @@
       font-size:13px;
       line-height:1.8;
     }
+
+    .login-status{
+      margin-top:12px;
+      font-size:13px;
+      line-height:1.8;
+      color:#6f7178;
+      padding:10px 12px;
+      border:1px solid #d7d7dc;
+      background:rgba(255,255,255,.55);
+      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
+    }
+    .login-status.ok{color:#0c8b43}
+    .login-status.err{color:#c90c0c}
 
     .hidden{
       display:none !important;
@@ -1418,7 +1480,7 @@
                   <div style="font-size:36px;font-weight:900" id="imageCount">0</div>
                 </div>
               </div>
-              <div class="bars" style="margin-top:16px">
+              <div class="bars">
                 <div class="bar-row">
                   <span><b>MEMORY DENSITY</b><b id="entryBarText">0%</b></span>
                   <div class="bar"><i id="entryBar" style="width:18%"></i></div>
@@ -1450,15 +1512,22 @@
 
           <div class="admin-login-box">
             <div class="admin-login-row">
-              <div class="hint">
-                管理者ログイン後のみ、追加・編集・削除が可能です。<br>
-                この第一版では画像は URL 入力方式です。次の版で画像直接アップロードにします。
+              <div class="admin-login-fields">
+                <div class="hint">
+                  管理者ログイン後のみ、追加・編集・削除が可能です。<br>
+                  当前版本图片仍然是 URL 输入方式。
+                </div>
+                <input id="adminEmailInput" type="email" placeholder="管理者メールアドレス" autocomplete="username">
+                <input id="adminPasswordInput" type="password" placeholder="管理者パスワード" autocomplete="current-password">
               </div>
-              <div class="filter-row">
+
+              <div class="admin-login-actions">
                 <button class="btn primary" id="adminLoginBtn">管理者ログイン</button>
                 <button class="btn hidden" id="adminLogoutBtn">ログアウト</button>
               </div>
             </div>
+
+            <div class="login-status" id="loginStatus">未登录。管理员功能锁定中。</div>
           </div>
 
           <div class="admin-head">
@@ -1603,6 +1672,8 @@
     let audioCtx = null;
     let doorBusy = false;
     let isAdminLoggedIn = false;
+    let appInitialized = false;
+    let authListenerBound = false;
 
     const cursor = document.getElementById("cursor");
     const steamLayer = document.getElementById("steamLayer");
@@ -1633,6 +1704,9 @@
     const logoutBtn = document.getElementById("logoutBtn");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const adminEmailInput = document.getElementById("adminEmailInput");
+    const adminPasswordInput = document.getElementById("adminPasswordInput");
+    const loginStatus = document.getElementById("loginStatus");
     const newEntryBtn = document.getElementById("newEntryBtn");
     const addSectionEntryBtn = document.getElementById("addSectionEntryBtn");
 
@@ -1643,6 +1717,12 @@
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+    }
+
+    function setLoginStatus(text, type=""){
+      loginStatus.textContent = text;
+      loginStatus.classList.remove("ok","err");
+      if(type) loginStatus.classList.add(type);
     }
 
     async function getVisiblePostsQuery() {
@@ -1666,26 +1746,32 @@
     }
 
     async function loadEntriesFromSupabase() {
-      const query = await getVisiblePostsQuery();
-      const { data, error } = await query;
+      try{
+        const query = await getVisiblePostsQuery();
+        const { data, error } = await query;
 
-      if (error) {
-        console.error("读取 posts 失败:", error);
-        alert("读取失败: " + error.message);
+        if (error) {
+          console.error("读取 posts 失败:", error);
+          alert("读取失败: " + error.message);
+          return [];
+        }
+
+        return (data || []).map(item => ({
+          id: item.id,
+          section: item.section,
+          date: item.entry_date,
+          title: item.title || "",
+          content: item.content || "",
+          image: item.image_url || "",
+          is_public: item.is_public,
+          author_id: item.author_id || "",
+          createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
+        }));
+      }catch(err){
+        console.error("loadEntriesFromSupabase exception:", err);
+        alert("读取发生异常: " + (err?.message || err));
         return [];
       }
-
-      return (data || []).map(item => ({
-        id: item.id,
-        section: item.section,
-        date: item.entry_date,
-        title: item.title || "",
-        content: item.content || "",
-        image: item.image_url || "",
-        is_public: item.is_public,
-        author_id: item.author_id || "",
-        createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
-      }));
     }
 
     async function refreshEntries() {
@@ -1851,11 +1937,19 @@
 
     function showPage(name){
       currentPage = name;
-      document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-      document.getElementById(`page-${name}`).classList.add("active");
 
-      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
-        btn.classList.toggle("active", btn.dataset.page === name);
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+
+      const targetPage = document.getElementById(`page-${name}`);
+      if (targetPage) {
+        targetPage.classList.add("active");
+      } else {
+        document.getElementById("page-home").classList.add("active");
+        currentPage = "home";
+      }
+
+      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === currentPage);
       });
     }
 
@@ -1914,55 +2008,60 @@
         return;
       }
 
-      const { data: sessionData } = await supabaseClient.auth.getSession();
-      const user = sessionData.session?.user;
+      try{
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        const user = sessionData.session?.user;
 
-      if (!user) {
-        alert("当前没有登录管理员账号");
-        return;
-      }
-
-      if(editId){
-        const { error } = await supabaseClient
-          .from("posts")
-          .update({
-            section,
-            entry_date: date,
-            title: title || (imageOnly ? "画像記録" : "無題の記録"),
-            content,
-            image_url: image,
-            author_id: user.id
-          })
-          .eq("id", editId);
-
-        if (error) {
-          console.error(error);
-          alert("更新失败: " + error.message);
+        if (!user) {
+          alert("当前没有登录管理员账号");
           return;
         }
-      } else {
-        const { error } = await supabaseClient
-          .from("posts")
-          .insert({
-            section,
-            entry_date: date,
-            title: title || (imageOnly ? "画像記録" : "無題の記録"),
-            content,
-            image_url: image,
-            is_public: true,
-            author_id: user.id
-          });
 
-        if (error) {
-          console.error(error);
-          alert("保存失败: " + error.message);
-          return;
+        if(editId){
+          const { error } = await supabaseClient
+            .from("posts")
+            .update({
+              section,
+              entry_date: date,
+              title: title || (imageOnly ? "画像記録" : "無題の記録"),
+              content,
+              image_url: image,
+              author_id: user.id
+            })
+            .eq("id", editId);
+
+          if (error) {
+            console.error(error);
+            alert("更新失败: " + error.message);
+            return;
+          }
+        } else {
+          const { error } = await supabaseClient
+            .from("posts")
+            .insert({
+              section,
+              entry_date: date,
+              title: title || (imageOnly ? "画像記録" : "無題の記録"),
+              content,
+              image_url: image,
+              is_public: true,
+              author_id: user.id
+            });
+
+          if (error) {
+            console.error(error);
+            alert("保存失败: " + error.message);
+            return;
+          }
         }
-      }
 
-      await refreshEntries();
-      closeModal();
-      await triggerDoorTransition();
+        await refreshEntries();
+        closeModal();
+        await triggerDoorTransition();
+      }catch(err){
+        console.error("publishEntry exception:", err);
+        alert("保存发生异常: " + (err?.message || err));
+      }
     }
 
     async function removeEntry(id){
@@ -1974,27 +2073,32 @@
       const ok = confirm("この記録を削除しますか？");
       if (!ok) return;
 
-      const { error } = await supabaseClient
-        .from("posts")
-        .delete()
-        .eq("id", id);
+      try{
+        const { error } = await supabaseClient
+          .from("posts")
+          .delete()
+          .eq("id", id);
 
-      if (error) {
-        console.error(error);
-        alert("削除失败: " + error.message);
-        return;
-      }
+        if (error) {
+          console.error(error);
+          alert("削除失败: " + error.message);
+          return;
+        }
 
-      await refreshEntries();
-      if(currentPage === "section"){
-        renderSectionPage(currentSection);
+        await refreshEntries();
+        if(currentPage === "section"){
+          renderSectionPage(currentSection);
+        }
+        spawnSteam(8);
+        playClickSound();
+      }catch(err){
+        console.error("removeEntry exception:", err);
+        alert("删除发生异常: " + (err?.message || err));
       }
-      spawnSteam(8);
-      playClickSound();
     }
 
     function openEdit(id){
-      const item = entries.find(x => x.id === id);
+      const item = entries.find(x => String(x.id) === String(id));
       if(item) openModal(item.section, item);
     }
 
@@ -2003,57 +2107,120 @@
     window.removeEntry = removeEntry;
 
     async function updateAuthUI() {
-      const { data } = await supabaseClient.auth.getSession();
-      isAdminLoggedIn = !!data.session;
+      try{
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          console.error("getSession error:", error);
+        }
 
-      authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
-      loginBtn.classList.toggle("hidden", isAdminLoggedIn);
-      logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-      adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
-      adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-      syncAdminButtons();
+        isAdminLoggedIn = !!data?.session;
+
+        authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
+        loginBtn.classList.toggle("hidden", isAdminLoggedIn);
+        logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+        adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
+        adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+
+        adminEmailInput.disabled = isAdminLoggedIn;
+        adminPasswordInput.disabled = isAdminLoggedIn;
+
+        if(isAdminLoggedIn){
+          setLoginStatus("管理员已登录，编辑权限已开启。", "ok");
+        }else{
+          setLoginStatus("未登录。管理员功能锁定中。", "");
+        }
+
+        syncAdminButtons();
+      }catch(err){
+        console.error("updateAuthUI exception:", err);
+        setLoginStatus("登录状态读取失败：" + (err?.message || err), "err");
+      }
     }
 
     function syncAdminButtons() {
       newEntryBtn.disabled = !isAdminLoggedIn;
       addSectionEntryBtn.disabled = !isAdminLoggedIn;
-      newEntryBtn.style.opacity = isAdminLoggedIn ? "1" : ".55";
-      addSectionEntryBtn.style.opacity = isAdminLoggedIn ? "1" : ".55";
     }
 
     async function adminLoginFlow() {
-      console.log("login clicked");
+      const email = adminEmailInput.value.trim();
+      const password = adminPasswordInput.value;
 
-      const email = prompt("管理者メールアドレスを入力してください");
-      if (!email) return;
-
-      const password = prompt("管理者パスワードを入力してください");
-      if (!password) return;
-
-      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        console.error(error);
-        alert("登录失败: " + error.message);
+      if (!email || !password) {
+        setLoginStatus("请输入管理员邮箱和密码。", "err");
+        alert("请输入管理员邮箱和密码");
         return;
       }
 
-      alert("管理者ログイン成功");
-      await updateAuthUI();
-      await refreshEntries();
+      adminLoginBtn.disabled = true;
+      setLoginStatus("正在登录，请稍等……");
+
+      try {
+        const result = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (result.error) {
+          console.error("login error:", result.error);
+          setLoginStatus("登录失败：" + result.error.message, "err");
+          alert("登录失败: " + result.error.message);
+          return;
+        }
+
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+        if (sessionError) {
+          setLoginStatus("登录后读取 session 失败：" + sessionError.message, "err");
+          alert("登录后读取 session 失败: " + sessionError.message);
+          return;
+        }
+
+        if (!sessionData.session) {
+          setLoginStatus("登录后没有拿到 session。", "err");
+          alert("登录后没有拿到 session，说明登录状态没有成功建立。");
+          return;
+        }
+
+        adminPasswordInput.value = "";
+        setLoginStatus("管理者ログイン成功", "ok");
+        alert("管理者ログイン成功");
+        await updateAuthUI();
+        await refreshEntries();
+      } catch (err) {
+        console.error("adminLoginFlow exception:", err);
+        setLoginStatus("登录发生异常：" + (err?.message || err), "err");
+        alert("登录发生异常: " + (err?.message || err));
+      } finally {
+        adminLoginBtn.disabled = false;
+      }
     }
 
     async function adminLogoutFlow() {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) {
-        console.error(error);
-        alert("ログアウト失敗: " + error.message);
-        return;
-      }
+      adminLogoutBtn.disabled = true;
+      setLoginStatus("正在退出登录……");
 
-      alert("ログアウトしました");
-      await updateAuthUI();
-      await refreshEntries();
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+          console.error(error);
+          setLoginStatus("ログアウト失敗：" + error.message, "err");
+          alert("ログアウト失敗: " + error.message);
+          return;
+        }
+
+        setLoginStatus("ログアウトしました");
+        alert("ログアウトしました");
+        await updateAuthUI();
+        await refreshEntries();
+      } catch (err) {
+        console.error("adminLogoutFlow exception:", err);
+        setLoginStatus("登出发生异常：" + (err?.message || err), "err");
+        alert("登出发生异常: " + (err?.message || err));
+      } finally {
+        adminLogoutBtn.disabled = false;
+      }
     }
 
     function ensureAudio(){
@@ -2301,6 +2468,32 @@
       doorOverlay.classList.remove("active","opening","closing");
     }
 
+    async function resetUIToDefault() {
+      currentPage = "home";
+      currentSection = "archive";
+      doorBusy = false;
+
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById("page-home").classList.add("active");
+
+      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === "home");
+      });
+
+      modalWrap.classList.remove("show");
+      modalWrap.dataset.editId = "";
+
+      doorOverlay.classList.remove("active", "opening", "closing");
+
+      bootOverlay.classList.remove("hidden");
+      bootBar.style.width = "0%";
+      bootPercent.textContent = "0%";
+      bootVerify.classList.remove("show");
+
+      adminPasswordInput.value = "";
+      setLoginStatus("正在初始化页面……");
+    }
+
     let tiltRAF = null;
     function setupTilt(){
       document.querySelectorAll("[data-tilt]").forEach(card=>{
@@ -2328,56 +2521,118 @@
       });
     }
 
-    document.addEventListener("mousemove", e=>{
-      cursor.style.left = e.clientX + "px";
-      cursor.style.top = e.clientY + "px";
-    });
+    async function initApp(forceBoot = true) {
+      if (appInitialized) return;
+      appInitialized = true;
 
-    document.addEventListener("mousedown", ()=> cursor.classList.add("active"));
-    document.addEventListener("mouseup", ()=> cursor.classList.remove("active"));
+      try {
+        await resetUIToDefault();
 
-    document.addEventListener("click", e=>{
-      createRipple(e.clientX, e.clientY);
-      if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
-        playClickSound();
+        renderAdminFilters();
+        setupTilt();
+
+        if (forceBoot) {
+          await runBootSequence();
+        } else {
+          bootOverlay.classList.add("hidden");
+        }
+
+        await updateAuthUI();
+        await refreshEntries();
+        syncAdminButtons();
+
+        showPage("home");
+        window.scrollTo({ top: 0, behavior: "auto" });
+
+        setLoginStatus(isAdminLoggedIn ? "管理员已登录，编辑权限已开启。" : "未登录。管理员功能锁定中。");
+      } catch (err) {
+        console.error("initApp exception:", err);
+        alert("页面初始化失败: " + (err?.message || err));
       }
-    });
+    }
 
-    document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
-      btn.addEventListener("click", ()=> switchPage(btn.dataset.page));
-    });
+    function bindStaticEvents(){
+      document.addEventListener("mousemove", e=>{
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+      });
 
-    newEntryBtn.addEventListener("click", ()=> openModal(currentSection));
-    document.getElementById("backHomeBtn").addEventListener("click", ()=> switchPage("home"));
-    addSectionEntryBtn.addEventListener("click", ()=> openModal(currentSection));
+      document.addEventListener("mousedown", ()=> cursor.classList.add("active"));
+      document.addEventListener("mouseup", ()=> cursor.classList.remove("active"));
 
-    document.getElementById("closeModal").addEventListener("click", closeModal);
-    modalWrap.addEventListener("click", e=>{
-      if(e.target === modalWrap) closeModal();
-    });
+      document.addEventListener("click", e=>{
+        createRipple(e.clientX, e.clientY);
+        if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
+          playClickSound();
+        }
+      });
 
-    document.getElementById("publishEntryBtn").addEventListener("click", ()=> publishEntry(false));
-    document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=> publishEntry(true));
+      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
+        btn.addEventListener("click", ()=> switchPage(btn.dataset.page));
+      });
 
-    loginBtn.addEventListener("click", adminLoginFlow);
-    logoutBtn.addEventListener("click", adminLogoutFlow);
-    adminLoginBtn.addEventListener("click", adminLoginFlow);
-    adminLogoutBtn.addEventListener("click", adminLogoutFlow);
+      loginBtn.addEventListener("click", async ()=>{
+        await switchPage("admin");
+        setTimeout(() => {
+          adminEmailInput.focus();
+        }, 80);
+        setLoginStatus("请在下方输入管理员邮箱和密码后登录。");
+      });
+
+      logoutBtn.addEventListener("click", adminLogoutFlow);
+      adminLoginBtn.addEventListener("click", adminLoginFlow);
+      adminLogoutBtn.addEventListener("click", adminLogoutFlow);
+
+      newEntryBtn.addEventListener("click", ()=> openModal(currentSection));
+      document.getElementById("backHomeBtn").addEventListener("click", ()=> switchPage("home"));
+      addSectionEntryBtn.addEventListener("click", ()=> openModal(currentSection));
+
+      document.getElementById("closeModal").addEventListener("click", closeModal);
+      modalWrap.addEventListener("click", e=>{
+        if(e.target === modalWrap) closeModal();
+      });
+
+      document.getElementById("publishEntryBtn").addEventListener("click", ()=> publishEntry(false));
+      document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=> publishEntry(true));
+
+      adminPasswordInput.addEventListener("keydown", e=>{
+        if(e.key === "Enter") adminLoginFlow();
+      });
+    }
+
+    function bindAuthListenerOnce(){
+      if(authListenerBound) return;
+      authListenerBound = true;
+
+      supabaseClient.auth.onAuthStateChange(async () => {
+        try {
+          await updateAuthUI();
+          await refreshEntries();
+          syncAdminButtons();
+        } catch (err) {
+          console.error("onAuthStateChange exception:", err);
+        }
+      });
+    }
+
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
 
     entryDate.value = new Date().toISOString().slice(0,10);
-
-    renderAdminFilters();
-    setupTilt();
-
-    supabaseClient.auth.onAuthStateChange(async () => {
-      await updateAuthUI();
-      await refreshEntries();
-    });
+    bindStaticEvents();
+    bindAuthListenerOnce();
 
     window.addEventListener("load", async ()=>{
-      await runBootSequence();
-      await updateAuthUI();
-      await refreshEntries();
+      await initApp(true);
+    });
+
+    window.addEventListener("pageshow", async (event) => {
+      if (event.persisted) {
+        console.log("pageshow persisted detected, reinitializing app");
+        appInitialized = false;
+        await initApp(false);
+      }
     });
   </script>
 </body>
