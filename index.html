@@ -1913,33 +1913,52 @@
       }
 
       if(editId){
-        const { error } = await supabaseClient
-          .from("posts")
-          .update({
-            section,
-            entry_date: date,
-            title: title || (imageOnly ? "画像記録" : "無題の記録"),
-            content,
-            image_url: image
-          })
-          .eq("id", editId);
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+const user = sessionData.session?.user;
+
+if (!user) {
+  alert("当前没有登录管理员账号");
+  return;
+}
+
+const { error } = await supabaseClient
+  .from("posts")
+  .update({
+    section,
+    entry_date: date,
+    title: title || (imageOnly ? "画像記録" : "無題の記録"),
+    content,
+    image_url: image,
+    author_id: user.id
+  })
+  .eq("id", editId);
 
         if (error) {
           console.error(error);
-          alert("更新に失敗しました。");
+          alert("更新失败: " + error.message);
+          alert("保存失败: " + error.message);
           return;
         }
       } else {
-        const { error } = await supabaseClient
-          .from("posts")
-          .insert({
-            section,
-            entry_date: date,
-            title: title || (imageOnly ? "画像記録" : "無題の記録"),
-            content,
-            image_url: image,
-            is_public: true
-          });
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+const user = sessionData.session?.user;
+
+if (!user) {
+  alert("当前没有登录管理员账号");
+  return;
+}
+
+const { error } = await supabaseClient
+  .from("posts")
+  .insert({
+    section,
+    entry_date: date,
+    title: title || (imageOnly ? "画像記録" : "無題の記録"),
+    content,
+    image_url: image,
+    is_public: true,
+    author_id: user.id
+  });
 
         if (error) {
           console.error(error);
