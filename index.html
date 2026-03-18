@@ -2158,15 +2158,7 @@
         }
 
         await updateAuthUI();
-        await refreshEntries();
-
-        const { data: verifySession, error: verifyError } = await supabaseClient.auth.getSession();
-        if (verifyError) {
-          setLoginStatus("登录后验证 session 失败：" + verifyError.message, "err");
-          alert("登录后验证 session 失败: " + verifyError.message);
-          return;
-        }
-
+      
         if (!verifySession.session) {
           setLoginStatus("登录后 session 未建立。", "err");
           alert("登录后 session 未建立。");
