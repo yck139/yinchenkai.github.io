@@ -7,27 +7,35 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
-      --bg:#e9e9ea;
-      --bg2:#f4f4f5;
-      --text:#17181c;
-      --muted:#6f7178;
+      --bg:#f4f4f6;
+      --bg2:#ececef;
+      --panel:#ffffff;
+      --panel2:#f7f7f8;
+      --line:#d7d7dc;
+      --line2:#c7c7cf;
+      --text:#16171b;
+      --muted:#777b84;
       --red:#ef1010;
       --red2:#c90c0c;
-      --redSoft:#ffb8b8;
+      --red3:#ff4d4d;
+      --redSoft:#ffd1d1;
+      --dark:#1f2026;
+      --dark2:#343540;
       --white:#ffffff;
-      --shadow:0 18px 40px rgba(0,0,0,.10);
+      --shadow:0 18px 42px rgba(0,0,0,.10);
       --shadowSoft:0 10px 22px rgba(0,0,0,.07);
-      --metalLight:linear-gradient(180deg,#ffffff 0%, #f7f7f8 22%, #ececef 54%, #e2e2e6 100%);
-      --metalDark:linear-gradient(180deg,#45464f 0%, #2d2e35 45%, #1f2026 100%);
-      --cutA:polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
-      --cutB:polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
+      --metalLight:linear-gradient(180deg,#ffffff 0%, #f7f7f8 24%, #ececef 58%, #e3e3e7 100%);
+      --metalDark:linear-gradient(180deg,#43444e 0%, #2e2f38 48%, #1d1e25 100%);
+      --cutA:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+      --cutB:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+      --cutC:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     }
 
     *{box-sizing:border-box}
     html,body{
       margin:0;
       min-height:100%;
-      background:linear-gradient(180deg,var(--bg2),var(--bg));
+      background:linear-gradient(180deg,var(--bg),var(--bg2));
       color:var(--text);
       font-family:"Segoe UI","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
       overflow-x:hidden;
@@ -40,24 +48,34 @@
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(rgba(0,0,0,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,.045) 1px, transparent 1px);
-      background-size:46px 46px;
-      opacity:.12;
+        linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+      background-size:44px 44px;
+      opacity:.14;
+      z-index:0;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(239,16,16,.08), transparent 38%),
+        radial-gradient(circle at 85% 20%, rgba(239,16,16,.05), transparent 24%);
       z-index:0;
     }
 
     .cursor{
       position:fixed;
-      left:0;top:0;
-      width:26px;height:26px;
+      left:0; top:0;
+      width:26px; height:26px;
       transform:translate(-50%,-50%);
       pointer-events:none;
       z-index:9999;
       transition:width .12s ease,height .12s ease,transform .08s ease,filter .12s ease,opacity .12s ease;
-      filter:drop-shadow(0 0 8px rgba(239,16,16,.26));
+      filter:drop-shadow(0 0 10px rgba(239,16,16,.28));
     }
-
     .cursor::before{
       content:"";
       position:absolute;
@@ -65,67 +83,47 @@
       border:2px solid var(--red);
       border-radius:50%;
       background:
-        radial-gradient(circle at center, rgba(255,255,255,.88) 0 8%, rgba(239,16,16,.18) 9% 15%, transparent 16% 100%);
+        radial-gradient(circle at center, rgba(255,255,255,.95) 0 10%, rgba(239,16,16,.18) 11% 18%, transparent 19% 100%);
       box-shadow:
         0 0 0 5px rgba(239,16,16,.06),
         inset 0 0 0 1px rgba(255,255,255,.55),
         0 0 14px rgba(239,16,16,.16);
     }
-
     .cursor::after{
       content:"";
       position:absolute;
-      left:50%;
-      top:50%;
-      width:44px;
-      height:44px;
+      left:50%; top:50%;
+      width:44px; height:44px;
       transform:translate(-50%,-50%);
       background:
         linear-gradient(var(--red),var(--red)) center top / 2px 8px no-repeat,
         linear-gradient(var(--red),var(--red)) center bottom / 2px 8px no-repeat,
         linear-gradient(90deg,var(--red),var(--red)) left center / 8px 2px no-repeat,
         linear-gradient(90deg,var(--red),var(--red)) right center / 8px 2px no-repeat;
-      opacity:.9;
-      animation:cursorHudBreath 1.8s ease-in-out infinite;
+      animation:cursorHud 1.8s ease-in-out infinite;
     }
-
     .cursor.active{
-      width:34px;
-      height:34px;
-      filter:drop-shadow(0 0 12px rgba(239,16,16,.42)) drop-shadow(0 0 20px rgba(239,16,16,.18));
+      width:34px; height:34px;
+      filter:drop-shadow(0 0 14px rgba(239,16,16,.42)) drop-shadow(0 0 22px rgba(239,16,16,.18));
     }
-
-    .cursor.active::before{
-      box-shadow:
-        0 0 0 8px rgba(239,16,16,.10),
-        inset 0 0 0 1px rgba(255,255,255,.65),
-        0 0 20px rgba(239,16,16,.24);
-    }
-
-    .cursor.active::after{
-      width:56px;
-      height:56px;
-    }
-
-    @keyframes cursorHudBreath{
-      0%,100%{opacity:.75; transform:translate(-50%,-50%) scale(.96)}
-      50%{opacity:1; transform:translate(-50%,-50%) scale(1.06)}
+    @keyframes cursorHud{
+      0%,100%{opacity:.78;transform:translate(-50%,-50%) scale(.96)}
+      50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
     }
 
     .click-ripple{
       position:fixed;
-      width:18px;height:18px;
-      left:0;top:0;
+      width:18px; height:18px;
+      left:0; top:0;
       transform:translate(-50%,-50%);
       pointer-events:none;
       z-index:10000;
       border-radius:50%;
       border:2px solid var(--red);
-      animation:ripple .48s ease-out forwards;
+      animation:ripple .46s ease-out forwards;
       box-shadow:0 0 14px rgba(239,16,16,.24), inset 0 0 0 1px rgba(255,255,255,.55);
       background:rgba(255,255,255,.12);
     }
-
     .click-ripple::before{
       content:"";
       position:absolute;
@@ -133,7 +131,6 @@
       border-radius:50%;
       border:1px solid rgba(239,16,16,.52);
     }
-
     @keyframes ripple{
       from{opacity:.96;transform:translate(-50%,-50%) scale(.55)}
       to{opacity:0;transform:translate(-50%,-50%) scale(4.2)}
@@ -145,14 +142,12 @@
       pointer-events:none;
       z-index:30;
     }
-
     .hud-frame .edge{
       position:absolute;
       background:linear-gradient(90deg,transparent,rgba(239,16,16,.82),transparent);
       box-shadow:0 0 16px rgba(239,16,16,.20);
       animation:breathEdge 2.4s ease-in-out infinite;
     }
-
     .hud-frame .top{left:0;right:0;top:0;height:4px}
     .hud-frame .bottom{left:0;right:0;bottom:0;height:4px}
     .hud-frame .left{
@@ -163,10 +158,9 @@
       right:0;top:0;bottom:0;width:4px;
       background:linear-gradient(180deg,transparent,rgba(239,16,16,.82),transparent);
     }
-
     .corner{
       position:absolute;
-      width:68px;height:68px;
+      width:66px;height:66px;
       border-color:var(--red);
       opacity:.9;
       animation:breathCorner 2.3s ease-in-out infinite;
@@ -175,20 +169,19 @@
     .corner.tr{right:18px;top:18px;border-top:4px solid var(--red);border-right:4px solid var(--red)}
     .corner.bl{left:18px;bottom:18px;border-bottom:4px solid var(--red);border-left:4px solid var(--red)}
     .corner.br{right:18px;bottom:18px;border-bottom:4px solid var(--red);border-right:4px solid var(--red)}
-
     @keyframes breathEdge{
       0%,100%{box-shadow:0 0 12px rgba(239,16,16,.12)}
       50%{box-shadow:0 0 28px rgba(239,16,16,.30)}
     }
     @keyframes breathCorner{
       0%,100%{filter:drop-shadow(0 0 4px rgba(239,16,16,.16))}
-      50%{filter:drop-shadow(0 0 12px rgba(239,16,16,.36))}
+      50%{filter:drop-shadow(0 0 12px rgba(239,16,16,.34))}
     }
 
     .app{
       position:relative;
       z-index:5;
-      width:min(1460px, calc(100% - 44px));
+      width:min(1440px, calc(100% - 32px));
       margin:14px auto 60px;
     }
 
@@ -201,14 +194,13 @@
       align-items:center;
       gap:16px;
       padding:14px 18px;
-      background:rgba(243,243,244,.92);
-      border:1px solid rgba(255,255,255,.92);
+      background:rgba(248,248,249,.88);
+      border:1px solid rgba(255,255,255,.95);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       clip-path:var(--cutA);
       overflow:hidden;
     }
-
     .topbar::before{
       content:"";
       position:absolute;
@@ -224,16 +216,15 @@
       gap:14px;
       min-width:0;
     }
-
     .brand-icon{
-      width:42px;height:42px;
+      width:44px;height:44px;
       position:relative;
       transform:rotate(45deg);
       background:var(--metalLight);
       border:1px solid #d8d8dd;
       box-shadow:var(--shadowSoft), inset 0 1px 0 rgba(255,255,255,.95);
+      flex:0 0 auto;
     }
-
     .brand-icon::before{
       content:"";
       position:absolute;
@@ -241,14 +232,21 @@
       border:3px solid var(--red);
       background:#fff;
     }
-
+    .brand-icon::after{
+      content:"";
+      position:absolute;
+      left:50%;top:50%;
+      width:8px;height:8px;
+      transform:translate(-50%,-50%) rotate(45deg);
+      background:var(--red);
+      box-shadow:0 0 12px rgba(239,16,16,.24);
+    }
     .brand-text h1{
       margin:0;
       font-size:15px;
       letter-spacing:.14em;
       white-space:nowrap;
     }
-
     .brand-text p{
       margin:4px 0 0;
       color:var(--muted);
@@ -265,6 +263,7 @@
       gap:10px;
       flex-wrap:wrap;
       align-items:center;
+      justify-content:flex-end;
     }
 
     .nav button,.btn,.mini-btn,.filter-btn{
@@ -283,7 +282,6 @@
       clip-path:var(--cutA);
       transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, opacity .16s ease;
     }
-
     .nav button:hover,.btn:hover,.mini-btn:hover,.filter-btn:hover{
       transform:translateY(-2px) scale(1.01);
       box-shadow:
@@ -291,9 +289,8 @@
         inset 0 1px 0 rgba(255,255,255,.96),
         inset 0 -1px 0 rgba(0,0,0,.04);
     }
-
     .nav button.active,.btn.primary,.filter-btn.active{
-      background:linear-gradient(180deg,var(--red),var(--red2));
+      background:linear-gradient(180deg,var(--red3),var(--red2));
       color:#fff;
       border-color:#c90f0f;
       box-shadow:
@@ -301,7 +298,6 @@
         inset 0 1px 0 rgba(255,255,255,.22),
         inset 0 -2px 0 rgba(0,0,0,.14);
     }
-
     button:disabled{
       cursor:not-allowed;
       opacity:.55;
@@ -321,44 +317,37 @@
       color:#7a7d84;
       letter-spacing:.08em;
     }
-
     .status-pill strong{
       color:var(--red);
       margin-left:6px;
     }
 
-    .page{
-      display:none;
-      margin-top:24px;
-    }
-    .page.active{
-      display:block;
-    }
+    .page{display:none;margin-top:22px}
+    .page.active{display:block}
 
     .hero{
-      min-height:76vh;
+      min-height:72vh;
       position:relative;
       display:grid;
       place-items:center;
       overflow:hidden;
     }
-
     .hero-grid{
       position:absolute;
       inset:0;
       background:
         linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px),
         linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-      background-size:70px 70px;
-      opacity:.46;
+      background-size:72px 72px;
+      opacity:.42;
       pointer-events:none;
     }
 
     .hero-panel{
       position:relative;
-      width:min(920px, 92%);
-      padding:56px 48px 58px;
-      background:linear-gradient(180deg,#f4f4f5,#ececee);
+      width:min(1060px, 94%);
+      padding:34px 34px 30px;
+      background:linear-gradient(180deg,#fafafa,#ededee);
       border:1px solid #d9d9de;
       box-shadow:
         0 24px 52px rgba(0,0,0,.10),
@@ -368,16 +357,14 @@
       transform-style:preserve-3d;
       overflow:hidden;
     }
-
     .hero-panel::before{
       content:"";
       position:absolute;
       inset:0;
-      border:3px solid rgba(239,16,16,.86);
+      border:3px solid rgba(239,16,16,.84);
       clip-path:polygon(0 0, calc(100% - 42px) 0, 100% 42px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
       pointer-events:none;
     }
-
     .hero-panel::after{
       content:"";
       position:absolute;
@@ -393,80 +380,167 @@
       align-items:center;
       gap:16px;
       color:var(--red);
-      letter-spacing:.32em;
+      letter-spacing:.3em;
       font-size:12px;
       text-transform:uppercase;
+      margin-bottom:18px;
     }
 
+    .hero-layout{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:520px;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(239,16,16,.08), transparent 28%),
+        linear-gradient(180deg,#ffffff,#f1f1f3);
+      border:1px solid #dddde2;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 14px 24px rgba(0,0,0,.06);
+      clip-path:var(--cutC);
+      overflow:hidden;
+    }
+    .hero-visual::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
+      background-size:28px 28px;
+      opacity:.26;
+    }
+    .hero-visual::after{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border:1px solid rgba(239,16,16,.18);
+      pointer-events:none;
+      clip-path:var(--cutA);
+    }
+    .hero-visual img{
+      position:absolute;
+      inset:18px 18px 18px 18px;
+      width:calc(100% - 36px);
+      height:calc(100% - 36px);
+      object-fit:contain;
+      filter:drop-shadow(0 18px 24px rgba(239,16,16,.10));
+    }
+
+    .hero-copy{
+      min-width:0;
+    }
     .hero-title{
-      margin:18px 0 8px;
-      text-align:center;
-      font-size:clamp(62px, 10vw, 130px);
-      line-height:1;
+      margin:0 0 10px;
+      font-size:clamp(46px, 8vw, 110px);
+      line-height:.98;
       font-weight:900;
       color:#121316;
       text-shadow:7px 7px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.95);
+      letter-spacing:.04em;
     }
-
     .hero-sub{
-      text-align:center;
       color:var(--red);
       letter-spacing:.34em;
-      font-size:14px;
+      font-size:13px;
       text-transform:uppercase;
+      margin-bottom:18px;
+      font-weight:800;
     }
-
     .hero-desc{
-      margin:42px auto 0;
-      max-width:720px;
-      text-align:center;
-      font-size:30px;
-      font-weight:700;
-      line-height:1.5;
-      padding:20px 28px;
+      font-size:24px;
+      font-weight:800;
+      line-height:1.55;
+      padding:18px 22px;
       background:var(--metalLight);
       border:1px solid #d8d8dc;
       box-shadow:0 12px 22px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
       clip-path:var(--cutB);
     }
-
     .hero-mini{
-      margin-top:28px;
-      text-align:center;
-      color:#8a8c93;
+      margin-top:16px;
+      color:#888b92;
       font-size:14px;
-      letter-spacing:.08em;
+      line-height:1.9;
+      letter-spacing:.04em;
     }
-
     .hero-mark{
-      margin-top:34px;
+      margin-top:24px;
       display:flex;
-      justify-content:center;
-      gap:16px;
+      gap:14px;
       align-items:center;
       color:var(--red);
     }
-
-    .hero-mark .line{width:80px;height:1px;background:var(--red)}
+    .hero-mark .line{
+      height:1px;
+      flex:1;
+      background:linear-gradient(90deg,transparent,var(--red),transparent);
+    }
     .hero-mark .diamond{
       width:18px;height:18px;
       border:2px solid var(--red);
       transform:rotate(45deg);
       box-shadow:0 0 14px rgba(239,16,16,.18);
+      flex:0 0 auto;
     }
 
+    .quick-grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+    .quick-card{
+      position:relative;
+      padding:16px 14px;
+      background:linear-gradient(180deg,#fff,#f0f0f2);
+      border:1px solid #dadadf;
+      box-shadow:0 12px 18px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.95);
+      clip-path:var(--cutB);
+      overflow:hidden;
+      transition:transform .16s ease, box-shadow .16s ease;
+    }
+    .quick-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 18px 28px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.95);
+    }
+    .quick-card small{
+      display:block;
+      color:#8a8d95;
+      letter-spacing:.18em;
+      font-size:11px;
+      margin-bottom:8px;
+      text-transform:uppercase;
+    }
+    .quick-card b{
+      display:block;
+      font-size:19px;
+      line-height:1.25;
+    }
+    .quick-card span{
+      display:block;
+      margin-top:6px;
+      color:#767982;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .section-page{margin-top:18px}
     .section-header{
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:18px;
-      margin-bottom:20px;
+      margin-bottom:18px;
       flex-wrap:wrap;
     }
-
     .sec-tag{
       min-width:260px;
-      padding:18px 28px;
+      padding:18px 24px;
       background:var(--metalDark);
       color:#fff;
       box-shadow:
@@ -475,19 +549,16 @@
         inset 0 -2px 0 rgba(239,16,16,.8);
       clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
     }
-
     .sec-tag small{
       color:var(--redSoft);
       letter-spacing:.2em;
       margin-right:12px;
       font-size:12px;
     }
-
     .sec-tag b{
       font-size:20px;
       letter-spacing:.06em;
     }
-
     .sec-line{
       flex:1;
       min-width:120px;
@@ -495,7 +566,6 @@
       background:linear-gradient(90deg,#d7a1a1,#ef1010,#e5b9b9);
       position:relative;
     }
-
     .sec-line::after{
       content:"";
       position:absolute;
@@ -508,7 +578,7 @@
     .overview-grid,.content-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:22px;
+      gap:20px;
     }
 
     .metal-card{
@@ -521,12 +591,11 @@
         inset 0 -1px 0 rgba(0,0,0,.04);
       padding:18px;
       min-height:220px;
-      clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+      clip-path:var(--cutC);
       transform-style:preserve-3d;
       transition:transform .16s ease, box-shadow .16s ease;
       overflow:hidden;
     }
-
     .metal-card::before{
       content:"";
       position:absolute;
@@ -536,7 +605,6 @@
         linear-gradient(225deg, rgba(239,16,16,.04), transparent 34%);
       pointer-events:none;
     }
-
     .metal-card:hover{
       transform:translateY(-3px) rotateX(2deg) rotateY(-2deg);
       box-shadow:
@@ -553,28 +621,24 @@
       text-transform:uppercase;
       letter-spacing:.3em;
       font-size:12px;
-      margin-bottom:18px;
+      margin-bottom:16px;
     }
-
     .card-topline .dot{
       width:12px;height:12px;background:var(--red);
       box-shadow:0 0 12px rgba(239,16,16,.22);
     }
-
     .card-topline .line{
       flex:1;height:1px;
       background:linear-gradient(90deg,#d8d8dc,var(--red),#d8d8dc);
     }
-
     .card-title{
       margin:0 0 12px;
-      font-size:32px;
+      font-size:30px;
       line-height:1.15;
     }
-
     .card-text{
       color:var(--muted);
-      line-height:1.95;
+      line-height:1.9;
       font-size:15px;
       white-space:pre-wrap;
     }
@@ -585,15 +649,14 @@
       gap:14px;
       margin-top:4px;
     }
-
-    .pilot-item{
+    .pilot-item,.pilot-wide{
       padding:12px 14px;
-      background:rgba(255,255,255,.55);
+      background:rgba(255,255,255,.58);
       border:1px solid #d7d7dc;
       clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
     }
-
+    .pilot-wide{margin-top:14px}
     .pilot-label{
       color:#8a8d95;
       font-size:11px;
@@ -601,31 +664,16 @@
       margin-bottom:6px;
       text-transform:uppercase;
     }
-
     .pilot-value{
-      font-size:24px;
+      font-size:22px;
       font-weight:900;
       line-height:1.2;
       color:#121316;
       word-break:break-word;
     }
-
-    .pilot-wide{
-      margin-top:14px;
-      padding:14px;
-      background:rgba(255,255,255,.60);
-      border:1px solid #d7d7dc;
-      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
-    }
-
     .pilot-wide .pilot-value{
       font-size:18px;
       font-weight:800;
-    }
-
-    .section-page{
-      margin-top:20px;
     }
 
     .section-shell{
@@ -641,7 +689,6 @@
       align-items:center;
       justify-content:space-between;
     }
-
     .filter-row{
       display:flex;
       gap:10px;
@@ -655,17 +702,9 @@
       overflow:auto;
       padding-right:4px;
     }
-
-    .entries::-webkit-scrollbar,
-    .gallery-grid::-webkit-scrollbar{
-      width:8px;
-      height:8px;
-    }
-
-    .entries::-webkit-scrollbar-thumb,
-    .gallery-grid::-webkit-scrollbar-thumb{
-      background:#cfcfd4;
-      border-radius:999px;
+    .entries::-webkit-scrollbar,.gallery-grid::-webkit-scrollbar{width:8px;height:8px}
+    .entries::-webkit-scrollbar-thumb,.gallery-grid::-webkit-scrollbar-thumb{
+      background:#cfcfd4;border-radius:999px;
     }
 
     .entry{
@@ -681,7 +720,6 @@
       transition:transform .16s ease, box-shadow .16s ease;
       overflow:hidden;
     }
-
     .entry::before{
       content:"";
       position:absolute;
@@ -689,7 +727,6 @@
       background:linear-gradient(180deg,#ffc7c7,var(--red),var(--red2));
       box-shadow:0 0 14px rgba(239,16,16,.20);
     }
-
     .entry:hover{
       transform:translateY(-2px) rotateX(1.5deg);
       box-shadow:
@@ -697,7 +734,6 @@
         inset 0 1px 0 rgba(255,255,255,.95),
         inset 0 -1px 0 rgba(0,0,0,.03);
     }
-
     .entry-head{
       display:flex;
       justify-content:space-between;
@@ -705,7 +741,6 @@
       gap:12px;
       margin-bottom:10px;
     }
-
     .entry-meta{
       display:flex;
       align-items:center;
@@ -716,20 +751,17 @@
       font-size:12px;
       letter-spacing:.08em;
     }
-
     .entry h4{
       margin:0;
       font-size:19px;
       line-height:1.3;
     }
-
     .entry p{
       margin:0;
       color:var(--muted);
       line-height:1.9;
       white-space:pre-wrap;
     }
-
     .entry img{
       width:100%;
       max-height:340px;
@@ -740,7 +772,6 @@
       box-shadow:0 10px 18px rgba(0,0,0,.05);
       clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
     }
-
     .entry-actions{
       display:flex;
       gap:8px;
@@ -752,7 +783,6 @@
       padding:8px 12px;
       font-size:12px;
     }
-
     .mini-btn.danger{
       background:linear-gradient(180deg,var(--red),var(--red2));
       color:#fff;
@@ -776,7 +806,6 @@
       max-height:520px;
       overflow:auto;
     }
-
     .gallery-item{
       position:relative;
       min-height:240px;
@@ -787,12 +816,10 @@
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
       transition:transform .16s ease, box-shadow .16s ease;
     }
-
     .gallery-item:hover{
       transform:translateY(-3px) rotateX(2deg) rotateY(-2deg);
       box-shadow:0 20px 36px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.95);
     }
-
     .gallery-item img{
       position:absolute;
       inset:0;
@@ -800,30 +827,26 @@
       height:100%;
       object-fit:cover;
     }
-
     .gallery-item::after{
       content:"";
       position:absolute;
       inset:0;
       background:linear-gradient(180deg,transparent 35%, rgba(255,255,255,.12) 58%, rgba(236,236,239,.94) 100%);
     }
-
     .gallery-info{
       position:absolute;
       left:12px;right:12px;bottom:12px;
       z-index:2;
       padding:12px;
-      background:rgba(255,255,255,.76);
+      background:rgba(255,255,255,.78);
       border:1px solid rgba(255,255,255,.92);
       backdrop-filter:blur(8px);
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
     }
-
     .gallery-info h4{
       margin:0 0 4px;
       font-size:16px;
     }
-
     .gallery-info small{
       color:#7b7d84;
     }
@@ -841,6 +864,51 @@
       line-height:1.9;
     }
 
+    .admin-login-box{
+      margin-bottom:18px;
+      padding:18px;
+      background:var(--metalLight);
+      border:1px solid #d7d7dc;
+      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
+      clip-path:var(--cutC);
+    }
+    .admin-login-row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .admin-login-fields{
+      flex:1;
+      min-width:280px;
+      display:grid;
+      gap:14px;
+    }
+    .admin-login-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .hint{
+      color:#80838a;
+      font-size:13px;
+      line-height:1.8;
+    }
+    .login-status{
+      margin-top:14px;
+      font-size:13px;
+      line-height:1.8;
+      color:#6f7178;
+      padding:12px 14px;
+      border:1px solid #d7d7dc;
+      background:rgba(255,255,255,.55);
+      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
+    }
+    .login-status.ok{color:#0c8b43}
+    .login-status.err{color:#c90c0c}
+
     .admin-head{
       display:flex;
       justify-content:space-between;
@@ -854,7 +922,6 @@
       display:grid;
       gap:14px;
     }
-
     .admin-item{
       display:flex;
       justify-content:space-between;
@@ -864,19 +931,14 @@
       border:1px solid #d7d7dc;
       box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
       padding:16px;
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+      clip-path:var(--cutC);
     }
-
-    .admin-main{
-      min-width:0;
-    }
-
+    .admin-main{min-width:0}
     .admin-main h4{
       margin:6px 0 0;
       font-size:18px;
       line-height:1.3;
     }
-
     .admin-actions{
       display:flex;
       gap:8px;
@@ -894,9 +956,7 @@
       background:rgba(232,232,234,.66);
       backdrop-filter:blur(10px);
     }
-
     .modal-wrap.show{display:flex}
-
     .modal{
       width:min(920px,100%);
       max-height:88vh;
@@ -906,7 +966,6 @@
       box-shadow:0 30px 68px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.96);
       clip-path:polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
     }
-
     .modal-head{
       display:flex;
       justify-content:space-between;
@@ -917,7 +976,6 @@
       border-bottom:1px solid #d8d8dd;
       position:relative;
     }
-
     .modal-head::after{
       content:"";
       position:absolute;
@@ -925,14 +983,12 @@
       height:4px;
       background:linear-gradient(90deg,transparent,var(--red),transparent);
     }
-
     .modal-head h3{
       margin:0;
       font-size:16px;
       letter-spacing:.18em;
       text-transform:uppercase;
     }
-
     .modal-body{
       display:grid;
       gap:14px;
@@ -959,65 +1015,12 @@
       clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       resize:vertical;
     }
-
     input:focus,textarea:focus,select:focus{
       border-color:#f08f8f;
       box-shadow:0 0 0 4px rgba(239,16,16,.08), inset 0 1px 0 rgba(255,255,255,.96);
     }
 
-    .admin-login-box{
-      margin-bottom:18px;
-      padding:18px;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    }
-
-    .admin-login-row{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-
-    .admin-login-fields{
-      flex:1;
-      min-width:280px;
-      display:grid;
-      gap:14px;
-    }
-
-    .admin-login-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-    }
-
-    .hint{
-      color:#80838a;
-      font-size:13px;
-      line-height:1.8;
-    }
-
-    .login-status{
-      margin-top:14px;
-      font-size:13px;
-      line-height:1.8;
-      color:#6f7178;
-      padding:12px 14px;
-      border:1px solid #d7d7dc;
-      background:rgba(255,255,255,.55);
-      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
-    }
-    .login-status.ok{color:#0c8b43}
-    .login-status.err{color:#c90c0c}
-
-    .hidden{
-      display:none !important;
-    }
+    .hidden{display:none !important}
 
     .door-overlay{
       position:fixed;
@@ -1027,12 +1030,10 @@
       pointer-events:none;
       background:rgba(238,238,240,.12);
     }
-
     .door-overlay.active{
       opacity:1;
       pointer-events:auto;
     }
-
     .door-left,.door-right{
       position:absolute;
       top:0;
@@ -1042,17 +1043,14 @@
       box-shadow:inset 0 1px 0 rgba(255,255,255,.96), 0 0 30px rgba(239,16,16,.16);
       overflow:hidden;
     }
-
     .door-left{
       left:-52%;
       clip-path:polygon(0 0,100% 0,90% 50%,100% 100%,0 100%);
     }
-
     .door-right{
       right:-52%;
       clip-path:polygon(10% 50%,0 0,100% 0,100% 100%,0 100%);
     }
-
     .door-left::before,.door-right::before{
       content:"";
       position:absolute;
@@ -1061,7 +1059,6 @@
       border:1px solid #d7d7dc;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.94), inset 0 -1px 0 rgba(0,0,0,.03);
     }
-
     .door-left::after,.door-right::after{
       content:"";
       position:absolute;
@@ -1071,7 +1068,6 @@
       background:linear-gradient(180deg,#ff8b8b,var(--red));
       box-shadow:0 0 20px rgba(239,16,16,.26);
     }
-
     .door-left::after{right:14%}
     .door-right::after{left:14%}
 
@@ -1088,7 +1084,6 @@
       box-shadow:0 0 26px rgba(239,16,16,.20), inset 0 1px 0 rgba(255,255,255,.96);
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     }
-
     .door-center-lock::before{
       content:"";
       position:absolute;
@@ -1101,7 +1096,6 @@
       background:#fff;
       box-shadow:0 0 18px rgba(239,16,16,.24);
     }
-
     .door-center-lock::after{
       content:"";
       position:absolute;
@@ -1121,7 +1115,6 @@
     .door-overlay.closing .door-left{animation:doorCloseLeft .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.closing .door-right{animation:doorCloseRight .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.closing .door-center-lock{animation:centerLockIn .22s .20s ease-out forwards}
-
     .door-overlay.opening .door-left{animation:doorOpenLeft .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.opening .door-right{animation:doorOpenRight .46s cubic-bezier(.75,0,.25,1) forwards}
     .door-overlay.opening .door-center-lock{animation:centerLockOut .20s ease-in forwards}
@@ -1130,12 +1123,10 @@
     @keyframes doorCloseRight{from{right:-52%}to{right:0}}
     @keyframes doorOpenLeft{from{left:0}to{left:-52%}}
     @keyframes doorOpenRight{from{right:0}to{right:-52%}}
-
     @keyframes centerLockIn{
       from{opacity:0;transform:translate(-50%,-50%) scale(.6)}
       to{opacity:1;transform:translate(-50%,-50%) scale(1)}
     }
-
     @keyframes centerLockOut{
       from{opacity:1;transform:translate(-50%,-50%) scale(1)}
       to{opacity:0;transform:translate(-50%,-50%) scale(.68)}
@@ -1151,11 +1142,7 @@
       background:linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
       overflow:hidden;
     }
-
-    .boot-overlay.hidden{
-      display:none;
-    }
-
+    .boot-overlay.hidden{display:none}
     .boot-grid{
       position:absolute;
       inset:0;
@@ -1166,7 +1153,6 @@
       opacity:.28;
       pointer-events:none;
     }
-
     .boot-shell{
       position:relative;
       width:min(760px, 90vw);
@@ -1177,7 +1163,6 @@
       clip-path:polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
       overflow:hidden;
     }
-
     .boot-shell::before{
       content:"";
       position:absolute;
@@ -1186,7 +1171,6 @@
       background:linear-gradient(90deg,transparent,var(--red),transparent);
       box-shadow:0 0 18px rgba(239,16,16,.24);
     }
-
     .boot-title{
       text-align:center;
       font-size:18px;
@@ -1196,7 +1180,6 @@
       margin-bottom:18px;
       font-weight:800;
     }
-
     .boot-main{
       text-align:center;
       font-size:40px;
@@ -1207,7 +1190,6 @@
       margin-bottom:20px;
       letter-spacing:.06em;
     }
-
     .boot-sub{
       text-align:center;
       color:#7a7c83;
@@ -1216,7 +1198,6 @@
       margin-bottom:26px;
       text-transform:uppercase;
     }
-
     .boot-bar-wrap{
       position:relative;
       width:100%;
@@ -1228,7 +1209,6 @@
       clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       overflow:hidden;
     }
-
     .boot-bar{
       height:100%;
       width:0%;
@@ -1237,7 +1217,6 @@
       transition:width .08s linear;
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
     }
-
     .boot-status{
       margin-top:14px;
       display:flex;
@@ -1248,7 +1227,6 @@
       font-size:12px;
       letter-spacing:.14em;
     }
-
     .boot-verify{
       margin-top:26px;
       text-align:center;
@@ -1262,7 +1240,6 @@
       transition:opacity .18s ease, transform .18s ease;
       text-shadow:0 0 16px rgba(239,16,16,.18);
     }
-
     .boot-verify.show{
       opacity:1;
       transform:translateY(0);
@@ -1275,7 +1252,6 @@
       pointer-events:none;
       overflow:hidden;
     }
-
     .steam{
       position:absolute;
       bottom:-120px;
@@ -1285,7 +1261,6 @@
       animation:steamRise 1.6s linear forwards;
       filter:blur(2px);
     }
-
     @keyframes steamRise{
       0%{transform:translateY(0) scale(.7);opacity:0}
       12%{opacity:.65}
@@ -1301,17 +1276,26 @@
       text-transform:uppercase;
     }
 
-    @media (max-width: 1200px){
+    @media (max-width: 1180px){
+      .hero-layout{
+        grid-template-columns:1fr;
+      }
+      .hero-visual{
+        min-height:420px;
+      }
       .overview-grid,.content-grid,.gallery-grid{
         grid-template-columns:1fr;
       }
       .pilot-grid{
         grid-template-columns:1fr;
       }
+      .quick-grid{
+        grid-template-columns:1fr;
+      }
     }
 
     @media (max-width: 860px){
-      .app{width:min(100% - 18px,100%)}
+      .app{width:min(100% - 14px,100%)}
       .topbar{
         flex-direction:column;
         align-items:flex-start;
@@ -1320,15 +1304,20 @@
       }
       .hero-panel{
         width:100%;
-        padding:42px 22px 44px;
+        padding:22px 16px 20px;
         clip-path:none;
         border-radius:24px;
       }
-      .hero-title{font-size:72px}
-      .hero-desc{font-size:22px}
+      .hero-visual{
+        min-height:360px;
+        clip-path:none;
+        border-radius:20px;
+      }
+      .hero-title{font-size:58px}
+      .hero-desc{font-size:19px}
       .row-2{grid-template-columns:1fr}
       .admin-item{flex-direction:column;align-items:flex-start}
-      .nav{width:100%}
+      .nav{width:100%;justify-content:flex-start}
       .sec-tag{min-width:unset;width:100%}
     }
   </style>
@@ -1380,7 +1369,7 @@
         <div class="brand-icon"></div>
         <div class="brand-text">
           <h1>私の記録</h1>
-          <p>パーソナル・ライフ・アーカイブ</p>
+          <p>パーソナル・ライフ・アーカイブ / RED-WHITE COCKPIT</p>
         </div>
       </div>
 
@@ -1400,17 +1389,47 @@
           <div class="hero-panel" data-tilt>
             <div class="hero-top">
               <span>◆</span>
-              <span>MY RECORD</span>
+              <span>PILOT MEMORY CORE</span>
               <span>◆</span>
             </div>
-            <div class="hero-title">私の記録</div>
-            <div class="hero-sub">MY RECORD</div>
-            <div class="hero-desc">人生の軌跡と心を保存するアーカイブ</div>
-            <div class="hero-mini">機体内メモリーシェルに、私の一生を刻む場所</div>
-            <div class="hero-mark">
-              <div class="line"></div>
-              <div class="diamond"></div>
-              <div class="line"></div>
+
+            <div class="hero-layout">
+              <div class="hero-visual">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" id="heroImage" alt="mecha visual">
+              </div>
+
+              <div class="hero-copy">
+                <h2 class="hero-title">私の記録</h2>
+                <div class="hero-sub">MY RECORD / PERSONAL ARCHIVE</div>
+                <div class="hero-desc">人生の軌跡と感情を、少年機甲のコクピットに保存する個人アーカイブ。</div>
+                <div class="hero-mini">
+                  日々の出来事、写真、好きなもの、大切な人、未来への願い。<br>
+                  ここは私だけの母艦であり、君がいつでも見に来られる記録装置。
+                </div>
+                <div class="hero-mark">
+                  <div class="line"></div>
+                  <div class="diamond"></div>
+                  <div class="line"></div>
+                </div>
+
+                <div class="quick-grid">
+                  <div class="quick-card">
+                    <small>PILOT</small>
+                    <b id="heroQuickStatus">OWNER MODE: STANDBY</b>
+                    <span>ログイン状態と公開表示を同期中</span>
+                  </div>
+                  <div class="quick-card">
+                    <small>ARCHIVE</small>
+                    <b id="heroQuickLogs">0 LOGS</b>
+                    <span>今までの保存記録数</span>
+                  </div>
+                  <div class="quick-card">
+                    <small>VISUAL</small>
+                    <b id="heroQuickImages">0 FILES</b>
+                    <span>画像付きメモリーの数</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1441,17 +1460,14 @@
                   <div class="pilot-label">PILOT STATUS</div>
                   <div class="pilot-value" id="pilotStatusText">OWNER MODE: STANDBY</div>
                 </div>
-
                 <div class="pilot-item">
                   <div class="pilot-label">LAST UPDATE</div>
                   <div class="pilot-value" id="pilotLastUpdate">--</div>
                 </div>
-
                 <div class="pilot-item">
                   <div class="pilot-label">ARCHIVE LOGS</div>
                   <div class="pilot-value" id="pilotArchiveLogs">0</div>
                 </div>
-
                 <div class="pilot-item">
                   <div class="pilot-label">VISUAL FILES</div>
                   <div class="pilot-value" id="pilotVisualFiles">0</div>
@@ -1470,7 +1486,7 @@
             </article>
           </div>
 
-          <div style="height:24px"></div>
+          <div style="height:20px"></div>
           <div class="overview-grid" id="sectionCards"></div>
         </section>
       </section>
@@ -1487,7 +1503,7 @@
               <div class="admin-login-fields">
                 <div class="hint">
                   管理者ログイン後のみ、追加・編集・削除が可能です。<br>
-                  当前版本图片仍然是 URL 输入方式。
+                  画像は今の段階では URL 入力方式です。あとで端末直接アップロード型にも拡張できます。
                 </div>
                 <input id="adminEmailInput" type="email" placeholder="管理者メールアドレス" autocomplete="username">
                 <input id="adminPasswordInput" type="password" placeholder="管理者パスワード" autocomplete="current-password">
@@ -1595,9 +1611,11 @@
   </div>
 
   <script>
-    const SUPABASE_URL = "https://hmdqaepikgqlakpinrkc.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_bugTGZcMnSalfAvK5_1plg_GImWHGut";
+    const SUPABASE_URL = "你的 Project URL";
+    const SUPABASE_ANON_KEY = "你的 anon public key";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const HERO_MECHA_IMAGE = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80";
 
     const SECTIONS = {
       archive: {
@@ -1644,8 +1662,8 @@
     let audioCtx = null;
     let doorBusy = false;
     let isAdminLoggedIn = false;
-    let appInitialized = false;
-    let authListenerBound = false;
+    let editingId = null;
+    let initializedOnce = false;
 
     const cursor = document.getElementById("cursor");
     const steamLayer = document.getElementById("steamLayer");
@@ -1681,6 +1699,11 @@
     const pilotSystemNote = document.getElementById("pilotSystemNote");
     const pilotLatestLog = document.getElementById("pilotLatestLog");
 
+    const heroQuickStatus = document.getElementById("heroQuickStatus");
+    const heroQuickLogs = document.getElementById("heroQuickLogs");
+    const heroQuickImages = document.getElementById("heroQuickImages");
+    const heroImage = document.getElementById("heroImage");
+
     function escapeHtml(str=""){
       return String(str)
         .replaceAll("&","&amp;")
@@ -1696,62 +1719,15 @@
       if(type) loginStatus.classList.add(type);
     }
 
-    function withTimeout(promise, ms, message){
+    function withTimeout(promise, ms=8000, message="请求超时"){
       return Promise.race([
         promise,
-        new Promise((_, reject) => {
-          setTimeout(() => reject(new Error(message)), ms);
-        })
+        new Promise((_, reject)=>setTimeout(()=>reject(new Error(message)), ms))
       ]);
     }
 
-    async function getVisiblePostsQuery() {
-      const { data: sessionData } = await supabaseClient.auth.getSession();
-      const hasSession = !!sessionData.session;
-
-      if (hasSession) {
-        return supabaseClient
-          .from("posts")
-          .select("*")
-          .order("entry_date", { ascending: false })
-          .order("created_at", { ascending: false });
-      }
-
-      return supabaseClient
-        .from("posts")
-        .select("*")
-        .eq("is_public", true)
-        .order("entry_date", { ascending: false })
-        .order("created_at", { ascending: false });
-    }
-
-    async function loadEntriesFromSupabase() {
-      try{
-        const query = await getVisiblePostsQuery();
-        const { data, error } = await query;
-
-        if (error) {
-          console.error("读取 posts 失败:", error);
-          alert("读取失败: " + error.message);
-          return [];
-        }
-
-        return (data || []).map(item => ({
-          id: item.id,
-          section: item.section,
-          date: item.entry_date,
-          title: item.title || "",
-          content: item.content || "",
-          image: item.image_url || "",
-          is_public: item.is_public,
-          author_id: item.author_id || "",
-          createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
-        }));
-      }catch(err){
-        console.error("loadEntriesFromSupabase exception:", err);
-        alert("读取发生异常: " + (err?.message || err));
-        return [];
-      }
+    function todayText(){
+      return new Date().toISOString().slice(0,10);
     }
 
     function formatDateText(dateStr){
@@ -1761,27 +1737,237 @@
       return d.toISOString().slice(0,10);
     }
 
+    function playBeep(freq=240, dur=0.05, type="sawtooth", gain=.018){
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        g.gain.value = gain;
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      }catch(e){}
+    }
+
+    function playSteamBurst(){
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const bufferSize = audioCtx.sampleRate * 0.45;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for(let i=0;i<bufferSize;i++){
+          data[i] = (Math.random()*2 - 1) * (1 - i / bufferSize);
+        }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 900;
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.035, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.42);
+
+        noise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.45);
+      }catch(e){}
+    }
+
+    function spawnSteam(count=7){
+      const w = window.innerWidth;
+      for(let i=0;i<count;i++){
+        const s = document.createElement("div");
+        s.className = "steam";
+        s.style.left = Math.random() * w + "px";
+        s.style.animationDelay = (Math.random() * 0.18) + "s";
+        s.style.width = (160 + Math.random() * 180) + "px";
+        s.style.height = s.style.width;
+        steamLayer.appendChild(s);
+        setTimeout(()=>s.remove(), 1800);
+      }
+    }
+
+    async function runDoorTransition(action){
+      if(doorBusy) return;
+      doorBusy = true;
+      doorOverlay.classList.add("active");
+      doorOverlay.classList.remove("opening","closing");
+      void doorOverlay.offsetWidth;
+
+      spawnSteam(8);
+      playSteamBurst();
+
+      if(action === "close"){
+        doorOverlay.classList.add("closing");
+        await new Promise(r=>setTimeout(r, 520));
+      }else{
+        doorOverlay.classList.add("opening");
+        await new Promise(r=>setTimeout(r, 520));
+        doorOverlay.classList.remove("active","opening","closing");
+      }
+      doorBusy = false;
+    }
+
+    async function pageTransition(toPage){
+      if(currentPage === toPage) return;
+      await runDoorTransition("close");
+      document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+      document.getElementById("page-" + toPage).classList.add("active");
+      currentPage = toPage;
+      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
+        btn.classList.toggle("active", btn.dataset.page === toPage);
+      });
+      await runDoorTransition("open");
+    }
+
+    function setupCursor(){
+      window.addEventListener("mousemove", e=>{
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+      });
+      document.addEventListener("mouseover", e=>{
+        if(e.target.closest("button,a,.metal-card,.entry,.gallery-item,input,textarea,select")){
+          cursor.classList.add("active");
+        }else{
+          cursor.classList.remove("active");
+        }
+      });
+      document.addEventListener("click", e=>{
+        const r = document.createElement("div");
+        r.className = "click-ripple";
+        r.style.left = e.clientX + "px";
+        r.style.top = e.clientY + "px";
+        document.body.appendChild(r);
+        setTimeout(()=>r.remove(), 520);
+        playBeep(320, .04, "triangle", .02);
+      });
+    }
+
+    function setupTilt(){
+      document.querySelectorAll("[data-tilt]").forEach(card=>{
+        card.onmousemove = (e)=>{
+          if(window.innerWidth < 861) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rx = (rect.height/2 - y) / 28;
+          const ry = (x - rect.width/2) / 28;
+          card.style.transform = `translateY(-2px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        };
+        card.onmouseleave = ()=>{
+          card.style.transform = "";
+        };
+      });
+    }
+
+    function updateAuthUI(){
+      authStatus.textContent = isAdminLoggedIn ? "OWNER" : "GUEST";
+      loginBtn.classList.toggle("hidden", isAdminLoggedIn);
+      logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+      adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
+      adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
+
+      if(isAdminLoggedIn){
+        setLoginStatus("管理者ログイン中。編集・追加・削除が使用できます。","ok");
+      }else{
+        setLoginStatus("未登录。管理员功能锁定中。","")
+      }
+
+      syncAdminButtons();
+      updatePilotPanel();
+    }
+
+    function syncAdminButtons(){
+      newEntryBtn.disabled = !isAdminLoggedIn;
+      addSectionEntryBtn.disabled = !isAdminLoggedIn;
+    }
+
+    async function getVisiblePostsQuery(){
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const hasSession = !!sessionData.session;
+      if(hasSession){
+        return supabaseClient
+          .from("posts")
+          .select("*")
+          .order("entry_date",{ascending:false})
+          .order("created_at",{ascending:false});
+      }
+      return supabaseClient
+        .from("posts")
+        .select("*")
+        .eq("is_public", true)
+        .order("entry_date",{ascending:false})
+        .order("created_at",{ascending:false});
+    }
+
+    async function loadEntriesFromSupabase(){
+      try{
+        const query = await getVisiblePostsQuery();
+        const { data, error } = await withTimeout(query, 8000, "读取数据超时");
+        if(error){
+          console.error(error);
+          alert("读取失败: " + error.message);
+          return [];
+        }
+        return (data || []).map(item=>({
+          id: item.id,
+          section: item.section || "archive",
+          date: item.entry_date || "",
+          title: item.title || "",
+          content: item.content || "",
+          image: item.image_url || "",
+          is_public: item.is_public ?? true,
+          author_id: item.author_id || "",
+          createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
+        }));
+      }catch(err){
+        console.error(err);
+        alert("读取发生异常: " + (err?.message || err));
+        return [];
+      }
+    }
+
+    async function refreshEntries(){
+      entries = await loadEntriesFromSupabase();
+      renderSectionCards();
+      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
+      if(currentPage === "section"){
+        renderSectionPage(currentSection);
+      }
+      updatePilotPanel();
+    }
+
     function updatePilotPanel(){
       const count = entries.length;
-      const imageCount = entries.filter(x => x.image && x.image.trim()).length;
+      const imageCount = entries.filter(x=>x.image && x.image.trim()).length;
       const latest = [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt)[0];
 
-      pilotStatusText.textContent = isAdminLoggedIn ? "OWNER MODE: ACTIVE" : "OWNER MODE: STANDBY";
+      const statusText = isAdminLoggedIn ? "OWNER MODE: ACTIVE" : "OWNER MODE: STANDBY";
+
+      pilotStatusText.textContent = statusText;
       pilotArchiveLogs.textContent = String(count);
       pilotVisualFiles.textContent = String(imageCount);
       pilotLastUpdate.textContent = latest ? formatDateText(latest.date) : "--";
       pilotLatestLog.textContent = latest ? (latest.title || "無題の記録") : "NO ENTRY YET";
       pilotSystemNote.textContent = count > 0 ? "MEMORY LINK STABLE" : "ARCHIVE WAITING FOR FIRST LOG";
-    }
 
-    async function refreshEntries() {
-      entries = await loadEntriesFromSupabase();
-      renderSectionCards();
-      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
-      if (currentPage === "section") {
-        renderSectionPage(currentSection);
+      heroQuickStatus.textContent = statusText;
+      heroQuickLogs.textContent = `${count} LOGS`;
+      heroQuickImages.textContent = `${imageCount} FILES`;
+
+      if(latest && latest.image){
+        heroImage.src = latest.image;
+      }else{
+        heroImage.src = HERO_MECHA_IMAGE;
       }
-      updatePilotPanel();
     }
 
     function renderSectionCards(){
@@ -1805,14 +1991,13 @@
 
     function listBySection(section){
       return [...entries]
-        .filter(x => x.section === section)
+        .filter(x=>x.section === section)
         .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
     }
 
     function renderSectionPage(section){
       currentSection = section;
       const meta = SECTIONS[section];
-
       document.getElementById("sectionTag").innerHTML = `<small>${meta.code}</small><b>${meta.label}</b>`;
       document.getElementById("sectionLineTitle").textContent = meta.line;
       document.getElementById("sectionBigTitle").textContent = meta.label;
@@ -1841,15 +2026,16 @@
             <p>${escapeHtml(item.content || "")}</p>
             ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}
             ${isAdminLoggedIn ? `
-            <div class="entry-actions">
-              <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-              <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
-            </div>` : ""}
+              <div class="entry-actions">
+                <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
+                <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
+              </div>
+            ` : ""}
           </article>
         `).join("");
       }
 
-      const imgList = list.filter(x => x.image && x.image.trim());
+      const imgList = list.filter(x=>x.image && x.image.trim());
       if(!imgList.length){
         galleryEl.innerHTML = `<div class="empty" style="grid-column:1/-1">まだ画像がありません。</div>`;
       }else{
@@ -1875,7 +2061,6 @@
           `<button class="filter-btn" data-filter="${key}">${escapeHtml(val.label)}</button>`
         ).join("")}
       `;
-
       wrap.querySelectorAll(".filter-btn").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           wrap.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
@@ -1907,722 +2092,285 @@
             <h4>${escapeHtml(item.title || "無題の記録")}</h4>
           </div>
           <div class="admin-actions">
-            ${isAdminLoggedIn ? `
-            <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-            <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
-            ` : `<span class="hint">ログイン後に編集可能</span>`}
+            <button class="mini-btn" onclick="openEdit('${item.id}')" ${!isAdminLoggedIn ? "disabled" : ""}>編集</button>
+            <button class="mini-btn danger" onclick="removeEntry('${item.id}')" ${!isAdminLoggedIn ? "disabled" : ""}>削除</button>
           </div>
         </article>
       `).join("");
     }
 
-    function showPage(name){
-      currentPage = name;
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      const targetPage = document.getElementById(`page-${name}`);
-      if (targetPage) {
-        targetPage.classList.add("active");
-      } else {
-        document.getElementById("page-home").classList.add("active");
-        currentPage = "home";
-      }
-
-      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.page === currentPage);
-      });
-    }
-
-    async function switchPage(name){
-      await triggerDoorTransition();
-      showPage(name);
-      window.scrollTo({top:0, behavior:"smooth"});
-      syncAdminButtons();
-    }
-
-    async function openSection(section){
-      renderSectionPage(section);
-      await switchPage("section");
-    }
-
-    function openModal(section="archive", item=null){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
-        return;
-      }
-      modalWrap.classList.add("show");
-      modalWrap.dataset.editId = item?.id || "";
-      modalTitle.textContent = item ? "EDIT RECORD" : "NEW RECORD";
-      entrySection.value = item?.section || section;
-      entryDate.value = item?.date || new Date().toISOString().slice(0,10);
+    function openModal(mode="new", item=null, forceSection=null){
+      editingId = item ? item.id : null;
+      modalTitle.textContent = mode === "edit" ? "EDIT RECORD" : "NEW RECORD";
+      entrySection.value = forceSection || item?.section || currentSection || "archive";
+      entryDate.value = item?.date || todayText();
       entryTitle.value = item?.title || "";
       entryContent.value = item?.content || "";
       entryImage.value = item?.image || "";
+      modalWrap.classList.add("show");
     }
 
     function closeModal(){
       modalWrap.classList.remove("show");
-      modalWrap.dataset.editId = "";
+      editingId = null;
     }
 
-    async function publishEntry(imageOnly = false){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
+    async function saveEntry(imageOnly=false){
+      if(!isAdminLoggedIn){
+        alert("先に管理者ログインしてください。");
         return;
       }
 
-      const editId = modalWrap.dataset.editId;
       const section = entrySection.value;
-      const date = entryDate.value || new Date().toISOString().slice(0,10);
-      const title = entryTitle.value.trim();
-      const content = entryContent.value.trim();
-      const image = entryImage.value.trim();
+      const date = entryDate.value || todayText();
+      const title = (entryTitle.value || "").trim();
+      const content = (entryContent.value || "").trim();
+      const image = (entryImage.value || "").trim();
 
+      if(!imageOnly && !title && !content && !image){
+        alert("内容が空です。");
+        return;
+      }
       if(imageOnly && !image){
         alert("画像URLを入力してください。");
         return;
       }
 
-      if(!imageOnly && !title && !content && !image){
-        alert("タイトル・内容・画像のうち、少なくとも一つを入力してください。");
-        return;
-      }
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const userId = sessionData?.session?.user?.id || null;
+
+      const payload = {
+        section,
+        entry_date: date,
+        title: imageOnly ? (title || "画像記録") : title,
+        content: imageOnly ? "" : content,
+        image_url: image,
+        is_public: true,
+        author_id: userId
+      };
 
       try{
-        const { data: sessionData } = await supabaseClient.auth.getSession();
-        const user = sessionData.session?.user;
+        let result;
+        if(editingId){
+          result = await withTimeout(
+            supabaseClient.from("posts").update(payload).eq("id", editingId),
+            8000,
+            "保存超时"
+          );
+        }else{
+          result = await withTimeout(
+            supabaseClient.from("posts").insert(payload),
+            8000,
+            "保存超时"
+          );
+        }
 
-        if (!user) {
-          alert("当前没有登录管理员账号");
+        if(result.error){
+          alert("保存失败: " + result.error.message);
           return;
         }
 
-        if(editId){
-          const { error } = await supabaseClient
-            .from("posts")
-            .update({
-              section,
-              entry_date: date,
-              title: title || (imageOnly ? "画像記録" : "無題の記録"),
-              content,
-              image_url: image,
-              author_id: user.id
-            })
-            .eq("id", editId);
-
-          if (error) {
-            console.error(error);
-            alert("更新失败: " + error.message);
-            return;
-          }
-        } else {
-          const { error } = await supabaseClient
-            .from("posts")
-            .insert({
-              section,
-              entry_date: date,
-              title: title || (imageOnly ? "画像記録" : "無題の記録"),
-              content,
-              image_url: image,
-              is_public: true,
-              author_id: user.id
-            });
-
-          if (error) {
-            console.error(error);
-            alert("保存失败: " + error.message);
-            return;
-          }
-        }
-
-        await refreshEntries();
         closeModal();
-        await triggerDoorTransition();
-      }catch(err){
-        console.error("publishEntry exception:", err);
-        alert("保存发生异常: " + (err?.message || err));
-      }
-    }
-
-    async function removeEntry(id){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
-        return;
-      }
-
-      const ok = confirm("この記録を削除しますか？");
-      if (!ok) return;
-
-      try{
-        const { error } = await supabaseClient
-          .from("posts")
-          .delete()
-          .eq("id", id);
-
-        if (error) {
-          console.error(error);
-          alert("削除失败: " + error.message);
-          return;
-        }
-
         await refreshEntries();
         if(currentPage === "section"){
           renderSectionPage(currentSection);
         }
-        spawnSteam(8);
-        playClickSound();
       }catch(err){
-        console.error("removeEntry exception:", err);
-        alert("删除发生异常: " + (err?.message || err));
+        alert("保存异常: " + (err?.message || err));
+      }
+    }
+
+    async function removeEntry(id){
+      if(!isAdminLoggedIn){
+        alert("先に管理者ログインしてください。");
+        return;
+      }
+      if(!confirm("この記録を削除しますか？")) return;
+
+      try{
+        const { error } = await withTimeout(
+          supabaseClient.from("posts").delete().eq("id", id),
+          8000,
+          "删除超时"
+        );
+        if(error){
+          alert("削除失敗: " + error.message);
+          return;
+        }
+        await refreshEntries();
+      }catch(err){
+        alert("削除异常: " + (err?.message || err));
       }
     }
 
     function openEdit(id){
-      const item = entries.find(x => String(x.id) === String(id));
-      if(item) openModal(item.section, item);
+      const item = entries.find(x=>String(x.id) === String(id));
+      if(!item) return;
+      openModal("edit", item);
+    }
+
+    async function doLogin(){
+      const email = adminEmailInput.value.trim();
+      const password = adminPasswordInput.value;
+
+      if(!email || !password){
+        setLoginStatus("メールアドレスとパスワードを入力してください。","err");
+        return;
+      }
+
+      setLoginStatus("登录中...","");
+
+      try{
+        const { data, error } = await withTimeout(
+          supabaseClient.auth.signInWithPassword({ email, password }),
+          9000,
+          "登录请求超时，请检查网络、Supabase 配置，或稍后重试。"
+        );
+
+        if(error){
+          setLoginStatus("登录失败: " + error.message, "err");
+          alert("登录失败: " + error.message);
+          return;
+        }
+
+        isAdminLoggedIn = !!data.session;
+        updateAuthUI();
+        await refreshEntries();
+      }catch(err){
+        setLoginStatus(err.message || "登录异常", "err");
+        alert(err.message || "登录异常");
+      }
+    }
+
+    async function doLogout(){
+      try{
+        await withTimeout(
+          supabaseClient.auth.signOut(),
+          6000,
+          "退出登录超时"
+        );
+      }catch(e){}
+      isAdminLoggedIn = false;
+      updateAuthUI();
+      await refreshEntries();
+    }
+
+    async function restoreSession(){
+      try{
+        const { data, error } = await withTimeout(
+          supabaseClient.auth.getSession(),
+          7000,
+          "会话恢复超时"
+        );
+        if(error){
+          console.error(error);
+          isAdminLoggedIn = false;
+        }else{
+          isAdminLoggedIn = !!data.session;
+        }
+      }catch(err){
+        console.error(err);
+        isAdminLoggedIn = false;
+      }
+      updateAuthUI();
+    }
+
+    async function runBoot(){
+      return new Promise(resolve=>{
+        let value = 0;
+        const timer = setInterval(()=>{
+          value += Math.floor(Math.random() * 9) + 4;
+          if(value > 100) value = 100;
+          bootBar.style.width = value + "%";
+          bootPercent.textContent = value + "%";
+          if(value >= 100){
+            clearInterval(timer);
+            playBeep(380, .06, "triangle", .02);
+            setTimeout(()=>{
+              bootVerify.classList.add("show");
+              setTimeout(()=>{
+                bootOverlay.classList.add("hidden");
+                resolve();
+              }, 460);
+            }, 180);
+          }
+        }, 90);
+      });
+    }
+
+    async function openSection(section){
+      renderSectionPage(section);
+      await pageTransition("section");
+    }
+
+    function bindEvents(){
+      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const to = btn.dataset.page;
+          await pageTransition(to);
+        });
+      });
+
+      loginBtn.addEventListener("click", async ()=>{
+        await pageTransition("admin");
+        adminEmailInput.focus();
+      });
+
+      logoutBtn.addEventListener("click", doLogout);
+      adminLoginBtn.addEventListener("click", doLogin);
+      adminLogoutBtn.addEventListener("click", doLogout);
+
+      document.getElementById("backHomeBtn").addEventListener("click", ()=>pageTransition("home"));
+      document.getElementById("closeModal").addEventListener("click", closeModal);
+      newEntryBtn.addEventListener("click", ()=>openModal("new"));
+      addSectionEntryBtn.addEventListener("click", ()=>openModal("new", null, currentSection));
+      document.getElementById("publishEntryBtn").addEventListener("click", ()=>saveEntry(false));
+      document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=>saveEntry(true));
+
+      modalWrap.addEventListener("click", e=>{
+        if(e.target === modalWrap) closeModal();
+      });
+
+      adminPasswordInput.addEventListener("keydown", e=>{
+        if(e.key === "Enter") doLogin();
+      });
+      adminEmailInput.addEventListener("keydown", e=>{
+        if(e.key === "Enter") doLogin();
+      });
+    }
+
+    function bindAuthListener(){
+      supabaseClient.auth.onAuthStateChange(async (_event, session)=>{
+        const before = isAdminLoggedIn;
+        isAdminLoggedIn = !!session;
+        updateAuthUI();
+        if(initializedOnce && before !== isAdminLoggedIn){
+          await refreshEntries();
+        }
+      });
+    }
+
+    async function initApp(){
+      if(initializedOnce) return;
+      initializedOnce = true;
+
+      setupCursor();
+      setupTilt();
+      renderAdminFilters();
+      bindEvents();
+      bindAuthListener();
+      entryDate.value = todayText();
+
+      await runBoot();
+      await restoreSession();
+      await refreshEntries();
     }
 
     window.openSection = openSection;
     window.openEdit = openEdit;
     window.removeEntry = removeEntry;
 
-    async function updateAuthUI() {
-      try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if (error) {
-          console.error("getSession error:", error);
-        }
-
-        isAdminLoggedIn = !!data?.session;
-        authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
-        loginBtn.classList.toggle("hidden", isAdminLoggedIn);
-        logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-        adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
-        adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-
-        adminEmailInput.disabled = isAdminLoggedIn;
-        adminPasswordInput.disabled = isAdminLoggedIn;
-
-        if(isAdminLoggedIn){
-          setLoginStatus("管理员已登录，编辑权限已开启。", "ok");
-        }else{
-          setLoginStatus("未登录。管理员功能锁定中。", "");
-        }
-
-        updatePilotPanel();
-        syncAdminButtons();
-      }catch(err){
-        console.error("updateAuthUI exception:", err);
-        setLoginStatus("登录状态读取失败：" + (err?.message || err), "err");
-      }
-    }
-
-    function syncAdminButtons() {
-      newEntryBtn.disabled = !isAdminLoggedIn;
-      addSectionEntryBtn.disabled = !isAdminLoggedIn;
-    }
-
-    async function adminLoginFlow() {
-      const email = adminEmailInput.value.trim();
-      const password = adminPasswordInput.value;
-
-      if (!email || !password) {
-        setLoginStatus("请输入管理员邮箱和密码。", "err");
-        alert("请输入管理员邮箱和密码");
-        return;
-      }
-
-      adminLoginBtn.disabled = true;
-      setLoginStatus("正在登录，请稍等……");
-
-      try {
-        const result = await withTimeout(
-          supabaseClient.auth.signInWithPassword({ email, password }),
-          12000,
-          "登录请求超时，请检查网络、Supabase 配置，或稍后重试。"
-        );
-
-        if (result.error) {
-          console.error("login error:", result.error);
-          setLoginStatus("登录失败：" + result.error.message, "err");
-          alert("登录失败: " + result.error.message);
-          return;
-        }
-
-        const sessionData = result.data?.session;
-        const userData = result.data?.user;
-
-        if (!sessionData && !userData) {
-          setLoginStatus("登录失败：没有拿到登录会话。", "err");
-          alert("登录失败：没有拿到登录会话。");
-          return;
-        }
-
-        await updateAuthUI();
-        await refreshEntries();
-
-        const { data: verifySession, error: verifyError } = await supabaseClient.auth.getSession();
-        if (verifyError) {
-          setLoginStatus("登录后验证 session 失败：" + verifyError.message, "err");
-          alert("登录后验证 session 失败: " + verifyError.message);
-          return;
-        }
-
-        if (!verifySession.session) {
-          setLoginStatus("登录后 session 未建立。", "err");
-          alert("登录后 session 未建立。");
-          return;
-        }
-
-        adminPasswordInput.value = "";
-        setLoginStatus("管理者ログイン成功", "ok");
-        alert("管理者ログイン成功");
-      } catch (err) {
-        console.error("adminLoginFlow exception:", err);
-        setLoginStatus("登录发生异常：" + (err?.message || err), "err");
-        alert("登录发生异常: " + (err?.message || err));
-      } finally {
-        adminLoginBtn.disabled = false;
-      }
-    }
-
-    async function adminLogoutFlow() {
-      adminLogoutBtn.disabled = true;
-      setLoginStatus("正在退出登录……");
-
-      try {
-        const { error } = await withTimeout(
-          supabaseClient.auth.signOut(),
-          10000,
-          "登出请求超时，请稍后重试。"
-        );
-
-        if (error) {
-          console.error(error);
-          setLoginStatus("ログアウト失敗：" + error.message, "err");
-          alert("ログアウト失敗: " + error.message);
-          return;
-        }
-
-        setLoginStatus("ログアウトしました");
-        alert("ログアウトしました");
-        await updateAuthUI();
-        await refreshEntries();
-      } catch (err) {
-        console.error("adminLogoutFlow exception:", err);
-        setLoginStatus("登出发生异常：" + (err?.message || err), "err");
-        alert("登出发生异常: " + (err?.message || err));
-      } finally {
-        adminLogoutBtn.disabled = false;
-      }
-    }
-
-    function ensureAudio(){
-      if(!audioCtx){
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if(audioCtx.state === "suspended"){
-        audioCtx.resume();
-      }
-    }
-
-    function playClickSound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(260, t);
-      osc.frequency.exponentialRampToValueAtTime(130, t + 0.06);
-
-      filter.type = "lowpass";
-      filter.frequency.value = 1600;
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.04, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + 0.09);
-    }
-
-    function playDoorSound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(110, t);
-      osc.frequency.exponentialRampToValueAtTime(48, t + 0.28);
-
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(620, t);
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.12, t + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(t);
-      osc.stop(t + 0.32);
-    }
-
-    function playVerifySound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-
-      const osc1 = audioCtx.createOscillator();
-      const gain1 = audioCtx.createGain();
-      osc1.type = "triangle";
-      osc1.frequency.setValueAtTime(520, t);
-      osc1.frequency.exponentialRampToValueAtTime(780, t + 0.12);
-      gain1.gain.setValueAtTime(0.0001, t);
-      gain1.gain.exponentialRampToValueAtTime(0.028, t + 0.02);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-      osc1.connect(gain1);
-      gain1.connect(audioCtx.destination);
-      osc1.start(t);
-      osc1.stop(t + 0.16);
-
-      const osc2 = audioCtx.createOscillator();
-      const gain2 = audioCtx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(860, t + 0.08);
-      osc2.frequency.exponentialRampToValueAtTime(1120, t + 0.18);
-      gain2.gain.setValueAtTime(0.0001, t + 0.08);
-      gain2.gain.exponentialRampToValueAtTime(0.018, t + 0.10);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, t + 0.20);
-      osc2.connect(gain2);
-      gain2.connect(audioCtx.destination);
-      osc2.start(t + 0.08);
-      osc2.stop(t + 0.20);
-    }
-
-    function playBootHum(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(80, t);
-      osc.frequency.exponentialRampToValueAtTime(58, t + 0.5);
-
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(520, t);
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.02, t + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + 0.56);
-    }
-
-    function playSteamSound(){
-      ensureAudio();
-      const duration = 0.68;
-      const bufferSize = audioCtx.sampleRate * duration;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      for(let i=0;i<bufferSize;i++){
-        data[i] = (Math.random()*2-1) * (1 - i / bufferSize);
-      }
-
-      const source = audioCtx.createBufferSource();
-      const filter = audioCtx.createBiquadFilter();
-      const gain = audioCtx.createGain();
-
-      source.buffer = buffer;
-      filter.type = "bandpass";
-      filter.frequency.value = 1000;
-
-      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.03, audioCtx.currentTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-
-      source.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      source.start();
-      source.stop(audioCtx.currentTime + duration);
-    }
-
-    function createRipple(x,y){
-      const ripple = document.createElement("div");
-      ripple.className = "click-ripple";
-      ripple.style.left = x + "px";
-      ripple.style.top = y + "px";
-      document.body.appendChild(ripple);
-      setTimeout(()=> ripple.remove(), 720);
-    }
-
-    function spawnSteam(count=10){
-      playSteamSound();
-      for(let i=0;i<count;i++){
-        const s = document.createElement("div");
-        s.className = "steam";
-        const size = 180 + Math.random()*100;
-        s.style.width = size + "px";
-        s.style.height = size + "px";
-        s.style.left = Math.random()*100 + "vw";
-        s.style.animationDuration = (1.3 + Math.random()*0.6) + "s";
-        s.style.opacity = (0.22 + Math.random()*0.28).toFixed(2);
-        steamLayer.appendChild(s);
-        setTimeout(()=> s.remove(), 2100);
-      }
-    }
-
-    function triggerDoorTransition(){
-      if(doorBusy) return Promise.resolve();
-      doorBusy = true;
-
-      return new Promise(resolve=>{
-        doorOverlay.classList.remove("opening", "closing");
-        doorOverlay.classList.add("active", "closing");
-        playDoorSound();
-        spawnSteam(6);
-
-        setTimeout(()=>{
-          doorOverlay.classList.remove("closing");
-          doorOverlay.classList.add("opening");
-          playDoorSound();
-        }, 520);
-
-        setTimeout(()=>{
-          doorOverlay.classList.remove("active","opening","closing");
-          doorBusy = false;
-          resolve();
-        }, 1040);
-      });
-    }
-
-    async function runBootSequence(){
-      let progress = 0;
-      const totalDuration = 1800;
-      const stepTime = 45;
-      const increment = 100 / (totalDuration / stepTime);
-
-      playBootHum();
-
-      await new Promise(resolve=>{
-        const timer = setInterval(()=>{
-          progress += increment + Math.random() * 2.2;
-          if(progress > 100) progress = 100;
-
-          const p = Math.floor(progress);
-          bootBar.style.width = p + "%";
-          bootPercent.textContent = p + "%";
-
-          if(p >= 100){
-            clearInterval(timer);
-            bootBar.style.width = "100%";
-            bootPercent.textContent = "100%";
-            resolve();
-          }
-        }, stepTime);
-      });
-
-      bootVerify.classList.add("show");
-      playVerifySound();
-
-      await new Promise(r => setTimeout(r, 260));
-
-      doorOverlay.classList.remove("opening","closing");
-      doorOverlay.classList.add("active","closing");
-      playDoorSound();
-      spawnSteam(8);
-
-      await new Promise(r => setTimeout(r, 420));
-
-      bootOverlay.classList.add("hidden");
-
-      doorOverlay.classList.remove("closing");
-      doorOverlay.classList.add("opening");
-      playDoorSound();
-
-      await new Promise(r => setTimeout(r, 500));
-
-      doorOverlay.classList.remove("active","opening","closing");
-    }
-
-    async function resetUIToDefault() {
-      currentPage = "home";
-      currentSection = "archive";
-      doorBusy = false;
-
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById("page-home").classList.add("active");
-
-      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.page === "home");
-      });
-
-      modalWrap.classList.remove("show");
-      modalWrap.dataset.editId = "";
-
-      doorOverlay.classList.remove("active", "opening", "closing");
-
-      bootOverlay.classList.remove("hidden");
-      bootBar.style.width = "0%";
-      bootPercent.textContent = "0%";
-      bootVerify.classList.remove("show");
-
-      adminPasswordInput.value = "";
-      setLoginStatus("正在初始化页面……");
-    }
-
-    let tiltRAF = null;
-    function setupTilt(){
-      document.querySelectorAll("[data-tilt]").forEach(card=>{
-        if(card.dataset.tiltBound === "1") return;
-        card.dataset.tiltBound = "1";
-
-        card.addEventListener("mousemove", e=>{
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const ry = ((x / rect.width) - 0.5) * 6;
-          const rx = ((y / rect.height) - 0.5) * -6;
-
-          if(!tiltRAF){
-            tiltRAF = requestAnimationFrame(()=>{
-              card.style.transform = `perspective(1500px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-              tiltRAF = null;
-            });
-          }
-        });
-
-        card.addEventListener("mouseleave", ()=>{
-          card.style.transform = "perspective(1500px) rotateX(0deg) rotateY(0deg)";
-        });
-      });
-    }
-
-    async function initApp(forceBoot = true) {
-      if (appInitialized) return;
-      appInitialized = true;
-
-      try {
-        await resetUIToDefault();
-        renderAdminFilters();
-        setupTilt();
-
-        if (forceBoot) {
-          await runBootSequence();
-        } else {
-          bootOverlay.classList.add("hidden");
-        }
-
-        await updateAuthUI();
-        await refreshEntries();
-        syncAdminButtons();
-        showPage("home");
-        window.scrollTo({ top: 0, behavior: "auto" });
-        setLoginStatus(isAdminLoggedIn ? "管理员已登录，编辑权限已开启。" : "未登录。管理员功能锁定中。");
-      } catch (err) {
-        console.error("initApp exception:", err);
-        alert("页面初始化失败: " + (err?.message || err));
-      }
-    }
-
-    function bindStaticEvents(){
-      document.addEventListener("mousemove", e=>{
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      });
-
-      document.addEventListener("mousedown", ()=> cursor.classList.add("active"));
-      document.addEventListener("mouseup", ()=> cursor.classList.remove("active"));
-
-      document.addEventListener("click", e=>{
-        createRipple(e.clientX, e.clientY);
-        if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
-          playClickSound();
-        }
-      });
-
-      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
-        btn.addEventListener("click", ()=> switchPage(btn.dataset.page));
-      });
-
-      loginBtn.addEventListener("click", async ()=>{
-        await switchPage("admin");
-        setTimeout(() => {
-          adminEmailInput.focus();
-        }, 80);
-        setLoginStatus("请在下方输入管理员邮箱和密码后登录。");
-      });
-
-      logoutBtn.addEventListener("click", adminLogoutFlow);
-      adminLoginBtn.addEventListener("click", adminLoginFlow);
-      adminLogoutBtn.addEventListener("click", adminLogoutFlow);
-
-      newEntryBtn.addEventListener("click", ()=> openModal(currentSection));
-      document.getElementById("backHomeBtn").addEventListener("click", ()=> switchPage("home"));
-      addSectionEntryBtn.addEventListener("click", ()=> openModal(currentSection));
-
-      document.getElementById("closeModal").addEventListener("click", closeModal);
-      modalWrap.addEventListener("click", e=>{
-        if(e.target === modalWrap) closeModal();
-      });
-
-      document.getElementById("publishEntryBtn").addEventListener("click", ()=> publishEntry(false));
-      document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=> publishEntry(true));
-
-      adminPasswordInput.addEventListener("keydown", e=>{
-        if(e.key === "Enter") adminLoginFlow();
-      });
-    }
-
-    function bindAuthListenerOnce(){
-      if(authListenerBound) return;
-      authListenerBound = true;
-
-      supabaseClient.auth.onAuthStateChange(async () => {
-        try {
-          await updateAuthUI();
-          await refreshEntries();
-          syncAdminButtons();
-        } catch (err) {
-          console.error("onAuthStateChange exception:", err);
-        }
-      });
-    }
-
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-
-    entryDate.value = new Date().toISOString().slice(0,10);
-    bindStaticEvents();
-    bindAuthListenerOnce();
-
-    window.addEventListener("load", async ()=>{
-      await initApp(true);
-    });
-
-    window.addEventListener("pageshow", async (event) => {
-      if (event.persisted) {
-        appInitialized = false;
-        await initApp(false);
-      }
-    });
+    initApp();
   </script>
 </body>
 </html>
