@@ -1671,6 +1671,7 @@
 
       if (error) {
         console.error("读取 posts 失败:", error);
+        alert("读取失败: " + error.message);
         return [];
       }
 
@@ -1682,7 +1683,8 @@
         content: item.content || "",
         image: item.image_url || "",
         is_public: item.is_public,
-        createdAt: new Date(item.created_at).getTime()
+        author_id: item.author_id || "",
+        createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
       }));
     }
 
@@ -1912,64 +1914,55 @@
         return;
       }
 
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const user = sessionData.session?.user;
+
+      if (!user) {
+        alert("当前没有登录管理员账号");
+        return;
+      }
+
       if(editId){
-        const { data: sessionData } = await supabaseClient.auth.getSession();
-const user = sessionData.session?.user;
-
-if (!user) {
-  alert("当前没有登录管理员账号");
-  return;
-}
-
-const { error } = await supabaseClient
-  .from("posts")
-  .update({
-    section,
-    entry_date: date,
-    title: title || (imageOnly ? "画像記録" : "無題の記録"),
-    content,
-    image_url: image,
-    author_id: user.id
-  })
-  .eq("id", editId);
+        const { error } = await supabaseClient
+          .from("posts")
+          .update({
+            section,
+            entry_date: date,
+            title: title || (imageOnly ? "画像記録" : "無題の記録"),
+            content,
+            image_url: image,
+            author_id: user.id
+          })
+          .eq("id", editId);
 
         if (error) {
           console.error(error);
           alert("更新失败: " + error.message);
-          alert("保存失败: " + error.message);
           return;
         }
       } else {
-        const { data: sessionData } = await supabaseClient.auth.getSession();
-const user = sessionData.session?.user;
-
-if (!user) {
-  alert("当前没有登录管理员账号");
-  return;
-}
-
-const { error } = await supabaseClient
-  .from("posts")
-  .insert({
-    section,
-    entry_date: date,
-    title: title || (imageOnly ? "画像記録" : "無題の記録"),
-    content,
-    image_url: image,
-    is_public: true,
-    author_id: user.id
-  });
+        const { error } = await supabaseClient
+          .from("posts")
+          .insert({
+            section,
+            entry_date: date,
+            title: title || (imageOnly ? "画像記録" : "無題の記録"),
+            content,
+            image_url: image,
+            is_public: true,
+            author_id: user.id
+          });
 
         if (error) {
           console.error(error);
-          alert("保存に失敗しました。");
+          alert("保存失败: " + error.message);
           return;
         }
       }
 
       await refreshEntries();
       closeModal();
-      triggerDoorTransition();
+      await triggerDoorTransition();
     }
 
     async function removeEntry(id){
@@ -1988,7 +1981,7 @@ const { error } = await supabaseClient
 
       if (error) {
         console.error(error);
-        alert("削除に失敗しました。");
+        alert("削除失败: " + error.message);
         return;
       }
 
@@ -2029,6 +2022,8 @@ const { error } = await supabaseClient
     }
 
     async function adminLoginFlow() {
+      console.log("login clicked");
+
       const email = prompt("管理者メールアドレスを入力してください");
       if (!email) return;
 
@@ -2039,7 +2034,7 @@ const { error } = await supabaseClient
 
       if (error) {
         console.error(error);
-        alert("ログイン失敗: " + error.message);
+        alert("登录失败: " + error.message);
         return;
       }
 
@@ -2052,7 +2047,7 @@ const { error } = await supabaseClient
       const { error } = await supabaseClient.auth.signOut();
       if (error) {
         console.error(error);
-        alert("ログアウト失敗");
+        alert("ログアウト失敗: " + error.message);
         return;
       }
 
