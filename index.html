@@ -9,17 +9,11 @@
     :root{
       --bg:#e9e9ea;
       --bg2:#f4f4f5;
-      --panel:#f7f7f8;
-      --panel2:#ededee;
-      --line:#d2d2d5;
-      --line2:#babac0;
       --text:#17181c;
       --muted:#6f7178;
       --red:#ef1010;
       --red2:#c90c0c;
       --redSoft:#ffb8b8;
-      --dark:#23242a;
-      --dark2:#34353d;
       --white:#ffffff;
       --shadow:0 18px 40px rgba(0,0,0,.10);
       --shadowSoft:0 10px 22px rgba(0,0,0,.07);
@@ -60,12 +54,7 @@
       transform:translate(-50%,-50%);
       pointer-events:none;
       z-index:9999;
-      transition:
-        width .12s ease,
-        height .12s ease,
-        transform .08s ease,
-        filter .12s ease,
-        opacity .12s ease;
+      transition:width .12s ease,height .12s ease,transform .08s ease,filter .12s ease,opacity .12s ease;
       filter:drop-shadow(0 0 8px rgba(239,16,16,.26));
     }
 
@@ -103,9 +92,7 @@
     .cursor.active{
       width:34px;
       height:34px;
-      filter:
-        drop-shadow(0 0 12px rgba(239,16,16,.42))
-        drop-shadow(0 0 20px rgba(239,16,16,.18));
+      filter:drop-shadow(0 0 12px rgba(239,16,16,.42)) drop-shadow(0 0 20px rgba(239,16,16,.18));
     }
 
     .cursor.active::before{
@@ -135,9 +122,7 @@
       border-radius:50%;
       border:2px solid var(--red);
       animation:ripple .48s ease-out forwards;
-      box-shadow:
-        0 0 14px rgba(239,16,16,.24),
-        inset 0 0 0 1px rgba(255,255,255,.55);
+      box-shadow:0 0 14px rgba(239,16,16,.24), inset 0 0 0 1px rgba(255,255,255,.55);
       background:rgba(255,255,255,.12);
     }
 
@@ -420,9 +405,7 @@
       line-height:1;
       font-weight:900;
       color:#121316;
-      text-shadow:
-        7px 7px 0 rgba(0,0,0,.08),
-        0 1px 0 rgba(255,255,255,.95);
+      text-shadow:7px 7px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.95);
     }
 
     .hero-sub{
@@ -443,9 +426,7 @@
       padding:20px 28px;
       background:var(--metalLight);
       border:1px solid #d8d8dc;
-      box-shadow:
-        0 12px 22px rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.95);
+      box-shadow:0 12px 22px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
       clip-path:var(--cutB);
     }
 
@@ -598,33 +579,49 @@
       white-space:pre-wrap;
     }
 
-    .bars{margin-top:16px}
-    .bar-row{margin-top:12px}
-    .bar-row span{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      font-size:12px;
-      letter-spacing:.12em;
-      color:#7d8087;
-      margin-bottom:7px;
+    .pilot-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:4px;
     }
-    .bar{
-      width:100%;
-      height:12px;
-      background:linear-gradient(180deg,#ffffff,#ececef);
+
+    .pilot-item{
+      padding:12px 14px;
+      background:rgba(255,255,255,.55);
       border:1px solid #d7d7dc;
+      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
-      overflow:hidden;
-      clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);
     }
-    .bar i{
-      display:block;
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,#ffd1d1,var(--red),var(--red2));
-      box-shadow:0 0 14px rgba(239,16,16,.24);
-      transition:width .25s ease;
+
+    .pilot-label{
+      color:#8a8d95;
+      font-size:11px;
+      letter-spacing:.18em;
+      margin-bottom:6px;
+      text-transform:uppercase;
+    }
+
+    .pilot-value{
+      font-size:24px;
+      font-weight:900;
+      line-height:1.2;
+      color:#121316;
+      word-break:break-word;
+    }
+
+    .pilot-wide{
+      margin-top:14px;
+      padding:14px;
+      background:rgba(255,255,255,.60);
+      border:1px solid #d7d7dc;
+      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+    }
+
+    .pilot-wide .pilot-value{
+      font-size:18px;
+      font-weight:800;
     }
 
     .section-page{
@@ -760,9 +757,7 @@
       background:linear-gradient(180deg,var(--red),var(--red2));
       color:#fff;
       border-color:#c90f0f;
-      box-shadow:
-        0 10px 18px rgba(239,16,16,.18),
-        inset 0 1px 0 rgba(255,255,255,.18);
+      box-shadow:0 10px 18px rgba(239,16,16,.18), inset 0 1px 0 rgba(255,255,255,.18);
     }
 
     .badge{
@@ -787,9 +782,7 @@
       min-height:240px;
       background:var(--metalLight);
       border:1px solid #d7d7dc;
-      box-shadow:
-        0 14px 28px rgba(0,0,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.95);
+      box-shadow:0 14px 28px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.95);
       overflow:hidden;
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
       transition:transform .16s ease, box-shadow .16s ease;
@@ -797,9 +790,7 @@
 
     .gallery-item:hover{
       transform:translateY(-3px) rotateX(2deg) rotateY(-2deg);
-      box-shadow:
-        0 20px 36px rgba(0,0,0,.12),
-        inset 0 1px 0 rgba(255,255,255,.95);
+      box-shadow:0 20px 36px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.95);
     }
 
     .gallery-item img{
@@ -871,9 +862,7 @@
       gap:14px;
       background:var(--metalLight);
       border:1px solid #d7d7dc;
-      box-shadow:
-        0 14px 28px rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.95);
+      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
       padding:16px;
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     }
@@ -914,9 +903,7 @@
       overflow:hidden;
       background:var(--metalLight);
       border:1px solid #d8d8dd;
-      box-shadow:
-        0 30px 68px rgba(0,0,0,.16),
-        inset 0 1px 0 rgba(255,255,255,.96);
+      box-shadow:0 30px 68px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.96);
       clip-path:polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
     }
 
@@ -968,18 +955,14 @@
       border:1px solid #d3d3d8;
       outline:none;
       padding:14px 16px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.03);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(0,0,0,.03);
       clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       resize:vertical;
     }
 
     input:focus,textarea:focus,select:focus{
       border-color:#f08f8f;
-      box-shadow:
-        0 0 0 4px rgba(239,16,16,.08),
-        inset 0 1px 0 rgba(255,255,255,.96);
+      box-shadow:0 0 0 4px rgba(239,16,16,.08), inset 0 1px 0 rgba(255,255,255,.96);
     }
 
     .admin-login-box{
@@ -987,15 +970,13 @@
       padding:18px;
       background:var(--metalLight);
       border:1px solid #d7d7dc;
-      box-shadow:
-        0 14px 28px rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.95);
+      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     }
 
     .admin-login-row{
       display:flex;
-      gap:10px;
+      gap:14px;
       flex-wrap:wrap;
       align-items:flex-start;
       justify-content:space-between;
@@ -1005,7 +986,7 @@
       flex:1;
       min-width:280px;
       display:grid;
-      gap:10px;
+      gap:14px;
     }
 
     .admin-login-actions{
@@ -1022,11 +1003,11 @@
     }
 
     .login-status{
-      margin-top:12px;
+      margin-top:14px;
       font-size:13px;
       line-height:1.8;
       color:#6f7178;
-      padding:10px 12px;
+      padding:12px 14px;
       border:1px solid #d7d7dc;
       background:rgba(255,255,255,.55);
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
@@ -1057,11 +1038,8 @@
       top:0;
       width:50.5%;
       height:100%;
-      background:
-        linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.96),
-        0 0 30px rgba(239,16,16,.16);
+      background:linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.96), 0 0 30px rgba(239,16,16,.16);
       overflow:hidden;
     }
 
@@ -1081,9 +1059,7 @@
       inset:18px;
       background:linear-gradient(180deg,#ffffff,#eef0f2);
       border:1px solid #d7d7dc;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.94),
-        inset 0 -1px 0 rgba(0,0,0,.03);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.94), inset 0 -1px 0 rgba(0,0,0,.03);
     }
 
     .door-left::after,.door-right::after{
@@ -1108,11 +1084,8 @@
       transform:translate(-50%,-50%) scale(.6);
       opacity:0;
       border:2px solid rgba(239,16,16,.84);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.84), rgba(236,236,239,.95));
-      box-shadow:
-        0 0 26px rgba(239,16,16,.20),
-        inset 0 1px 0 rgba(255,255,255,.96);
+      background:linear-gradient(180deg, rgba(255,255,255,.84), rgba(236,236,239,.95));
+      box-shadow:0 0 26px rgba(239,16,16,.20), inset 0 1px 0 rgba(255,255,255,.96);
       clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     }
 
@@ -1200,10 +1173,7 @@
       padding:38px 36px 34px;
       background:linear-gradient(180deg,#f8f8f9,#ececee);
       border:1px solid #d7d7dc;
-      box-shadow:
-        0 24px 48px rgba(0,0,0,.12),
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.03);
+      box-shadow:0 24px 48px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(0,0,0,.03);
       clip-path:polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
       overflow:hidden;
     }
@@ -1233,9 +1203,7 @@
       line-height:1.15;
       font-weight:900;
       color:#16171b;
-      text-shadow:
-        4px 4px 0 rgba(0,0,0,.08),
-        0 1px 0 rgba(255,255,255,.95);
+      text-shadow:4px 4px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.95);
       margin-bottom:20px;
       letter-spacing:.06em;
     }
@@ -1256,9 +1224,7 @@
       padding:4px;
       background:linear-gradient(180deg,#ffffff,#ececef);
       border:1px solid #d4d4d9;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(0,0,0,.03);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.03);
       clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
       overflow:hidden;
     }
@@ -1266,8 +1232,7 @@
     .boot-bar{
       height:100%;
       width:0%;
-      background:
-        linear-gradient(90deg,#ffd0d0 0%, var(--red) 55%, var(--red2) 100%);
+      background:linear-gradient(90deg,#ffd0d0 0%, var(--red) 55%, var(--red2) 100%);
       box-shadow:0 0 16px rgba(239,16,16,.24);
       transition:width .08s linear;
       clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
@@ -1340,6 +1305,9 @@
       .overview-grid,.content-grid,.gallery-grid{
         grid-template-columns:1fr;
       }
+      .pilot-grid{
+        grid-template-columns:1fr;
+      }
     }
 
     @media (max-width: 860px){
@@ -1391,16 +1359,13 @@
       <div class="boot-title">MECHA MEMORY SYSTEM</div>
       <div class="boot-main">個人アーカイブ認証</div>
       <div class="boot-sub">INITIALIZING COCKPIT INTERFACE</div>
-
       <div class="boot-bar-wrap">
         <div class="boot-bar" id="bootBar"></div>
       </div>
-
       <div class="boot-status">
         <span>IDENTITY CHECK</span>
         <span id="bootPercent">0%</span>
       </div>
-
       <div class="boot-verify" id="bootVerify">
         IDENTITY VERIFIED<br>認証成功
       </div>
@@ -1470,35 +1435,42 @@
                 <span>SYSTEM STATUS</span>
                 <div class="line"></div>
               </div>
-              <div class="content-grid" style="grid-template-columns:1fr 1fr;gap:12px">
-                <div>
-                  <div style="color:#8c8f95;font-size:12px;letter-spacing:.18em;margin-bottom:6px">ENTRIES</div>
-                  <div style="font-size:36px;font-weight:900" id="entryCount">0</div>
+
+              <div class="pilot-grid">
+                <div class="pilot-item">
+                  <div class="pilot-label">PILOT STATUS</div>
+                  <div class="pilot-value" id="pilotStatusText">OWNER MODE: STANDBY</div>
                 </div>
-                <div>
-                  <div style="color:#8c8f95;font-size:12px;letter-spacing:.18em;margin-bottom:6px">IMAGES</div>
-                  <div style="font-size:36px;font-weight:900" id="imageCount">0</div>
+
+                <div class="pilot-item">
+                  <div class="pilot-label">LAST UPDATE</div>
+                  <div class="pilot-value" id="pilotLastUpdate">--</div>
+                </div>
+
+                <div class="pilot-item">
+                  <div class="pilot-label">ARCHIVE LOGS</div>
+                  <div class="pilot-value" id="pilotArchiveLogs">0</div>
+                </div>
+
+                <div class="pilot-item">
+                  <div class="pilot-label">VISUAL FILES</div>
+                  <div class="pilot-value" id="pilotVisualFiles">0</div>
                 </div>
               </div>
-              <div class="bars">
-                <div class="bar-row">
-                  <span><b>MEMORY DENSITY</b><b id="entryBarText">0%</b></span>
-                  <div class="bar"><i id="entryBar" style="width:18%"></i></div>
-                </div>
-                <div class="bar-row">
-                  <span><b>VISUAL LOGS</b><b id="imageBarText">0%</b></span>
-                  <div class="bar"><i id="imageBar" style="width:12%"></i></div>
-                </div>
-                <div class="bar-row">
-                  <span><b>LAST SYNC</b><b id="lastSync">--:--</b></span>
-                  <div class="bar"><i style="width:88%"></i></div>
-                </div>
+
+              <div class="pilot-wide">
+                <div class="pilot-label">SYSTEM NOTE</div>
+                <div class="pilot-value" id="pilotSystemNote">MEMORY LINK STABLE</div>
+              </div>
+
+              <div class="pilot-wide">
+                <div class="pilot-label">LATEST LOG</div>
+                <div class="pilot-value" id="pilotLatestLog">NO ENTRY YET</div>
               </div>
             </article>
           </div>
 
           <div style="height:24px"></div>
-
           <div class="overview-grid" id="sectionCards"></div>
         </section>
       </section>
@@ -1683,14 +1655,6 @@
     const bootPercent = document.getElementById("bootPercent");
     const bootVerify = document.getElementById("bootVerify");
 
-    const entryCountEl = document.getElementById("entryCount");
-    const imageCountEl = document.getElementById("imageCount");
-    const entryBar = document.getElementById("entryBar");
-    const imageBar = document.getElementById("imageBar");
-    const entryBarText = document.getElementById("entryBarText");
-    const imageBarText = document.getElementById("imageBarText");
-    const lastSyncEl = document.getElementById("lastSync");
-
     const modalWrap = document.getElementById("modalWrap");
     const modalTitle = document.getElementById("modalTitle");
     const entrySection = document.getElementById("entrySection");
@@ -1710,6 +1674,13 @@
     const newEntryBtn = document.getElementById("newEntryBtn");
     const addSectionEntryBtn = document.getElementById("addSectionEntryBtn");
 
+    const pilotStatusText = document.getElementById("pilotStatusText");
+    const pilotLastUpdate = document.getElementById("pilotLastUpdate");
+    const pilotArchiveLogs = document.getElementById("pilotArchiveLogs");
+    const pilotVisualFiles = document.getElementById("pilotVisualFiles");
+    const pilotSystemNote = document.getElementById("pilotSystemNote");
+    const pilotLatestLog = document.getElementById("pilotLatestLog");
+
     function escapeHtml(str=""){
       return String(str)
         .replaceAll("&","&amp;")
@@ -1723,6 +1694,15 @@
       loginStatus.textContent = text;
       loginStatus.classList.remove("ok","err");
       if(type) loginStatus.classList.add(type);
+    }
+
+    function withTimeout(promise, ms, message){
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error(message)), ms);
+        })
+      ]);
     }
 
     async function getVisiblePostsQuery() {
@@ -1774,6 +1754,26 @@
       }
     }
 
+    function formatDateText(dateStr){
+      if(!dateStr) return "--";
+      const d = new Date(dateStr);
+      if(Number.isNaN(d.getTime())) return dateStr;
+      return d.toISOString().slice(0,10);
+    }
+
+    function updatePilotPanel(){
+      const count = entries.length;
+      const imageCount = entries.filter(x => x.image && x.image.trim()).length;
+      const latest = [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt)[0];
+
+      pilotStatusText.textContent = isAdminLoggedIn ? "OWNER MODE: ACTIVE" : "OWNER MODE: STANDBY";
+      pilotArchiveLogs.textContent = String(count);
+      pilotVisualFiles.textContent = String(imageCount);
+      pilotLastUpdate.textContent = latest ? formatDateText(latest.date) : "--";
+      pilotLatestLog.textContent = latest ? (latest.title || "無題の記録") : "NO ENTRY YET";
+      pilotSystemNote.textContent = count > 0 ? "MEMORY LINK STABLE" : "ARCHIVE WAITING FOR FIRST LOG";
+    }
+
     async function refreshEntries() {
       entries = await loadEntriesFromSupabase();
       renderSectionCards();
@@ -1781,26 +1781,7 @@
       if (currentPage === "section") {
         renderSectionPage(currentSection);
       }
-      updateStats();
-      lastSyncEl.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
-    }
-
-    function updateStats(){
-      const count = entries.length;
-      const imageCount = entries.filter(x => x.image && x.image.trim()).length;
-      const countP = Math.min(100, 12 + count * 7);
-      const imageP = Math.min(100, 10 + imageCount * 11);
-
-      entryCountEl.textContent = count;
-      imageCountEl.textContent = imageCount;
-      entryBar.style.width = countP + "%";
-      imageBar.style.width = imageP + "%";
-      entryBarText.textContent = countP + "%";
-      imageBarText.textContent = imageP + "%";
-
-      if(lastSyncEl.textContent === "--:--"){
-        lastSyncEl.textContent = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
-      }
+      updatePilotPanel();
     }
 
     function renderSectionCards(){
@@ -1937,9 +1918,7 @@
 
     function showPage(name){
       currentPage = name;
-
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-
       const targetPage = document.getElementById(`page-${name}`);
       if (targetPage) {
         targetPage.classList.add("active");
@@ -2114,7 +2093,6 @@
         }
 
         isAdminLoggedIn = !!data?.session;
-
         authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
         loginBtn.classList.toggle("hidden", isAdminLoggedIn);
         logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
@@ -2130,6 +2108,7 @@
           setLoginStatus("未登录。管理员功能锁定中。", "");
         }
 
+        updatePilotPanel();
         syncAdminButtons();
       }catch(err){
         console.error("updateAuthUI exception:", err);
@@ -2156,10 +2135,11 @@
       setLoginStatus("正在登录，请稍等……");
 
       try {
-        const result = await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
+        const result = await withTimeout(
+          supabaseClient.auth.signInWithPassword({ email, password }),
+          12000,
+          "登录请求超时，请检查网络、Supabase 配置，或稍后重试。"
+        );
 
         if (result.error) {
           console.error("login error:", result.error);
@@ -2168,25 +2148,34 @@
           return;
         }
 
-        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        const sessionData = result.data?.session;
+        const userData = result.data?.user;
 
-        if (sessionError) {
-          setLoginStatus("登录后读取 session 失败：" + sessionError.message, "err");
-          alert("登录后读取 session 失败: " + sessionError.message);
+        if (!sessionData && !userData) {
+          setLoginStatus("登录失败：没有拿到登录会话。", "err");
+          alert("登录失败：没有拿到登录会话。");
           return;
         }
 
-        if (!sessionData.session) {
-          setLoginStatus("登录后没有拿到 session。", "err");
-          alert("登录后没有拿到 session，说明登录状态没有成功建立。");
+        await updateAuthUI();
+        await refreshEntries();
+
+        const { data: verifySession, error: verifyError } = await supabaseClient.auth.getSession();
+        if (verifyError) {
+          setLoginStatus("登录后验证 session 失败：" + verifyError.message, "err");
+          alert("登录后验证 session 失败: " + verifyError.message);
+          return;
+        }
+
+        if (!verifySession.session) {
+          setLoginStatus("登录后 session 未建立。", "err");
+          alert("登录后 session 未建立。");
           return;
         }
 
         adminPasswordInput.value = "";
         setLoginStatus("管理者ログイン成功", "ok");
         alert("管理者ログイン成功");
-        await updateAuthUI();
-        await refreshEntries();
       } catch (err) {
         console.error("adminLoginFlow exception:", err);
         setLoginStatus("登录发生异常：" + (err?.message || err), "err");
@@ -2201,7 +2190,11 @@
       setLoginStatus("正在退出登录……");
 
       try {
-        const { error } = await supabaseClient.auth.signOut();
+        const { error } = await withTimeout(
+          supabaseClient.auth.signOut(),
+          10000,
+          "登出请求超时，请稍后重试。"
+        );
 
         if (error) {
           console.error(error);
@@ -2527,7 +2520,6 @@
 
       try {
         await resetUIToDefault();
-
         renderAdminFilters();
         setupTilt();
 
@@ -2540,10 +2532,8 @@
         await updateAuthUI();
         await refreshEntries();
         syncAdminButtons();
-
         showPage("home");
         window.scrollTo({ top: 0, behavior: "auto" });
-
         setLoginStatus(isAdminLoggedIn ? "管理员已登录，编辑权限已开启。" : "未登录。管理员功能锁定中。");
       } catch (err) {
         console.error("initApp exception:", err);
@@ -2629,7 +2619,6 @@
 
     window.addEventListener("pageshow", async (event) => {
       if (event.persisted) {
-        console.log("pageshow persisted detected, reinitializing app");
         appInitialized = false;
         await initApp(false);
       }
