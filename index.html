@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
-  <!-- BUILD: 2026-03-21-fix10 -->
+  <!-- BUILD: 2026-03-21-fix11 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2127,7 +2127,7 @@
     });
     let authSession = null;
 
-    const BUILD_VERSION = "2026-03-21-fix10";
+    const BUILD_VERSION = "2026-03-21-fix11";
     console.log("Diary site build:", BUILD_VERSION);
 
     // === AUTH CACHE FIX10 ===
@@ -2186,11 +2186,10 @@
 
     async function savePostViaRestFix10(payload, editId){
       const token = await getAccessTokenFastFix10();
-      // If token missing, still allow anon write if your table has no RLS; otherwise show a friendly message.
       const headers = {
         "apikey": SUPABASE_ANON_KEY,
         "Content-Type": "application/json",
-        "Prefer": "return=minimal"
+        "Prefer": "return=representation"
       };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
@@ -2202,22 +2201,45 @@
         if (editId){
           const url = `${base}?id=eq.${encodeURIComponent(editId)}`;
           const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(payload), signal: ctrl.signal });
-          const text = await res.text();
+          const raw = await res.text();
           if (!res.ok){
-            throw new Error(`HTTP ${res.status} ${res.statusText}: ${text}`);
+            throw new Error(`HTTP ${res.status} ${res.statusText}: ${raw}`);
           }
-          return { ok: true };
+          let row = null;
+          try {
+            const parsed = raw ? JSON.parse(raw) : [];
+            row = Array.isArray(parsed) ? (parsed[0] || null) : parsed;
+          } catch (_) {}
+          return { ok: true, row };
         } else {
           const res = await fetch(base, { method: "POST", headers, body: JSON.stringify(payload), signal: ctrl.signal });
-          const text = await res.text();
+          const raw = await res.text();
           if (!res.ok){
-            throw new Error(`HTTP ${res.status} ${res.statusText}: ${text}`);
+            throw new Error(`HTTP ${res.status} ${res.statusText}: ${raw}`);
           }
-          return { ok: true };
+          let row = null;
+          try {
+            const parsed = raw ? JSON.parse(raw) : [];
+            row = Array.isArray(parsed) ? (parsed[0] || null) : parsed;
+          } catch (_) {}
+          return { ok: true, row };
         }
       } finally {
         clearTimeout(t);
       }
+    }
+
+    function mapPostRowToEntry(item, rowOrder = 0){
+      return {
+        id: item.id,
+        section: normalizeSection(item.section),
+        date: item.entry_date,
+        title: item.title || "",
+        content: item.content || "",
+        image: parseStoredImages(item.image_url || "")[0] || "",
+        images: parseStoredImages(item.image_url || ""),
+        rowOrder
+      };
     }
 
     async function getActiveUser(){
@@ -2461,14 +2483,15 @@
           return [];
         }
 
-        return (data || []).map(item => ({
+        return (data || []).map((item, index) => ({
           id: item.id,
           section: normalizeSection(item.section),
           date: item.entry_date,
           title: item.title || "",
           content: item.content || "",
           image: parseStoredImages(item.image_url || "")[0] || "",
-          images: parseStoredImages(item.image_url || "")
+          images: parseStoredImages(item.image_url || ""),
+          rowOrder: index
         }));
       }catch(err){
         console.error("loadEntriesFromSupabase exception:", err);
@@ -2506,7 +2529,7 @@
         .filter(item => !normalizedSection || item.section === normalizedSection)
         .filter(item => !normalizedDate || String(item.date || "") === normalizedDate)
         .filter(item => searchMatches(item, normalizedKeyword))
-        .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+        .sort((a,b)=> new Date(b.date) - new Date(a.date) || (Number(b.rowOrder ?? 0) - Number(a.rowOrder ?? 0)));
     }
 
     function renderSearchSummary(el, total, shown, keyword, date, scopeLabel){
@@ -2673,7 +2696,7 @@
     function listBySection(section){
       return [...entries]
         .filter(x => x.section === section)
-        .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+        .sort((a,b)=> new Date(b.date) - new Date(a.date) || (Number(b.rowOrder ?? 0) - Number(a.rowOrder ?? 0)));
     }
 
     function renderSectionPage(section){
@@ -2741,7 +2764,7 @@
     function renderAdminList(filter="all"){
       const baseList = [...entries]
         .filter(x => filter === "all" ? true : x.section === filter)
-        .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+        .sort((a,b)=> new Date(b.date) - new Date(a.date) || (Number(b.rowOrder ?? 0) - Number(a.rowOrder ?? 0)));
 
       const keyword = adminSearchInput.value.trim();
       const date = adminSearchDate.value;
@@ -3053,8 +3076,9 @@
 
         // === DB WRITE (FIX10) ===
         // Avoid supabase-js insert/update hangs by writing via PostgREST (fetch).
+        let saveResult = null;
         try{
-          await savePostViaRestFix10(payload, editId);
+          saveResult = await savePostViaRestFix10(payload, editId);
         } catch (e){
           console.error("publishEntry REST save error:", e);
           const msg = String(e?.message || e || "");
@@ -3073,14 +3097,43 @@
         }
 
         currentSection = section;
-        closeModal();
 
-        try {
-          await refreshEntries();
-          if(currentPage === "section") renderSectionPage(section);
-        } catch (refreshErr) {
-          console.error("refreshEntries after save failed:", refreshErr);
+        const savedRow = saveResult?.row || {
+          id: editId || `local-${Date.now()}`,
+          section,
+          entry_date: date,
+          title: title || (imageOnly ? "画像記録" : "無題の記録"),
+          content,
+          image_url: image
+        };
+        const localEntry = mapPostRowToEntry(savedRow, Date.now());
+
+        if (editId) {
+          const idx = entries.findIndex(x => String(x.id) === String(editId));
+          if (idx >= 0) {
+            entries[idx] = localEntry;
+          }
+        } else {
+          entries = [localEntry, ...entries.filter(x => String(x.id) !== String(localEntry.id))];
         }
+
+        closeModal();
+        renderSectionCards();
+        renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
+        renderSectionPage(section);
+        updatePilotPanel();
+
+        setTimeout(async () => {
+          try {
+            await refreshEntries();
+            if(currentPage === "section") renderSectionPage(section);
+          } catch (refreshErr) {
+            console.error("refreshEntries after save failed:", refreshErr);
+          }
+        }, 120);
+
+        alert("保存成功しました。");
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
         triggerDoorTransition().catch(err => {
           console.error("triggerDoorTransition after save failed:", err);
