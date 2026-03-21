@@ -2126,12 +2126,16 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix3";
+    const BUILD_VERSION = "2026-03-21-fix4";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
       try {
-        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        const { data: sessionData, error: sessionError } = await withTimeout(
+          supabaseClient.auth.getSession(),
+          5000,
+          "AUTH_GET_SESSION_TIMEOUT"
+        );
         if (sessionError) {
           console.error("getSession error:", sessionError);
         }
@@ -2141,7 +2145,11 @@
           return session.user;
         }
 
-        const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+        const { data: userData, error: userError } = await withTimeout(
+          supabaseClient.auth.getUser(),
+          5000,
+          "AUTH_GET_USER_TIMEOUT"
+        );
         if (userError) {
           console.error("getUser error:", userError);
         }
@@ -2937,7 +2945,9 @@
       }
 
       try{
+        console.log("publishEntry start", { imageOnly, editId, section, date, titleLength: title.length, contentLength: content.length, imageLength: image ? image.length : 0 });
         const user = await getActiveUser();
+        console.log("publishEntry active user", user?.id || null);
 
         if (!user?.id) {
           await updateAuthUI(null);
@@ -2958,18 +2968,27 @@
 
         let result;
         if(editId){
-          result = await supabaseClient
-            .from("posts")
-            .update(payload)
-            .eq("id", editId)
-            .select();
+          result = await withTimeout(
+            supabaseClient
+              .from("posts")
+              .update(payload)
+              .eq("id", editId)
+              .select(),
+            8000,
+            "POST_SAVE_TIMEOUT"
+          );
         } else {
-          result = await supabaseClient
-            .from("posts")
-            .insert({ ...payload, is_public: true })
-            .select();
+          result = await withTimeout(
+            supabaseClient
+              .from("posts")
+              .insert({ ...payload, is_public: true })
+              .select(),
+            8000,
+            "POST_SAVE_TIMEOUT"
+          );
         }
 
+        console.log("publishEntry db result", result);
         if (result?.error) {
           console.error(result.error);
           const detailParts = [result.error.message, result.error.details, result.error.hint].filter(Boolean);
@@ -2992,15 +3011,19 @@
       }catch(err){
         console.error("publishEntry exception:", err);
         const rawMsg = String(err?.message || err || "");
-        const msg = /Failed to fetch|fetch/i.test(rawMsg)
-          ? "ネットワーク接続または Supabase 側への接続に失敗しました。"
-          : /JWT|session|token/i.test(rawMsg)
-            ? "ログイン状態が切れています。もう一度ログインしてください。"
-            : /row-level security|policy|permission denied|not allowed/i.test(rawMsg)
-              ? "Supabase の権限設定で保存が拒否されています。posts テーブルの RLS / policy を確認してください。"
-              : /relation .*posts.* does not exist|Could not find the table/i.test(rawMsg)
-                ? "Supabase 側に posts テーブルが見つかりません。テーブル名と schema を確認してください。"
-                : (rawMsg || "不明なエラー");
+        const msg = /POST_SAVE_TIMEOUT/i.test(rawMsg)
+          ? "保存请求超时了。数据库可能没有响应，或者 RLS / policy 把写入卡住了。"
+          : /AUTH_GET_SESSION_TIMEOUT|AUTH_GET_USER_TIMEOUT/i.test(rawMsg)
+            ? "登录状态读取超时，请重新登录后再试。"
+            : /Failed to fetch|fetch/i.test(rawMsg)
+              ? "ネットワーク接続または Supabase 側への接続に失敗しました。"
+              : /JWT|session|token/i.test(rawMsg)
+                ? "ログイン状態が切れています。もう一度ログインしてください。"
+                : /row-level security|policy|permission denied|not allowed/i.test(rawMsg)
+                  ? "Supabase の権限設定で保存が拒否されています。posts テーブルの RLS / policy を確認してください。"
+                  : /relation .*posts.* does not exist|Could not find the table/i.test(rawMsg)
+                    ? "Supabase 側に posts テーブルが見つかりません。テーブル名と schema を確認してください。"
+                    : (rawMsg || "不明なエラー");
         alert("保存发生异常: " + msg);
       } finally {
         publishBtn.disabled = prevPublishDisabled;
