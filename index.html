@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
-  <!-- BUILD: 2026-03-21-fix9 -->
+  <!-- BUILD: 2026-03-21-fix10 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2125,9 +2125,100 @@
         detectSessionInUrl: true
       }
     });
+    let authSession = null;
 
-    const BUILD_VERSION = "2026-03-21-fix9";
+    const BUILD_VERSION = "2026-03-21-fix10";
     console.log("Diary site build:", BUILD_VERSION);
+
+    // === AUTH CACHE FIX10 ===
+    // Cache session/token at login time; never force-logout on transient session read failure.
+    const AUTH_CACHE_FIX10 = { session: null, user: null, token: null, lastSeenAt: 0 };
+
+    function cacheSessionFix10(session){
+      if(!session) return;
+      AUTH_CACHE_FIX10.session = session;
+      AUTH_CACHE_FIX10.user = session.user || null;
+      AUTH_CACHE_FIX10.token = session.access_token || null;
+      AUTH_CACHE_FIX10.lastSeenAt = Date.now();
+      if (AUTH_CACHE_FIX10.user) {
+        authSession = { ...(authSession || {}), user: AUTH_CACHE_FIX10.user, access_token: AUTH_CACHE_FIX10.token };
+      }
+    }
+
+    // Keep cache fresh (do NOT auto-logout UI just because session is briefly null)
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (session) cacheSessionFix10(session);
+    });
+
+    async function getAccessTokenFastFix10(){
+      if (AUTH_CACHE_FIX10.token) return AUTH_CACHE_FIX10.token;
+
+      // Try quick session read (guarded by timeout)
+      try{
+        const { data, error } = await Promise.race([
+          supabaseClient.auth.getSession(),
+          new Promise((_, reject)=>setTimeout(()=>reject(new Error("SESSION_TIMEOUT")), 2500))
+        ]);
+        if (error) throw error;
+        const s = data?.session;
+        if (s?.access_token){
+          cacheSessionFix10(s);
+          return s.access_token;
+        }
+      }catch(_e){ /* ignore */ }
+
+      // Try silent refresh (still no re-login)
+      try{
+        const { data, error } = await Promise.race([
+          supabaseClient.auth.refreshSession(),
+          new Promise((_, reject)=>setTimeout(()=>reject(new Error("REFRESH_TIMEOUT")), 4500))
+        ]);
+        if (error) throw error;
+        const s = data?.session;
+        if (s?.access_token){
+          cacheSessionFix10(s);
+          return s.access_token;
+        }
+      }catch(_e){ /* ignore */ }
+
+      return null;
+    }
+
+    async function savePostViaRestFix10(payload, editId){
+      const token = await getAccessTokenFastFix10();
+      // If token missing, still allow anon write if your table has no RLS; otherwise show a friendly message.
+      const headers = {
+        "apikey": SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const base = `${SUPABASE_URL}/rest/v1/posts`;
+      const ctrl = new AbortController();
+      const t = setTimeout(()=>ctrl.abort(), 12000);
+
+      try{
+        if (editId){
+          const url = `${base}?id=eq.${encodeURIComponent(editId)}`;
+          const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(payload), signal: ctrl.signal });
+          const text = await res.text();
+          if (!res.ok){
+            throw new Error(`HTTP ${res.status} ${res.statusText}: ${text}`);
+          }
+          return { ok: true };
+        } else {
+          const res = await fetch(base, { method: "POST", headers, body: JSON.stringify(payload), signal: ctrl.signal });
+          const text = await res.text();
+          if (!res.ok){
+            throw new Error(`HTTP ${res.status} ${res.statusText}: ${text}`);
+          }
+          return { ok: true };
+        }
+      } finally {
+        clearTimeout(t);
+      }
+    }
 
     async function getActiveUser(){
       try {
@@ -2344,50 +2435,7 @@
       });
     }
 
-    
-    // --- FIX9: direct REST save to avoid hanging PostgREST builder in some browsers ---
-    async function restSavePost(payload, editId){
-      // Use the current access token from Supabase auth; keep login once.
-      const sessRes = await withTimeout(supabaseClient.auth.getSession(), 6000, "AUTH_GET_SESSION_TIMEOUT");
-      const accessToken = sessRes?.data?.session?.access_token || "";
-      if (!accessToken) {
-        return { error: { message: "No access token (session missing)", hint: "Please login again once.", details: "" } };
-      }
-
-      const base = SUPABASE_URL.replace(/\/+$/,"");
-      const url = editId
-        ? `${base}/rest/v1/posts?id=eq.${encodeURIComponent(editId)}`
-        : `${base}/rest/v1/posts`;
-
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 20000);
-
-      try{
-        const res = await fetch(url, {
-          method: editId ? "PATCH" : "POST",
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-            "Prefer": "return=minimal"
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-
-        // PostgREST returns 201/204 on success for minimal return.
-        if (res.ok) return { error: null };
-
-        const text = await res.text().catch(()=> "");
-        return { error: { message: `HTTP ${res.status}`, details: text, hint: "" } };
-      } catch(e){
-        const msg = (e && e.name === "AbortError") ? "POST_SAVE_TIMEOUT" : (e?.message || String(e));
-        throw new Error(msg);
-      } finally {
-        clearTimeout(timer);
-      }
-    }
-async function getVisiblePostsQuery() {
+    async function getVisiblePostsQuery() {
       // NOTE: Your current public.posts schema (from your screenshot) contains:
       // id(uuid), section(text), title(text), content(text), image_url(text), entry_date(date)
       // It does NOT include is_public / author_id / created_at.
@@ -2983,7 +3031,7 @@ async function getVisiblePostsQuery() {
       }
 
       try{
-        const user = authSession?.user || await getActiveUser();
+        const user = authSession?.user || AUTH_CACHE_FIX10.user || null;
         console.log("publishEntry start", { imageOnly, editId, section, userId: user?.id || null, date, titleLength: title.length, contentLength: content.length, imageLength: image ? image.length : 0 });
 
         if (!user?.id) {
@@ -3003,15 +3051,24 @@ async function getVisiblePostsQuery() {
           image_url: image
         };
 
-        let result;
-        // Use direct REST call to avoid rare "promise never resolves" hangs.
-        result = await restSavePost(payload, editId);
-
-        console.log("publishEntry db result", result);
-        if (result?.error) {
-          console.error(result.error);
-          const detailParts = [result.error.message, result.error.details, result.error.hint].filter(Boolean);
-          alert((editId ? "更新失败: " : "保存失败: ") + detailParts.join(" | "));
+        // === DB WRITE (FIX10) ===
+        // Avoid supabase-js insert/update hangs by writing via PostgREST (fetch).
+        try{
+          await savePostViaRestFix10(payload, editId);
+        } catch (e){
+          console.error("publishEntry REST save error:", e);
+          const msg = String(e?.message || e || "");
+          if (msg.includes("401") || msg.includes("JWT") || msg.toLowerCase().includes("unauthorized")) {
+            alert("保存失败：登录凭证不可用或已过期（不会自动退出登录）。请刷新页面后再试一次。\n\n" + msg);
+          } else if (msg.includes("403") || msg.toLowerCase().includes("policy") || msg.toLowerCase().includes("rls")) {
+            alert("保存失败：数据库权限策略拦截（RLS / Policy）。\n\n" + msg);
+          } else if (msg.includes("HTTP")) {
+            alert("保存失败：" + msg);
+          } else if (msg.includes("AbortError")) {
+            alert("保存失败：保存请求超时（12秒）。请检查网络或稍后重试。");
+          } else {
+            alert("保存失败：" + msg);
+          }
           return;
         }
 
@@ -3198,6 +3255,7 @@ function syncAdminButtons() {
         }
 
         authSession = { ...sessionData, user: userData };
+        cacheSessionFix10(sessionData);
         isAdminLoggedIn = true;
         adminPasswordInput.value = "";
         await updateAuthUI(authSession);
