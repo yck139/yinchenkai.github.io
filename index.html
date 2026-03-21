@@ -2126,11 +2126,15 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix4";
+    const BUILD_VERSION = "2026-03-21-fix5";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
       try {
+        if (authSession?.user?.id) {
+          return authSession.user;
+        }
+
         const { data: sessionData, error: sessionError } = await withTimeout(
           supabaseClient.auth.getSession(),
           5000,
@@ -2154,12 +2158,13 @@
           console.error("getUser error:", userError);
         }
         if (userData?.user?.id) {
+          authSession = { ...(authSession || {}), user: userData.user };
           return userData.user;
         }
       } catch (err) {
         console.error("getActiveUser exception:", err);
       }
-      return null;
+      return authSession?.user || null;
     }
 
     const SECTIONS = {
@@ -2950,12 +2955,12 @@
         console.log("publishEntry active user", user?.id || null);
 
         if (!user?.id) {
-          await updateAuthUI(null);
-          alert("保存するには、もう一度ログインしてください。");
+          console.warn("publishEntry: no active user, keeping current UI state.");
+          alert("保存する前に、もう一度ログインしてください。ログイン直後なら数秒待って再試行してください。");
           return;
         }
 
-        authSession = authSession || { user };
+        authSession = { ...(authSession || {}), user };
 
         const payload = {
           section,
@@ -3159,7 +3164,7 @@
           return;
         }
 
-        authSession = sessionData;
+        authSession = { ...sessionData, user: userData };
         isAdminLoggedIn = true;
         adminPasswordInput.value = "";
         await updateAuthUI(authSession);
