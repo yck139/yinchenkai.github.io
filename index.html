@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
-  <!-- BUILD: 2026-03-21-fix8 -->
+  <!-- BUILD: 2026-03-21-fix9 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2126,7 +2126,7 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix8";
+    const BUILD_VERSION = "2026-03-21-fix9";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
@@ -2344,7 +2344,50 @@
       });
     }
 
-    async function getVisiblePostsQuery() {
+    
+    // --- FIX9: direct REST save to avoid hanging PostgREST builder in some browsers ---
+    async function restSavePost(payload, editId){
+      // Use the current access token from Supabase auth; keep login once.
+      const sessRes = await withTimeout(supabaseClient.auth.getSession(), 6000, "AUTH_GET_SESSION_TIMEOUT");
+      const accessToken = sessRes?.data?.session?.access_token || "";
+      if (!accessToken) {
+        return { error: { message: "No access token (session missing)", hint: "Please login again once.", details: "" } };
+      }
+
+      const base = SUPABASE_URL.replace(/\/+$/,"");
+      const url = editId
+        ? `${base}/rest/v1/posts?id=eq.${encodeURIComponent(editId)}`
+        : `${base}/rest/v1/posts`;
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 20000);
+
+      try{
+        const res = await fetch(url, {
+          method: editId ? "PATCH" : "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+
+        // PostgREST returns 201/204 on success for minimal return.
+        if (res.ok) return { error: null };
+
+        const text = await res.text().catch(()=> "");
+        return { error: { message: `HTTP ${res.status}`, details: text, hint: "" } };
+      } catch(e){
+        const msg = (e && e.name === "AbortError") ? "POST_SAVE_TIMEOUT" : (e?.message || String(e));
+        throw new Error(msg);
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+async function getVisiblePostsQuery() {
       // NOTE: Your current public.posts schema (from your screenshot) contains:
       // id(uuid), section(text), title(text), content(text), image_url(text), entry_date(date)
       // It does NOT include is_public / author_id / created_at.
@@ -2961,24 +3004,8 @@
         };
 
         let result;
-        if(editId){
-          result = await withTimeout(
-            supabaseClient
-              .from("posts")
-              .update(payload)
-              .eq("id", editId),
-            8000,
-            "POST_SAVE_TIMEOUT"
-          );
-        } else {
-          result = await withTimeout(
-            supabaseClient
-              .from("posts")
-              .insert(payload),
-            8000,
-            "POST_SAVE_TIMEOUT"
-          );
-        }
+        // Use direct REST call to avoid rare "promise never resolves" hangs.
+        result = await restSavePost(payload, editId);
 
         console.log("publishEntry db result", result);
         if (result?.error) {
