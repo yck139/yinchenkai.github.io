@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
-  <!-- BUILD: 2026-03-21-fix7 -->
+  <!-- BUILD: 2026-03-21-fix8 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2126,7 +2126,7 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix7";
+    const BUILD_VERSION = "2026-03-21-fix8";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
@@ -2355,13 +2355,6 @@
         .order("entry_date", { ascending: false });
     }
 
-      return supabaseClient
-        .from("posts")
-        .select("*")
-        .eq("is_public", true)
-        .order("entry_date", { ascending: false })
-        .order("created_at", { ascending: false });
-    }
 
     async function loadEntriesFromSupabase() {
       try{
