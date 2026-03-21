@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
-  <!-- BUILD: 2026-03-21-fix2 -->
+  <!-- BUILD: 2026-03-21-fix7 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2126,7 +2126,7 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix6";
+    const BUILD_VERSION = "2026-03-21-fix7";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
@@ -2345,15 +2345,15 @@
     }
 
     async function getVisiblePostsQuery() {
-      const hasSession = !!isAdminLoggedIn;
-
-      if (hasSession) {
-        return supabaseClient
-          .from("posts")
-          .select("*")
-          .order("entry_date", { ascending: false })
-          .order("created_at", { ascending: false });
-      }
+      // NOTE: Your current public.posts schema (from your screenshot) contains:
+      // id(uuid), section(text), title(text), content(text), image_url(text), entry_date(date)
+      // It does NOT include is_public / author_id / created_at.
+      // So we must NOT filter/order by missing columns, otherwise PostgREST can fail.
+      return supabaseClient
+        .from("posts")
+        .select("*")
+        .order("entry_date", { ascending: false });
+    }
 
       return supabaseClient
         .from("posts")
@@ -2384,10 +2384,7 @@
           title: item.title || "",
           content: item.content || "",
           image: parseStoredImages(item.image_url || "")[0] || "",
-          images: parseStoredImages(item.image_url || ""),
-          is_public: item.is_public,
-          author_id: item.author_id || "",
-          createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
+          images: parseStoredImages(item.image_url || "")
         }));
       }catch(err){
         console.error("loadEntriesFromSupabase exception:", err);
@@ -2967,9 +2964,7 @@
           entry_date: date,
           title: title || (imageOnly ? "画像記録" : "無題の記録"),
           content,
-          image_url: image,
-          author_id: user.id,
-          is_public: true
+          image_url: image
         };
 
         let result;
