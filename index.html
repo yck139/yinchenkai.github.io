@@ -2126,7 +2126,7 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix2";
+    const BUILD_VERSION = "2026-03-21-fix3";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
@@ -2353,7 +2353,11 @@
     async function loadEntriesFromSupabase() {
       try{
         const query = await getVisiblePostsQuery();
-        const { data, error } = await query;
+        const { data, error } = await withTimeout(
+          query,
+          6000,
+          "POSTS_QUERY_TIMEOUT"
+        );
 
         if (error) {
           console.error("读取 posts 失败:", error);
@@ -3053,11 +3057,21 @@
       try{
         let session = sessionOverride;
         if (sessionOverride === undefined) {
-          const { data, error } = await supabaseClient.auth.getSession();
-          if (error) {
-            console.error("getSession error:", error);
+          try {
+            const { data, error } = await withTimeout(
+              supabaseClient.auth.getSession(),
+              4000,
+              "AUTH_SESSION_TIMEOUT"
+            );
+            if (error) {
+              console.error("getSession error:", error);
+            }
+            session = data?.session || null;
+          } catch (sessionErr) {
+            console.error("updateAuthUI getSession timeout:", sessionErr);
+            session = null;
+            setLoginStatus("登录状态读取超时，已按未登录模式进入。", "err");
           }
-          session = data?.session || null;
         }
 
         authSession = session || null;
@@ -3073,7 +3087,7 @@
 
         if(isAdminLoggedIn){
           setLoginStatus("管理员已登录，编辑权限已开启。", "ok");
-        }else{
+        }else if (!String(loginStatus.textContent || "").includes("超时")){
           setLoginStatus("未登录。管理员功能锁定中。", "");
         }
 
