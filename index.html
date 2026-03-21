@@ -2117,7 +2117,38 @@
   <script>
     const SUPABASE_URL = "https://hmdqaepikgqlakpinrkc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_bugTGZcMnSalfAvK5_1plg_GImWHGut";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    async function getActiveUser(){
+      try {
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        if (sessionError) {
+          console.error("getSession error:", sessionError);
+        }
+        const session = sessionData?.session || null;
+        if (session?.user?.id) {
+          authSession = session;
+          return session.user;
+        }
+
+        const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+        if (userError) {
+          console.error("getUser error:", userError);
+        }
+        if (userData?.user?.id) {
+          return userData.user;
+        }
+      } catch (err) {
+        console.error("getActiveUser exception:", err);
+      }
+      return null;
+    }
 
     const SECTIONS = {
       archive: {
@@ -2898,40 +2929,15 @@
       }
 
       try{
-        let user = authSession?.user || null;
-
-        if (!user) {
-          const { data: sessionData, error: sessionError } = await Promise.race([
-            supabaseClient.auth.getSession(),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("SESSION_TIMEOUT")), 2500))
-          ]);
-          if (sessionError) {
-            console.error("getSession in publishEntry error:", sessionError);
-          }
-          if (sessionData?.session) {
-            authSession = sessionData.session;
-            user = sessionData.session.user || null;
-          }
-        }
-
-        if (!user) {
-          const { data: userData, error: userError } = await Promise.race([
-            supabaseClient.auth.getUser(),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("USER_TIMEOUT")), 2500))
-          ]);
-          if (userError) {
-            console.error("getUser in publishEntry error:", userError);
-          }
-          if (userData?.user) {
-            user = userData.user;
-          }
-        }
+        const user = await getActiveUser();
 
         if (!user?.id) {
           await updateAuthUI(null);
           alert("保存するには、もう一度ログインしてください。");
           return;
         }
+
+        authSession = authSession || { user };
 
         const payload = {
           section,
@@ -2944,15 +2950,16 @@
 
         let result;
         if(editId){
-          result = await Promise.race([
-            supabaseClient.from("posts").update(payload).eq("id", editId),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("SAVE_TIMEOUT")), 10000))
-          ]);
+          result = await supabaseClient
+            .from("posts")
+            .update(payload)
+            .eq("id", editId)
+            .select();
         } else {
-          result = await Promise.race([
-            supabaseClient.from("posts").insert({ ...payload, is_public: true }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("SAVE_TIMEOUT")), 10000))
-          ]);
+          result = await supabaseClient
+            .from("posts")
+            .insert({ ...payload, is_public: true })
+            .select();
         }
 
         if (result?.error) {
@@ -2975,11 +2982,14 @@
         });
       }catch(err){
         console.error("publishEntry exception:", err);
-        const msg = err?.message === "SAVE_TIMEOUT"
-          ? "保存処理が長すぎます。ネットワークか Supabase を確認してください。"
-          : (err?.message === "SESSION_TIMEOUT" || err?.message === "USER_TIMEOUT")
-            ? "ログイン状態の確認に失敗しました。もう一度ログインしてください。"
-            : (err?.message || err);
+        const rawMsg = String(err?.message || err || "");
+        const msg = /Failed to fetch|fetch/i.test(rawMsg)
+          ? "ネットワーク接続または Supabase 側への接続に失敗しました。"
+          : /JWT|session|token/i.test(rawMsg)
+            ? "ログイン状態が切れています。もう一度ログインしてください。"
+            : /row-level security|policy|permission denied|not allowed/i.test(rawMsg)
+              ? "Supabase の権限設定で保存が拒否されています。posts テーブルの RLS / policy を確認してください。"
+              : (rawMsg || "不明なエラー");
         alert("保存发生异常: " + msg);
       } finally {
         publishBtn.disabled = prevPublishDisabled;
