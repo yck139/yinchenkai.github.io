@@ -220,165 +220,154 @@
 
     .brand{
       display:flex;
-      align-items:center;
-      gap:14px;
+      flex-direction:column;
+      gap:3px;
       min-width:0;
     }
 
-    .brand-icon{
-      width:42px;height:42px;
-      position:relative;
-      transform:rotate(45deg);
-      background:var(--metalLight);
-      border:1px solid #d8d8dd;
-      box-shadow:var(--shadowSoft), inset 0 1px 0 rgba(255,255,255,.95);
+    .brand-main{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
     }
 
-    .brand-icon::before{
+    .brand-mark{
+      width:54px;
+      height:54px;
+      clip-path:var(--cutB);
+      background:var(--metalLight);
+      border:1px solid rgba(255,255,255,.92);
+      box-shadow:var(--shadowSoft);
+      position:relative;
+      flex:0 0 auto;
+      overflow:hidden;
+    }
+
+    .brand-mark::before{
       content:"";
       position:absolute;
-      inset:8px;
-      border:3px solid var(--red);
-      background:#fff;
+      inset:7px;
+      clip-path:inherit;
+      background:
+        linear-gradient(135deg,transparent 0 42%, var(--red) 42% 50%, transparent 50% 100%),
+        linear-gradient(315deg,transparent 0 44%, #ffffff 44% 53%, transparent 53% 100%),
+        linear-gradient(180deg,#fdfdfd,#d8d8dd);
+      border:1px solid rgba(0,0,0,.05);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
     }
 
-    .brand-text h1{
+    .brand-title{
       margin:0;
-      font-size:15px;
-      letter-spacing:.14em;
-      white-space:nowrap;
-    }
-
-    .brand-text p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:.1em;
-      max-width:360px;
+      font-size:1.18rem;
+      line-height:1.2;
+      letter-spacing:.08em;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
 
-    .nav{
+    .brand-sub{
+      font-size:.74rem;
+      color:var(--muted);
+      letter-spacing:.2em;
+      text-transform:uppercase;
+    }
+
+    .top-actions{
       display:flex;
+      align-items:center;
       gap:10px;
       flex-wrap:wrap;
-      align-items:center;
+      justify-content:flex-end;
     }
 
-    .nav button,.btn,.mini-btn,.filter-btn{
+    .status-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:.78rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+    }
+
+    .status-dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--red);
+      box-shadow:0 0 10px rgba(239,16,16,.35);
+      animation:blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(.72);opacity:.46}
+    }
+
+    .btn{
       appearance:none;
       border:none;
-      font:inherit;
       cursor:pointer;
+      position:relative;
+      clip-path:var(--cutA);
+      padding:14px 20px;
+      min-height:50px;
+      font-weight:800;
+      letter-spacing:.08em;
+      transition:transform .16s ease, box-shadow .16s ease, filter .16s ease, opacity .16s ease;
+      box-shadow:var(--shadowSoft);
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+    .btn:active{transform:translateY(0)}
+
+    .btn-red{
+      color:#fff;
+      background:linear-gradient(180deg,var(--red),var(--red2));
+      box-shadow:0 12px 24px rgba(239,16,16,.26);
+    }
+    .btn-red:hover{filter:brightness(1.04)}
+
+    .btn-white{
       color:var(--text);
       background:var(--metalLight);
-      border:1px solid #d5d5da;
-      box-shadow:
-        0 8px 16px rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.03);
-      padding:11px 16px;
-      clip-path:var(--cutA);
-      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, opacity .16s ease;
+      border:1px solid rgba(0,0,0,.06);
     }
 
-    .nav button:hover,.btn:hover,.mini-btn:hover,.filter-btn:hover{
-      transform:translateY(-2px) scale(1.01);
-      box-shadow:
-        0 14px 26px rgba(0,0,0,.10),
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.04);
-    }
-
-    .nav button.active,.btn.primary,.filter-btn.active{
-      background:linear-gradient(180deg,var(--red),var(--red2));
+    .btn-dark{
       color:#fff;
-      border-color:#c90f0f;
-      box-shadow:
-        0 14px 28px rgba(239,16,16,.24),
-        inset 0 1px 0 rgba(255,255,255,.22),
-        inset 0 -2px 0 rgba(0,0,0,.14);
-    }
-
-    button:disabled{
-      cursor:not-allowed;
-      opacity:.55;
-      transform:none !important;
-    }
-
-    .status-pill{
-      padding:10px 14px;
-      background:var(--metalLight);
-      border:1px solid #d5d5da;
-      box-shadow:
-        0 8px 16px rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.03);
-      clip-path:var(--cutA);
-      font-size:12px;
-      color:#7a7d84;
-      letter-spacing:.08em;
-    }
-
-    .status-pill strong{
-      color:var(--red);
-      margin-left:6px;
-    }
-
-    .page{
-      display:none;
-      margin-top:24px;
-    }
-    .page.active{
-      display:block;
+      background:var(--metalDark);
     }
 
     .hero{
-      min-height:76vh;
-      position:relative;
+      margin-top:20px;
       display:grid;
-      place-items:center;
-      overflow:hidden;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
     }
 
-    .hero-grid{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px),
-        linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-      background-size:70px 70px;
-      opacity:.46;
-      pointer-events:none;
-    }
-
-    .hero-panel{
+    .hero-main,
+    .hero-side,
+    .panel{
       position:relative;
-      width:min(920px, 92%);
-      padding:56px 48px 58px;
-      background:linear-gradient(180deg,#f4f4f5,#ececee);
-      border:1px solid #d9d9de;
-      box-shadow:
-        0 24px 52px rgba(0,0,0,.10),
-        inset 0 1px 0 rgba(255,255,255,.96),
-        inset 0 -1px 0 rgba(0,0,0,.03);
-      clip-path:polygon(0 0, calc(100% - 42px) 0, 100% 42px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
-      transform-style:preserve-3d;
+      background:rgba(246,246,247,.96);
+      border:1px solid rgba(255,255,255,.95);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
 
-    .hero-panel::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border:3px solid rgba(239,16,16,.86);
-      clip-path:polygon(0 0, calc(100% - 42px) 0, 100% 42px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
-      pointer-events:none;
-    }
+    .hero-main{clip-path:var(--cutB); padding:34px 30px 28px}
+    .hero-side,
+    .panel{clip-path:var(--cutA)}
 
-    .hero-panel::after{
+    .hero-main::before,
+    .hero-side::before,
+    .panel::before{
       content:"";
       position:absolute;
       left:0;right:0;top:0;
@@ -387,524 +376,717 @@
       box-shadow:0 0 18px rgba(239,16,16,.24);
     }
 
-    .hero-top{
-      display:flex;
-      justify-content:center;
+    .hero-gridline{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.16;
+      background:
+        linear-gradient(rgba(0,0,0,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.045) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.25));
+    }
+
+    .hero-tag{
+      display:inline-flex;
       align-items:center;
-      gap:16px;
-      color:var(--red);
-      letter-spacing:.32em;
-      font-size:12px;
+      gap:10px;
+      padding:8px 14px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      font-size:.76rem;
+      letter-spacing:.18em;
       text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .hero-tag .bar{
+      width:18px;height:3px;background:var(--red);
+      box-shadow:0 0 8px rgba(239,16,16,.22);
     }
 
     .hero-title{
-      margin:18px 0 8px;
-      text-align:center;
-      font-size:clamp(62px, 10vw, 130px);
-      line-height:1;
-      font-weight:900;
-      color:#121316;
-      text-shadow:7px 7px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.95);
+      margin:18px 0 14px;
+      font-size:clamp(2rem,4vw,3.55rem);
+      line-height:1.02;
+      letter-spacing:.06em;
+      max-width:12ch;
     }
 
-    .hero-sub{
-      text-align:center;
+    .hero-title .accent{
       color:var(--red);
-      letter-spacing:.34em;
-      font-size:14px;
-      text-transform:uppercase;
+      text-shadow:0 0 10px rgba(239,16,16,.14);
     }
 
     .hero-desc{
-      margin:42px auto 0;
-      max-width:720px;
-      text-align:center;
-      font-size:30px;
-      font-weight:700;
-      line-height:1.5;
-      padding:20px 28px;
-      background:var(--metalLight);
-      border:1px solid #d8d8dc;
-      box-shadow:0 12px 22px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
-      clip-path:var(--cutB);
-    }
-
-    .hero-mini{
-      margin-top:28px;
-      text-align:center;
-      color:#8a8c93;
-      font-size:14px;
-      letter-spacing:.08em;
-    }
-
-    .hero-mark{
-      margin-top:34px;
-      display:flex;
-      justify-content:center;
-      gap:16px;
-      align-items:center;
-      color:var(--red);
-    }
-
-    .hero-mark .line{width:80px;height:1px;background:var(--red)}
-    .hero-mark .diamond{
-      width:18px;height:18px;
-      border:2px solid var(--red);
-      transform:rotate(45deg);
-      box-shadow:0 0 14px rgba(239,16,16,.18);
-    }
-
-    .section-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:18px;
+      max-width:56ch;
+      line-height:1.95;
+      color:#3e4047;
+      font-size:1rem;
       margin-bottom:20px;
-      flex-wrap:wrap;
     }
 
-    .sec-tag{
-      min-width:260px;
-      padding:18px 28px;
-      background:var(--metalDark);
-      color:#fff;
-      box-shadow:
-        0 14px 28px rgba(0,0,0,.18),
-        inset 0 1px 0 rgba(255,255,255,.08),
-        inset 0 -2px 0 rgba(239,16,16,.8);
-      clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
-    }
-
-    .sec-tag small{
-      color:var(--redSoft);
-      letter-spacing:.2em;
-      margin-right:12px;
-      font-size:12px;
-    }
-
-    .sec-tag b{
-      font-size:20px;
-      letter-spacing:.06em;
-    }
-
-    .sec-line{
-      flex:1;
-      min-width:120px;
-      height:1px;
-      background:linear-gradient(90deg,#d7a1a1,#ef1010,#e5b9b9);
-      position:relative;
-    }
-
-    .sec-line::after{
-      content:"";
-      position:absolute;
-      right:0;top:50%;
-      width:12px;height:12px;
-      background:#efb5b5;
-      transform:translateY(-50%) rotate(45deg);
-    }
-
-    .overview-grid,.content-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:22px;
-    }
-
-    .metal-card{
-      position:relative;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:
-        0 18px 34px rgba(0,0,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(0,0,0,.04);
-      padding:18px;
-      min-height:220px;
-      clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
-      transform-style:preserve-3d;
-      transition:transform .16s ease, box-shadow .16s ease;
-      overflow:hidden;
-    }
-
-    .metal-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.55), transparent 26%),
-        linear-gradient(225deg, rgba(239,16,16,.04), transparent 34%);
-      pointer-events:none;
-    }
-
-    .metal-card:hover{
-      transform:translateY(-3px) rotateX(2deg) rotateY(-2deg);
-      box-shadow:
-        0 22px 40px rgba(0,0,0,.12),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(0,0,0,.04);
-    }
-
-    .card-topline{
+    .hero-cta{
       display:flex;
-      align-items:center;
       gap:12px;
-      color:var(--red);
-      text-transform:uppercase;
-      letter-spacing:.3em;
-      font-size:12px;
+      flex-wrap:wrap;
       margin-bottom:18px;
     }
 
-    .card-topline .dot{
-      width:12px;height:12px;background:var(--red);
-      box-shadow:0 0 12px rgba(239,16,16,.22);
-    }
-
-    .card-topline .line{
-      flex:1;height:1px;
-      background:linear-gradient(90deg,#d8d8dc,var(--red),#d8d8dc);
-    }
-
-    .card-title{
-      margin:0 0 12px;
-      font-size:32px;
-      line-height:1.15;
-    }
-
-    .card-text{
-      color:var(--muted);
-      line-height:1.95;
-      font-size:15px;
-      white-space:pre-wrap;
-    }
-
-    .pilot-grid{
+    .hero-stats{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-      margin-top:4px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:18px;
     }
 
-    .pilot-item{
-      padding:12px 14px;
-      background:rgba(255,255,255,.55);
-      border:1px solid #d7d7dc;
-      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+    .stat-box{
+      position:relative;
+      padding:16px 16px 14px;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+      min-height:102px;
     }
 
-    .pilot-label{
-      color:#8a8d95;
-      font-size:11px;
-      letter-spacing:.18em;
-      margin-bottom:6px;
+    .stat-label{
+      font-size:.74rem;
+      letter-spacing:.16em;
       text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+      display:block;
     }
 
-    .pilot-value{
-      font-size:24px;
-      font-weight:900;
-      line-height:1.2;
-      color:#121316;
-      word-break:break-word;
-    }
-
-    .pilot-wide{
-      margin-top:14px;
-      padding:14px;
-      background:rgba(255,255,255,.60);
-      border:1px solid #d7d7dc;
-      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
-    }
-
-    .pilot-wide .pilot-value{
-      font-size:18px;
+    .stat-value{
+      font-size:1.7rem;
       font-weight:800;
+      line-height:1.08;
     }
 
-    .section-page{
-      margin-top:20px;
+    .stat-note{
+      margin-top:6px;
+      font-size:.84rem;
+      color:#4e5158;
+      line-height:1.6;
+    }
+
+    .hero-side{
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      min-height:100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(236,236,239,.95)),
+        radial-gradient(circle at top right, rgba(239,16,16,.10), transparent 38%);
+    }
+
+    .pilot-card{
+      position:relative;
+      padding:18px;
+      min-height:246px;
+      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(235,235,238,.95));
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      overflow:hidden;
+      box-shadow:var(--shadowSoft);
+    }
+
+    .pilot-hud{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      font-size:.78rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .pilot-id{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pilot-id .stripe{
+      width:28px;height:4px;background:var(--red);
+      box-shadow:0 0 10px rgba(239,16,16,.24);
+    }
+
+    .pilot-portrait{
+      position:relative;
+      flex:1;
+      min-height:150px;
+      clip-path:var(--cutB);
+      background:
+        radial-gradient(circle at 50% 38%, rgba(239,16,16,.12), transparent 26%),
+        radial-gradient(circle at 50% 34%, rgba(255,255,255,.95) 0 12%, rgba(239,16,16,.12) 13% 17%, transparent 18% 100%),
+        linear-gradient(180deg,#f8f8f9,#d6d7dc 76%,#c6c8cf 100%);
+      border:1px solid rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+
+    .pilot-portrait::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:16%;
+      width:84px;
+      height:84px;
+      transform:translateX(-50%);
+      border-radius:46% 54% 44% 56% / 52% 47% 53% 48%;
+      background:linear-gradient(180deg,#ffffff,#dfe0e5);
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+    }
+
+    .pilot-portrait::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:14px;
+      width:150px;
+      height:118px;
+      transform:translateX(-50%);
+      background:
+        linear-gradient(180deg,#ffffff 0 12%, transparent 12% 100%),
+        linear-gradient(135deg, transparent 0 28%, var(--red) 28% 38%, transparent 38% 100%),
+        linear-gradient(225deg, transparent 0 24%, #ffffff 24% 34%, transparent 34% 100%),
+        linear-gradient(180deg,#ececef,#cfd1d7);
+      clip-path:polygon(18% 0, 82% 0, 100% 18%, 87% 100%, 13% 100%, 0 18%);
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow:0 12px 20px rgba(0,0,0,.08);
+    }
+
+    .pilot-lines{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg,transparent 0 18%, rgba(239,16,16,.20) 18% 19%, transparent 19% 81%, rgba(239,16,16,.20) 81% 82%, transparent 82% 100%),
+        linear-gradient(180deg,transparent 0 76%, rgba(0,0,0,.07) 76% 77%, transparent 77% 100%);
+      opacity:.55;
+    }
+
+    .pilot-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .meta-chip{
+      padding:12px 13px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+      min-height:82px;
+    }
+
+    .meta-chip .small{
+      display:block;
+      font-size:.72rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .meta-chip .big{
+      font-size:1.06rem;
+      font-weight:800;
+      line-height:1.3;
+    }
+
+    .meta-chip .tiny{
+      margin-top:6px;
+      font-size:.8rem;
+      color:#50535a;
+      line-height:1.55;
     }
 
     .section-shell{
+      margin-top:18px;
       display:grid;
-      grid-template-columns:1fr;
+      grid-template-columns:minmax(0,1fr) 350px;
       gap:18px;
+      align-items:start;
     }
 
-    .section-tools{
+    .section-panel{
+      padding:22px 22px 26px;
+    }
+
+    .panel-head{
       display:flex;
-      gap:10px;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:16px;
+      margin-bottom:18px;
       flex-wrap:wrap;
+    }
+
+    .panel-title{
+      margin:0;
+      font-size:1.22rem;
+      letter-spacing:.06em;
+    }
+
+    .panel-sub{
+      margin-top:6px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:.92rem;
+    }
+
+    .view-switch{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .switch-btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:10px 14px;
+      clip-path:var(--cutA);
+      background:#fff;
+      color:var(--text);
+      box-shadow:var(--shadowSoft);
+      border:1px solid rgba(0,0,0,.06);
+      font-weight:700;
+      letter-spacing:.05em;
+    }
+
+    .switch-btn.active{
+      background:linear-gradient(180deg,var(--red),var(--red2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .record-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .record-card{
+      position:relative;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      overflow:hidden;
+      box-shadow:var(--shadowSoft);
+      display:flex;
+      flex-direction:column;
+      min-height:280px;
+      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      cursor:pointer;
+    }
+
+    .record-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 22px 40px rgba(0,0,0,.12);
+      filter:brightness(1.01);
+    }
+
+    .record-thumb{
+      position:relative;
+      width:100%;
+      aspect-ratio:16/9;
+      background:
+        linear-gradient(135deg, rgba(239,16,16,.12), transparent 44%),
+        linear-gradient(180deg,#f3f3f5,#d9dadd);
+      overflow:hidden;
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+
+    .record-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .record-thumb .thumb-badge{
+      position:absolute;
+      left:14px;
+      top:14px;
+      padding:8px 12px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      font-size:.72rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .record-body{
+      padding:18px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      flex:1;
+    }
+
+    .record-title{
+      margin:0;
+      font-size:1.08rem;
+      line-height:1.5;
+      letter-spacing:.04em;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .record-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      font-size:.78rem;
+      color:var(--muted);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .record-chip{
+      padding:7px 10px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+    }
+
+    .record-desc{
+      margin:0;
+      color:#454850;
+      line-height:1.8;
+      font-size:.94rem;
+      display:-webkit-box;
+      -webkit-line-clamp:4;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .record-footer{
+      margin-top:auto;
+      display:flex;
       align-items:center;
       justify-content:space-between;
+      gap:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(0,0,0,.10);
+      color:var(--muted);
+      font-size:.82rem;
+      letter-spacing:.08em;
     }
 
-    .filter-row{
+    .record-arrow{
+      color:var(--red);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+
+    .empty-state{
+      padding:30px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.9;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+      grid-column:1/-1;
+    }
+
+    .detail-panel{
+      display:none;
+      padding:24px 24px 30px;
+    }
+
+    .detail-panel.active{display:block}
+
+    .detail-top{
       display:flex;
-      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
       flex-wrap:wrap;
     }
 
-    .entries{
-      display:grid;
+    .detail-back{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.06em;
+    }
+
+    .detail-cover{
+      width:100%;
+      max-height:540px;
+      object-fit:cover;
+      display:block;
+      clip-path:var(--cutA);
+      background:linear-gradient(180deg,#f3f3f5,#d9dadd);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .detail-title{
+      margin:0 0 10px;
+      font-size:clamp(1.6rem,2.6vw,2.45rem);
+      line-height:1.24;
+      letter-spacing:.05em;
+    }
+
+    .detail-meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .detail-body{
+      line-height:2.05;
+      color:#2f3239;
+      font-size:1rem;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .search-panel{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
       gap:14px;
-      max-height:68vh;
+    }
+
+    .search-row{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+
+    .label{
+      font-size:.78rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .input,
+    .textarea,
+    select{
+      width:100%;
+      border:none;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      padding:14px 14px;
+      font:inherit;
+    }
+
+    .input:focus,
+    .textarea:focus,
+    select:focus{
+      border-color:rgba(239,16,16,.48);
+      box-shadow:0 0 0 3px rgba(239,16,16,.08), var(--shadowSoft);
+    }
+
+    .textarea{
+      min-height:160px;
+      resize:vertical;
+      line-height:1.8;
+    }
+
+    .search-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .search-summary{
+      padding:12px 14px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      font-size:.86rem;
+      color:#4d5058;
+      line-height:1.7;
+    }
+
+    .admin-panel{
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .admin-gate{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding:16px;
+      background:linear-gradient(180deg,#ffffff,#ececef);
+      border:1px solid rgba(0,0,0,.06);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+    }
+
+    .admin-state{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:.84rem;
+      color:#4c5057;
+      line-height:1.7;
+    }
+
+    .admin-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .admin-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-height:520px;
       overflow:auto;
       padding-right:4px;
     }
 
-    .entries::-webkit-scrollbar,
-    .gallery-grid::-webkit-scrollbar{
-      width:8px;
-      height:8px;
-    }
-
-    .entries::-webkit-scrollbar-thumb,
-    .gallery-grid::-webkit-scrollbar-thumb{
-      background:#cfcfd4;
-      border-radius:999px;
-    }
-
-    .entry{
-      position:relative;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:
-        0 14px 28px rgba(0,0,0,.07),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(0,0,0,.03);
-      padding:16px;
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-      transition:transform .16s ease, box-shadow .16s ease;
-      overflow:hidden;
-    }
-
-    .entry::before{
-      content:"";
-      position:absolute;
-      left:0;top:0;bottom:0;width:6px;
-      background:linear-gradient(180deg,#ffc7c7,var(--red),var(--red2));
-      box-shadow:0 0 14px rgba(239,16,16,.20);
-    }
-
-    .entry:hover{
-      transform:translateY(-2px) rotateX(1.5deg);
-      box-shadow:
-        0 20px 34px rgba(0,0,0,.10),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(0,0,0,.03);
-    }
-
-    .entry-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      margin-bottom:10px;
-    }
-
-    .entry-meta{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:8px;
-      color:#8a8c92;
-      font-size:12px;
-      letter-spacing:.08em;
-    }
-
-    .entry h4{
-      margin:0;
-      font-size:19px;
-      line-height:1.3;
-    }
-
-    .entry p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.9;
-      white-space:pre-wrap;
-    }
-
-    .entry img{
-      width:100%;
-      max-height:340px;
-      object-fit:cover;
-      margin-top:12px;
-      border:1px solid #d8d8dc;
+    .admin-item{
+      padding:14px;
       background:#fff;
-      box-shadow:0 10px 18px rgba(0,0,0,.05);
-      clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
 
-    .entry-actions{
+    .admin-item h4{
+      margin:0;
+      font-size:.98rem;
+      line-height:1.5;
+    }
+
+    .admin-item small{
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .admin-item-actions{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
-      margin-top:12px;
     }
 
-    .mini-btn{
-      padding:8px 12px;
-      font-size:12px;
+    .tiny-btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:10px 12px;
+      clip-path:var(--cutA);
+      font-weight:700;
+      letter-spacing:.04em;
+      box-shadow:var(--shadowSoft);
     }
 
-    .mini-btn.danger{
+    .tiny-btn.edit{background:var(--metalLight); color:var(--text)}
+    .tiny-btn.delete{background:linear-gradient(180deg,#3a3b43,#23242b); color:#fff}
+    .tiny-btn.publish{background:linear-gradient(180deg,var(--red),var(--red2)); color:#fff}
+
+    .list-filters{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .filter-btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:10px 12px;
+      clip-path:var(--cutA);
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      font-weight:700;
+      letter-spacing:.05em;
+    }
+
+    .filter-btn.active{
       background:linear-gradient(180deg,var(--red),var(--red2));
       color:#fff;
-      border-color:#c90f0f;
-      box-shadow:0 10px 18px rgba(239,16,16,.18), inset 0 1px 0 rgba(255,255,255,.18);
+      border-color:transparent;
     }
 
-    .badge{
-      font-size:11px;
-      padding:6px 8px;
-      background:#f0f0f2;
-      border:1px solid #d6d6db;
-      color:#7b7d85;
-      clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);
-    }
-
-    .gallery-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-      max-height:520px;
-      overflow:auto;
-    }
-
-    .gallery-item{
-      position:relative;
-      min-height:240px;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:0 14px 28px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.95);
-      overflow:hidden;
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
-      transition:transform .16s ease, box-shadow .16s ease;
-    }
-
-    .gallery-item:hover{
-      transform:translateY(-3px) rotateX(2deg) rotateY(-2deg);
-      box-shadow:0 20px 36px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.95);
-    }
-
-    .gallery-item img{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .gallery-item::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,transparent 35%, rgba(255,255,255,.12) 58%, rgba(236,236,239,.94) 100%);
-    }
-
-    .gallery-info{
-      position:absolute;
-      left:12px;right:12px;bottom:12px;
-      z-index:2;
-      padding:12px;
-      background:rgba(255,255,255,.76);
-      border:1px solid rgba(255,255,255,.92);
-      backdrop-filter:blur(8px);
-      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
-    }
-
-    .gallery-info h4{
-      margin:0 0 4px;
-      font-size:16px;
-    }
-
-    .gallery-info small{
-      color:#7b7d84;
-    }
-
-    .empty{
-      min-height:220px;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:#84868c;
-      background:var(--metalLight);
-      border:1px dashed #d2d2d7;
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
-      padding:24px;
-      line-height:1.9;
-    }
-
-    .admin-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-    }
-
-    .admin-list{
-      display:grid;
-      gap:14px;
-    }
-
-    .admin-item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
-      padding:16px;
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    }
-
-    .admin-main{
-      min-width:0;
-    }
-
-    .admin-main h4{
-      margin:6px 0 0;
-      font-size:18px;
-      line-height:1.3;
-    }
-
-    .admin-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .modal-wrap{
+    .modal{
       position:fixed;
       inset:0;
-      z-index:160;
       display:none;
       align-items:center;
       justify-content:center;
-      padding:22px;
-      background:rgba(232,232,234,.66);
-      backdrop-filter:blur(10px);
+      padding:28px;
+      z-index:120;
+      background:rgba(20,20,24,.46);
+      backdrop-filter:blur(8px);
     }
 
-    .modal-wrap.show{display:flex}
+    .modal.active{display:flex}
 
-    .modal{
-      width:min(920px,100%);
-      max-height:88vh;
-      overflow:hidden;
-      background:var(--metalLight);
-      border:1px solid #d8d8dd;
-      box-shadow:0 30px 68px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.96);
-      clip-path:polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+    .modal-card{
+      width:min(880px, 100%);
+      max-height:min(88vh, 980px);
+      overflow:auto;
+      background:linear-gradient(180deg,#fdfdfd,#e9eaee);
+      border:1px solid rgba(255,255,255,.96);
+      box-shadow:0 30px 70px rgba(0,0,0,.22);
+      clip-path:var(--cutB);
+      position:relative;
+      padding:22px;
+    }
+
+    .modal-card::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;top:0;
+      height:4px;
+      background:linear-gradient(90deg,transparent,var(--red),transparent);
+      box-shadow:0 0 20px rgba(239,16,16,.26);
     }
 
     .modal-head{
@@ -912,431 +1094,136 @@
       justify-content:space-between;
       align-items:center;
       gap:12px;
-      padding:18px 20px;
-      background:linear-gradient(180deg,#f8f8f9,#ededee);
-      border-bottom:1px solid #d8d8dd;
-      position:relative;
+      margin-bottom:16px;
+      flex-wrap:wrap;
     }
 
-    .modal-head::after{
-      content:"";
-      position:absolute;
-      left:0;right:0;bottom:0;
-      height:4px;
-      background:linear-gradient(90deg,transparent,var(--red),transparent);
-    }
-
-    .modal-head h3{
+    .modal-title{
       margin:0;
-      font-size:16px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
+      font-size:1.16rem;
+      letter-spacing:.06em;
     }
 
-    .modal-body{
-      display:grid;
-      gap:14px;
-      padding:20px;
-      max-height:calc(88vh - 78px);
-      overflow:auto;
+    .close-btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      width:42px;height:42px;
+      background:var(--metalDark);
+      color:#fff;
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+      font-size:1rem;
+      font-weight:800;
     }
 
-    .row-2{
+    .modal-form{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:14px;
     }
 
-    input,textarea,select{
-      width:100%;
-      font:inherit;
-      color:#17181c;
-      background:linear-gradient(180deg,#ffffff,#efeff1);
-      border:1px solid #d3d3d8;
-      outline:none;
-      padding:14px 16px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(0,0,0,.03);
-      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
-      resize:vertical;
-    }
+    .modal-form .full{grid-column:1/-1}
 
-    input:focus,textarea:focus,select:focus{
-      border-color:#f08f8f;
-      box-shadow:0 0 0 4px rgba(239,16,16,.08), inset 0 1px 0 rgba(255,255,255,.96);
-    }
-
-    .admin-login-box{
-      margin-bottom:18px;
-      padding:18px;
-      background:var(--metalLight);
-      border:1px solid #d7d7dc;
-      box-shadow:0 14px 28px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.95);
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    }
-
-    .admin-login-row{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-
-    .admin-login-fields{
-      flex:1;
-      min-width:280px;
-      display:grid;
-      gap:14px;
-    }
-
-    .admin-login-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-    }
-
-    .hint{
-      color:#80838a;
-      font-size:13px;
-      line-height:1.8;
-    }
-
-    .login-status{
-      margin-top:14px;
-      font-size:13px;
-      line-height:1.8;
-      color:#6f7178;
-      padding:12px 14px;
-      border:1px solid #d7d7dc;
-      background:rgba(255,255,255,.55);
-      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
-    }
-    .login-status.ok{color:#0c8b43}
-    .login-status.err{color:#c90c0c}
-
-    .hidden{
-      display:none !important;
-    }
-
-    .door-overlay{
-      position:fixed;
-      inset:0;
-      z-index:1000;
-      opacity:0;
-      pointer-events:none;
-      background:rgba(238,238,240,.12);
-    }
-
-    .door-overlay.active{
-      opacity:1;
-      pointer-events:auto;
-    }
-
-    .door-left,.door-right{
-      position:absolute;
-      top:0;
-      width:50.5%;
-      height:100%;
-      background:linear-gradient(180deg,#fafafa 0%, #ededee 42%, #dedee2 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.96), 0 0 30px rgba(239,16,16,.16);
-      overflow:hidden;
-    }
-
-    .door-left{
-      left:-52%;
-      clip-path:polygon(0 0,100% 0,90% 50%,100% 100%,0 100%);
-    }
-
-    .door-right{
-      right:-52%;
-      clip-path:polygon(10% 50%,0 0,100% 0,100% 100%,0 100%);
-    }
-
-    .door-left::before,.door-right::before{
-      content:"";
-      position:absolute;
-      inset:18px;
-      background:linear-gradient(180deg,#ffffff,#eef0f2);
-      border:1px solid #d7d7dc;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.94), inset 0 -1px 0 rgba(0,0,0,.03);
-    }
-
-    .door-left::after,.door-right::after{
-      content:"";
-      position:absolute;
-      top:22%;
-      width:10px;
-      height:56%;
-      background:linear-gradient(180deg,#ff8b8b,var(--red));
-      box-shadow:0 0 20px rgba(239,16,16,.26);
-    }
-
-    .door-left::after{right:14%}
-    .door-right::after{left:14%}
-
-    .door-center-lock{
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:120px;
-      height:120px;
-      transform:translate(-50%,-50%) scale(.6);
-      opacity:0;
-      border:2px solid rgba(239,16,16,.84);
-      background:linear-gradient(180deg, rgba(255,255,255,.84), rgba(236,236,239,.95));
-      box-shadow:0 0 26px rgba(239,16,16,.20), inset 0 1px 0 rgba(255,255,255,.96);
-      clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    }
-
-    .door-center-lock::before{
-      content:"";
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:22px;
-      height:22px;
-      transform:translate(-50%,-50%) rotate(45deg);
-      border:2px solid var(--red);
-      background:#fff;
-      box-shadow:0 0 18px rgba(239,16,16,.24);
-    }
-
-    .door-center-lock::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:64px;
-      height:64px;
-      transform:translate(-50%,-50%);
-      background:
-        linear-gradient(var(--red),var(--red)) center top / 2px 14px no-repeat,
-        linear-gradient(var(--red),var(--red)) center bottom / 2px 14px no-repeat,
-        linear-gradient(90deg,var(--red),var(--red)) left center / 14px 2px no-repeat,
-        linear-gradient(90deg,var(--red),var(--red)) right center / 14px 2px no-repeat;
-      opacity:.9;
-    }
-
-    .door-overlay.closing .door-left{animation:doorCloseLeft .46s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.closing .door-right{animation:doorCloseRight .46s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.closing .door-center-lock{animation:centerLockIn .22s .20s ease-out forwards}
-
-    .door-overlay.opening .door-left{animation:doorOpenLeft .46s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.opening .door-right{animation:doorOpenRight .46s cubic-bezier(.75,0,.25,1) forwards}
-    .door-overlay.opening .door-center-lock{animation:centerLockOut .20s ease-in forwards}
-
-    @keyframes doorCloseLeft{from{left:-52%}to{left:0}}
-    @keyframes doorCloseRight{from{right:-52%}to{right:0}}
-    @keyframes doorOpenLeft{from{left:0}to{left:-52%}}
-    @keyframes doorOpenRight{from{right:0}to{right:-52%}}
-
-    @keyframes centerLockIn{
-      from{opacity:0;transform:translate(-50%,-50%) scale(.6)}
-      to{opacity:1;transform:translate(-50%,-50%) scale(1)}
-    }
-
-    @keyframes centerLockOut{
-      from{opacity:1;transform:translate(-50%,-50%) scale(1)}
-      to{opacity:0;transform:translate(-50%,-50%) scale(.68)}
-    }
-
-    .boot-overlay{
-      position:fixed;
-      inset:0;
-      z-index:1200;
+    .image-dropzone{
+      border:1px dashed rgba(239,16,16,.35);
+      background:rgba(255,255,255,.78);
+      clip-path:var(--cutA);
+      box-shadow:var(--shadowSoft);
+      padding:16px;
+      min-height:108px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:linear-gradient(180deg,#ececee 0%, #e4e4e7 100%);
-      overflow:hidden;
-    }
-
-    .boot-overlay.hidden{
-      display:none;
-    }
-
-    .boot-grid{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px),
-        linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-      background-size:54px 54px;
-      opacity:.28;
-      pointer-events:none;
-    }
-
-    .boot-shell{
-      position:relative;
-      width:min(760px, 90vw);
-      padding:38px 36px 34px;
-      background:linear-gradient(180deg,#f8f8f9,#ececee);
-      border:1px solid #d7d7dc;
-      box-shadow:0 24px 48px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(0,0,0,.03);
-      clip-path:polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
-      overflow:hidden;
-    }
-
-    .boot-shell::before{
-      content:"";
-      position:absolute;
-      left:0;right:0;top:0;
-      height:4px;
-      background:linear-gradient(90deg,transparent,var(--red),transparent);
-      box-shadow:0 0 18px rgba(239,16,16,.24);
-    }
-
-    .boot-title{
       text-align:center;
-      font-size:18px;
-      letter-spacing:.42em;
-      color:var(--red);
-      text-transform:uppercase;
-      margin-bottom:18px;
+      color:#575b64;
+      line-height:1.7;
+    }
+
+    .image-dropzone.dragover{
+      background:rgba(239,16,16,.08);
+      border-color:rgba(239,16,16,.55);
+    }
+
+    .image-preview-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .image-preview-item{
+      width:118px;
+      aspect-ratio:1/1;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:var(--shadowSoft);
+      clip-path:var(--cutA);
+      overflow:hidden;
+      background:#fff;
+      position:relative;
+    }
+
+    .image-preview-item img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .image-preview-remove{
+      position:absolute;
+      right:8px;
+      top:8px;
+      width:26px;
+      height:26px;
+      border:none;
+      cursor:pointer;
+      clip-path:var(--cutA);
+      background:rgba(20,20,24,.78);
+      color:#fff;
       font-weight:800;
     }
 
-    .boot-main{
-      text-align:center;
-      font-size:40px;
-      line-height:1.15;
-      font-weight:900;
-      color:#16171b;
-      text-shadow:4px 4px 0 rgba(0,0,0,.08), 0 1px 0 rgba(255,255,255,.95);
-      margin-bottom:20px;
-      letter-spacing:.06em;
-    }
-
-    .boot-sub{
-      text-align:center;
-      color:#7a7c83;
-      font-size:13px;
-      letter-spacing:.28em;
-      margin-bottom:26px;
-      text-transform:uppercase;
-    }
-
-    .boot-bar-wrap{
-      position:relative;
-      width:100%;
-      height:22px;
-      padding:4px;
-      background:linear-gradient(180deg,#ffffff,#ececef);
-      border:1px solid #d4d4d9;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.03);
-      clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);
-      overflow:hidden;
-    }
-
-    .boot-bar{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,#ffd0d0 0%, var(--red) 55%, var(--red2) 100%);
-      box-shadow:0 0 16px rgba(239,16,16,.24);
-      transition:width .08s linear;
-      clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
-    }
-
-    .boot-status{
-      margin-top:14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      color:#707279;
-      font-size:12px;
-      letter-spacing:.14em;
-    }
-
-    .boot-verify{
-      margin-top:26px;
-      text-align:center;
-      font-size:28px;
-      line-height:1.35;
-      font-weight:900;
-      color:var(--red);
-      letter-spacing:.12em;
-      opacity:0;
-      transform:translateY(8px);
-      transition:opacity .18s ease, transform .18s ease;
-      text-shadow:0 0 16px rgba(239,16,16,.18);
-    }
-
-    .boot-verify.show{
-      opacity:1;
-      transform:translateY(0);
-    }
-
-    .steam-layer{
-      position:fixed;
-      inset:0;
-      z-index:950;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    .steam{
-      position:absolute;
-      bottom:-120px;
-      width:220px;height:220px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,.72), rgba(255,255,255,.22), transparent 72%);
-      animation:steamRise 1.6s linear forwards;
-      filter:blur(2px);
-    }
-
-    @keyframes steamRise{
-      0%{transform:translateY(0) scale(.7);opacity:0}
-      12%{opacity:.65}
-      100%{transform:translateY(-110vh) scale(1.5);opacity:0}
-    }
+    .hidden{display:none !important}
 
     .footer-note{
-      margin-top:22px;
+      margin-top:24px;
       text-align:center;
-      color:#8a8c92;
-      font-size:12px;
-      letter-spacing:.22em;
+      color:var(--muted);
+      font-size:.84rem;
+      letter-spacing:.1em;
       text-transform:uppercase;
     }
 
-    @media (max-width: 1200px){
-      .overview-grid,.content-grid,.gallery-grid{
+    @media (max-width:1100px){
+      .hero{
         grid-template-columns:1fr;
       }
-      .pilot-grid{
+      .section-shell{
+        grid-template-columns:1fr;
+      }
+      .record-grid{
         grid-template-columns:1fr;
       }
     }
 
-    @media (max-width: 860px){
-      .app{width:min(100% - 18px,100%)}
-      .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-        clip-path:none;
-        border-radius:22px;
-      }
-      .hero-panel{
-        width:100%;
-        padding:42px 22px 44px;
-        clip-path:none;
-        border-radius:24px;
-      }
-      .hero-title{font-size:72px}
-      .hero-desc{font-size:22px}
-      .row-2{grid-template-columns:1fr}
-      .admin-item{flex-direction:column;align-items:flex-start}
-      .nav{width:100%}
-      .sec-tag{min-width:unset;width:100%}
+    @media (max-width:720px){
+      .app{width:min(100%, calc(100% - 20px)); margin:10px auto 40px}
+      .topbar{top:10px; padding:12px}
+      .hero-main{padding:24px 18px 22px}
+      .hero-side,.section-panel,.search-panel,.admin-panel{padding:16px}
+      .hero-stats{grid-template-columns:1fr}
+      .modal{padding:14px}
+      .modal-form{grid-template-columns:1fr}
+      .admin-actions,.search-actions{grid-template-columns:1fr}
+      .cursor,.hud-frame{display:none !important}
     }
   </style>
 </head>
 <body>
-  <div class="cursor" id="cursor"></div>
+  <div id="cursor" class="cursor" aria-hidden="true"></div>
 
-  <div class="hud-frame">
+  <div class="hud-frame" aria-hidden="true">
     <div class="edge top"></div>
     <div class="edge bottom"></div>
     <div class="edge left"></div>
@@ -1347,1274 +1234,1341 @@
     <div class="corner br"></div>
   </div>
 
-  <div class="door-overlay" id="doorOverlay">
-    <div class="door-left"></div>
-    <div class="door-right"></div>
-    <div class="door-center-lock"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-main">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1 class="brand-title">私の記録 / ARCHIVE FRAME</h1>
+            <div class="brand-sub">Memory Feed / Personal Story Log</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          <span id="statusLabel">GUEST MODE</span>
+        </div>
+        <button id="writerEntryBtn" class="btn btn-red" type="button">心事記録</button>
+        <button id="logoutBtn" class="btn btn-white hidden" type="button">LOGOUT</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <section class="hero-main">
+        <div class="hero-gridline"></div>
+        <div class="hero-tag"><span class="bar"></span> Memory Chronicle</div>
+        <h2 class="hero-title">記録された時間を、<span class="accent">ひとつずつ残す。</span></h2>
+        <p class="hero-desc">
+          ここは、日々の感情や大切な出来事、好きな人や好きなものについて静かに保存していくための個人アーカイブ。
+          追加した記録は一覧で見られ、画像付きの投稿は詳細ページで写真のあとに文章が表示されます。
+        </p>
+
+        <div class="hero-cta">
+          <button class="btn btn-red" type="button" id="heroOpenRecordsBtn">記録を見る</button>
+          <button class="btn btn-white" type="button" id="heroOpenSearchBtn">検索する</button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-box">
+            <span class="stat-label">Archive Entries</span>
+            <div class="stat-value" id="heroEntryCount">0</div>
+            <div class="stat-note">保存されている記録の総数。</div>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Visible Feed</span>
+            <div class="stat-value" id="heroVisibleCount">0</div>
+            <div class="stat-note">現在画面に表示されている件数。</div>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Latest Update</span>
+            <div class="stat-value" id="heroLatestDate">-</div>
+            <div class="stat-note">最後に公開された日付。</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="hero-side">
+        <div class="pilot-card">
+          <div class="pilot-hud">
+            <div class="pilot-id"><span class="stripe"></span> PILOT FRAME</div>
+            <div id="pilotSignal">SIGNAL OPEN</div>
+          </div>
+          <div class="pilot-portrait">
+            <div class="pilot-lines"></div>
+          </div>
+        </div>
+
+        <div class="pilot-meta">
+          <div class="meta-chip">
+            <span class="small">Status</span>
+            <div class="big" id="metaLoginState">Guest</div>
+            <div class="tiny">閲覧者としてフィードを確認できます。</div>
+          </div>
+          <div class="meta-chip">
+            <span class="small">Sync</span>
+            <div class="big" id="metaSyncState">Idle</div>
+            <div class="tiny">データ同期状態を表示します。</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section-shell">
+      <main class="panel section-panel">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title" id="mainPanelTitle">記録フィード</h3>
+            <div class="panel-sub" id="mainPanelSub">公開されている記録を一覧表示します。カードをクリックすると詳細が開きます。</div>
+          </div>
+          <div class="view-switch">
+            <button class="switch-btn active" type="button" data-view="feed">FEED</button>
+            <button class="switch-btn" type="button" data-view="detail">DETAIL</button>
+          </div>
+        </div>
+
+        <div id="feedView">
+          <div class="list-filters" id="sectionFilterBar"></div>
+          <div class="record-grid" id="recordGrid"></div>
+        </div>
+
+        <div id="detailView" class="detail-panel">
+          <div class="detail-top">
+            <button type="button" class="detail-back" id="detailBackBtn">← フィードへ戻る</button>
+          </div>
+          <img id="detailCover" class="detail-cover hidden" alt="detail image" />
+          <h3 id="detailTitle" class="detail-title">タイトルなし</h3>
+          <div id="detailMeta" class="detail-meta"></div>
+          <div id="detailBody" class="detail-body">ここに本文が表示されます。</div>
+        </div>
+      </main>
+
+      <aside class="panel search-panel">
+        <div class="panel-head" style="margin-bottom:0">
+          <div>
+            <h3 class="panel-title">検索 / Search</h3>
+            <div class="panel-sub">キーワードと日付から記録を探します。</div>
+          </div>
+        </div>
+
+        <div class="search-row">
+          <label class="label" for="searchKeyword">Keyword</label>
+          <input id="searchKeyword" class="input" type="text" placeholder="タイトル / 本文 / セクション / 画像など" />
+        </div>
+
+        <div class="search-row">
+          <label class="label" for="searchDate">Date</label>
+          <input id="searchDate" class="input" type="date" />
+        </div>
+
+        <div class="search-actions">
+          <button id="searchApplyBtn" class="btn btn-red" type="button">検索する</button>
+          <button id="searchResetBtn" class="btn btn-white" type="button">リセット</button>
+        </div>
+
+        <div id="searchSummary" class="search-summary">
+          フィルターなしで全体を表示しています。
+        </div>
+
+        <div class="footer-note">Archive Search Interface</div>
+      </aside>
+
+      <aside class="panel admin-panel">
+        <div class="panel-head" style="margin-bottom:0">
+          <div>
+            <h3 class="panel-title">心事記録者 / Writer Gate</h3>
+            <div class="panel-sub">記録の追加・編集・公開状態の確認を行います。</div>
+          </div>
+        </div>
+
+        <div class="admin-gate">
+          <div class="admin-state">
+            <div>
+              <strong id="adminStateText">現在は閲覧モードです。</strong><br>
+              <span id="adminSubText">記録を編集するにはログインが必要です。</span>
+            </div>
+          </div>
+
+          <div class="admin-actions">
+            <button id="openEditorBtn" class="btn btn-red" type="button">新規記録</button>
+            <button id="openLoginBtn" class="btn btn-white" type="button">ログイン</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="label" style="margin-bottom:8px">Filter</div>
+          <div class="list-filters">
+            <button class="filter-btn active" type="button" data-filter="all">ALL</button>
+            <button class="filter-btn" type="button" data-filter="public">PUBLIC</button>
+            <button class="filter-btn" type="button" data-filter="private">PRIVATE</button>
+          </div>
+        </div>
+
+        <div id="adminList" class="admin-list"></div>
+      </aside>
+    </section>
   </div>
 
-  <div class="boot-overlay" id="bootOverlay">
-    <div class="boot-grid"></div>
-    <div class="boot-shell">
-      <div class="boot-title">MECHA MEMORY SYSTEM</div>
-      <div class="boot-main">個人アーカイブ認証</div>
-      <div class="boot-sub">INITIALIZING COCKPIT INTERFACE</div>
-      <div class="boot-bar-wrap">
-        <div class="boot-bar" id="bootBar"></div>
+  <div id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">心事記録 / Login</h3>
+        <button type="button" class="close-btn" data-close-modal="loginModal">×</button>
       </div>
-      <div class="boot-status">
-        <span>IDENTITY CHECK</span>
-        <span id="bootPercent">0%</span>
-      </div>
-      <div class="boot-verify" id="bootVerify">
-        IDENTITY VERIFIED<br>認証成功
+
+      <div class="modal-form">
+        <div class="full search-row">
+          <label class="label" for="adminEmailInput">Email</label>
+          <input id="adminEmailInput" class="input" type="email" autocomplete="username" placeholder="mail@example.com" />
+        </div>
+
+        <div class="full search-row">
+          <label class="label" for="adminPasswordInput">Password</label>
+          <input id="adminPasswordInput" class="input" type="password" autocomplete="current-password" placeholder="password" />
+        </div>
+
+        <div class="full search-row">
+          <div id="loginStatusText" class="search-summary">ログイン状態を確認していません。</div>
+        </div>
+
+        <div class="full search-actions">
+          <button id="loginSubmitBtn" class="btn btn-red" type="button">ログインする</button>
+          <button type="button" class="btn btn-white" data-close-modal="loginModal">閉じる</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="steam-layer" id="steamLayer"></div>
-
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-icon"></div>
-        <div class="brand-text">
-          <h1>私の記録</h1>
-          <p>パーソナル・ライフ・アーカイブ</p>
-        </div>
-      </div>
-
-      <nav class="nav">
-        <div class="status-pill">SYNC<strong id="authStatus">GUEST</strong></div>
-        <button class="active" data-page="home">HOME</button>
-        <button data-page="admin">ADMIN</button>
-        <button id="loginBtn">LOGIN</button>
-        <button id="logoutBtn" class="hidden">LOGOUT</button>
-      </nav>
-    </header>
-
-    <main>
-      <section class="page active" id="page-home">
-        <section class="hero">
-          <div class="hero-grid"></div>
-          <div class="hero-panel" data-tilt>
-            <div class="hero-top">
-              <span>◆</span>
-              <span>MY RECORD</span>
-              <span>◆</span>
-            </div>
-            <div class="hero-title">私の記録</div>
-            <div class="hero-sub">MY RECORD</div>
-            <div class="hero-desc">人生の軌跡と心を保存するアーカイブ</div>
-            <div class="hero-mini">機体内メモリーシェルに、私の一生を刻む場所</div>
-            <div class="hero-mark">
-              <div class="line"></div>
-              <div class="diamond"></div>
-              <div class="line"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section-page">
-          <div class="overview-grid">
-            <article class="metal-card" data-tilt>
-              <div class="card-topline">
-                <div class="dot"></div>
-                <span>ARCHIVE - OVERVIEW</span>
-                <div class="line"></div>
-              </div>
-              <h2 class="card-title">アーカイブ</h2>
-              <div class="card-text">このサイトは、私の人生を記録するための個人アーカイブです。
-日々の想い、出来事、好きなもの、大切な人々、未来への願い。
-全部ここに残していきます。</div>
-            </article>
-
-            <article class="metal-card" data-tilt>
-              <div class="card-topline">
-                <div class="dot"></div>
-                <span>SYSTEM STATUS</span>
-                <div class="line"></div>
-              </div>
-
-              <div class="pilot-grid">
-                <div class="pilot-item">
-                  <div class="pilot-label">PILOT STATUS</div>
-                  <div class="pilot-value" id="pilotStatusText">OWNER MODE: STANDBY</div>
-                </div>
-
-                <div class="pilot-item">
-                  <div class="pilot-label">LAST UPDATE</div>
-                  <div class="pilot-value" id="pilotLastUpdate">--</div>
-                </div>
-
-                <div class="pilot-item">
-                  <div class="pilot-label">ARCHIVE LOGS</div>
-                  <div class="pilot-value" id="pilotArchiveLogs">0</div>
-                </div>
-
-                <div class="pilot-item">
-                  <div class="pilot-label">VISUAL FILES</div>
-                  <div class="pilot-value" id="pilotVisualFiles">0</div>
-                </div>
-              </div>
-
-              <div class="pilot-wide">
-                <div class="pilot-label">SYSTEM NOTE</div>
-                <div class="pilot-value" id="pilotSystemNote">MEMORY LINK STABLE</div>
-              </div>
-
-              <div class="pilot-wide">
-                <div class="pilot-label">LATEST LOG</div>
-                <div class="pilot-value" id="pilotLatestLog">NO ENTRY YET</div>
-              </div>
-            </article>
-          </div>
-
-          <div style="height:24px"></div>
-          <div class="overview-grid" id="sectionCards"></div>
-        </section>
-      </section>
-
-      <section class="page" id="page-admin">
-        <div class="section-page">
-          <div class="section-header">
-            <div class="sec-tag"><small>ADMIN</small><b>管理パネル</b></div>
-            <div class="sec-line"></div>
-          </div>
-
-          <div class="admin-login-box">
-            <div class="admin-login-row">
-              <div class="admin-login-fields">
-                <div class="hint">
-                  管理者ログイン後のみ、追加・編集・削除が可能です。<br>
-                  当前版本图片仍然是 URL 输入方式。
-                </div>
-                <input id="adminEmailInput" type="email" placeholder="管理者メールアドレス" autocomplete="username">
-                <input id="adminPasswordInput" type="password" placeholder="管理者パスワード" autocomplete="current-password">
-              </div>
-
-              <div class="admin-login-actions">
-                <button class="btn primary" id="adminLoginBtn">管理者ログイン</button>
-                <button class="btn hidden" id="adminLogoutBtn">ログアウト</button>
-              </div>
-            </div>
-
-            <div class="login-status" id="loginStatus">未登录。管理员功能锁定中。</div>
-          </div>
-
-          <div class="admin-head">
-            <div class="filter-row" id="adminFilters"></div>
-            <button class="btn primary" id="newEntryBtn">+ 新しい記録</button>
-          </div>
-
-          <div class="admin-list" id="adminList"></div>
-        </div>
-      </section>
-
-      <section class="page" id="page-section">
-        <div class="section-page">
-          <div class="section-header">
-            <div class="sec-tag" id="sectionTag"><small>SEC.01</small><b>アーカイブ</b></div>
-            <div class="sec-line"></div>
-          </div>
-
-          <div class="section-shell">
-            <div class="section-tools">
-              <div class="filter-row">
-                <button class="btn" id="backHomeBtn">HOMEへ戻る</button>
-              </div>
-              <div class="filter-row">
-                <button class="btn primary" id="addSectionEntryBtn">+ 記録を追加</button>
-              </div>
-            </div>
-
-            <div class="content-grid">
-              <article class="metal-card" data-tilt>
-                <div class="card-topline">
-                  <div class="dot"></div>
-                  <span id="sectionLineTitle">SECTION OVERVIEW</span>
-                  <div class="line"></div>
-                </div>
-                <h2 class="card-title" id="sectionBigTitle">アーカイブ</h2>
-                <div class="card-text" id="sectionDesc"></div>
-              </article>
-
-              <article class="metal-card" data-tilt>
-                <div class="card-topline">
-                  <div class="dot"></div>
-                  <span>GALLERY</span>
-                  <div class="line"></div>
-                </div>
-                <div class="gallery-grid" id="sectionGallery"></div>
-              </article>
-            </div>
-
-            <article class="metal-card" data-tilt>
-              <div class="card-topline">
-                <div class="dot"></div>
-                <span id="sectionEntryTitle">ENTRY LOGS</span>
-                <div class="line"></div>
-              </div>
-              <div class="entries" id="sectionEntries"></div>
-            </article>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <div class="footer-note">RED / WHITE MECHA MEMORY COCKPIT</div>
-  </div>
-
-  <div class="modal-wrap" id="modalWrap">
-    <div class="modal">
+  <div id="editorModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
       <div class="modal-head">
-        <h3 id="modalTitle">NEW RECORD</h3>
-        <button class="btn" id="closeModal">閉じる</button>
+        <h3 id="editorModalTitle" class="modal-title">新しい記録を追加</h3>
+        <button type="button" class="close-btn" data-close-modal="editorModal">×</button>
       </div>
-      <div class="modal-body">
-        <div class="row-2">
-          <select id="entrySection">
-            <option value="archive">アーカイブ</option>
-            <option value="trajectory">軌跡</option>
-            <option value="important">大切な人</option>
-            <option value="favorite">好きなもの</option>
-            <option value="heart">心の記録</option>
-            <option value="future">未来図</option>
-          </select>
-          <input id="entryDate" type="date" />
+
+      <div class="modal-form">
+        <div class="search-row">
+          <label class="label" for="entryDateInput">Date</label>
+          <input id="entryDateInput" class="input" type="date" />
         </div>
-        <input id="entryTitle" type="text" placeholder="タイトル" />
-        <textarea id="entryContent" rows="8" placeholder="ここに感想、日記、記録を書いてください……"></textarea>
-        <input id="entryImage" type="text" placeholder="画像URL（任意）" />
-        <div class="row-2">
-          <button class="btn primary" id="publishEntryBtn">保存する</button>
-          <button class="btn" id="publishImageOnlyBtn">画像のみ追加</button>
+
+        <div class="search-row">
+          <label class="label" for="entrySectionSelect">Section</label>
+          <select id="entrySectionSelect">
+            <option value="daily">日常 / Daily</option>
+            <option value="important">大切な人 / Important</option>
+            <option value="favorite">好きなもの / Favorite</option>
+            <option value="memory">記憶 / Memory</option>
+            <option value="other">その他 / Other</option>
+          </select>
+        </div>
+
+        <div class="full search-row">
+          <label class="label" for="entryTitleInput">Title</label>
+          <input id="entryTitleInput" class="input" type="text" placeholder="タイトルを入力" />
+        </div>
+
+        <div class="full search-row">
+          <label class="label" for="entryBodyInput">Body</label>
+          <textarea id="entryBodyInput" class="textarea" placeholder="本文を入力"></textarea>
+        </div>
+
+        <div class="full search-row">
+          <label class="label" for="entryImageUrlInput">Image URL</label>
+          <input id="entryImageUrlInput" class="input" type="text" placeholder="https://example.com/image.jpg" />
+        </div>
+
+        <div class="full search-row">
+          <label class="label" for="entryImageFileInput">画像を選ぶ</label>
+          <input id="entryImageFileInput" class="input" type="file" accept="image/*" multiple />
+          <div id="imageDropzone" class="image-dropzone" style="margin-top:10px">
+            ここに画像をドラッグ＆ドロップ、またはコピーした画像を貼り付けできます。
+          </div>
+          <div id="imagePreviewWrap" class="image-preview-wrap"></div>
+        </div>
+
+        <div class="search-row">
+          <label class="label" for="entryVisibilitySelect">Visibility</label>
+          <select id="entryVisibilitySelect">
+            <option value="public">公開 / Public</option>
+            <option value="private">非公開 / Private</option>
+          </select>
+        </div>
+
+        <div class="search-row">
+          <label class="label">&nbsp;</label>
+          <button id="clearImagesBtn" class="btn btn-white" type="button">画像を外す</button>
+        </div>
+
+        <div class="full search-row">
+          <div id="editorStatusText" class="search-summary">新規作成モードです。</div>
+        </div>
+
+        <div class="full search-actions">
+          <button id="saveEntryBtn" class="btn btn-red" type="button">保存する</button>
+          <button type="button" class="btn btn-white" data-close-modal="editorModal">閉じる</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const SUPABASE_URL = "https://hmdqaepikgqlakpinrkc.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_bugTGZcMnSalfAvK5_1plg_GImWHGut";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = "https://grutioyegocdaarxxfji.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 
-    const SECTIONS = {
-      archive: {
-        code: "SEC.01",
-        label: "アーカイブ",
-        line: "ARCHIVE - OVERVIEW",
-        desc: "ここは全体の母艦です。人生の断片、想い、写真、転機、未来への願い──すべての記録がここから分岐していきます。"
-      },
-      trajectory: {
-        code: "SEC.02",
-        label: "軌跡",
-        line: "TRAJECTORY - LIFE STAGES",
-        desc: "歩いてきた道、転機になった日、忘れられない瞬間を残す区画です。"
-      },
-      important: {
-        code: "SEC.03",
-        label: "大切な人",
-        line: "PRECIOUS PEOPLE",
-        desc: "守りたい人、忘れたくない人、心に残る存在を記録する場所です。"
-      },
-      favorite: {
-        code: "SEC.04",
-        label: "好きなもの",
-        line: "FAVORITE THINGS",
-        desc: "好きな作品、物、景色、音楽、言葉──自分を救ってくれるものを残します。"
-      },
-      heart: {
-        code: "SEC.05",
-        label: "心の記録",
-        line: "HEART LOG",
-        desc: "言葉にしにくい感情や、夜にだけ浮かぶ思考を記録する、もっとも内側の区画です。"
-      },
-      future: {
-        code: "SEC.06",
-        label: "未来図",
-        line: "FUTURE MAP",
-        desc: "いつか実現したい未来、叶えたい景色、辿り着きたい場所を描く区画です。"
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
       }
+    });
+
+    const state = {
+      entries: [],
+      filteredEntries: [],
+      currentEntry: null,
+      currentView: "feed",
+      currentSection: "all",
+      currentAdminFilter: "all",
+      editingId: null,
+      authSession: null,
+      writerModeOpen: false,
+      imageFiles: [],
+      realtimeChannel: null,
+      searchKeyword: "",
+      searchDate: ""
     };
 
-    let currentPage = "home";
-    let currentSection = "archive";
-    let entries = [];
-    let audioCtx = null;
-    let doorBusy = false;
-    let isAdminLoggedIn = false;
-    let appInitialized = false;
-    let authListenerBound = false;
+    const SECTION_META = {
+      all: { label: "すべて", badge: "ALL" },
+      daily: { label: "日常", badge: "DAILY" },
+      important: { label: "大切な人", badge: "IMPORTANT" },
+      favorite: { label: "好きなもの", badge: "FAVORITE" },
+      memory: { label: "記憶", badge: "MEMORY" },
+      other: { label: "その他", badge: "OTHER" }
+    };
 
-    const cursor = document.getElementById("cursor");
-    const steamLayer = document.getElementById("steamLayer");
-    const doorOverlay = document.getElementById("doorOverlay");
-    const bootOverlay = document.getElementById("bootOverlay");
-    const bootBar = document.getElementById("bootBar");
-    const bootPercent = document.getElementById("bootPercent");
-    const bootVerify = document.getElementById("bootVerify");
-
-    const modalWrap = document.getElementById("modalWrap");
-    const modalTitle = document.getElementById("modalTitle");
-    const entrySection = document.getElementById("entrySection");
-    const entryDate = document.getElementById("entryDate");
-    const entryTitle = document.getElementById("entryTitle");
-    const entryContent = document.getElementById("entryContent");
-    const entryImage = document.getElementById("entryImage");
-
-    const authStatus = document.getElementById("authStatus");
-    const loginBtn = document.getElementById("loginBtn");
+    const recordGrid = document.getElementById("recordGrid");
+    const sectionFilterBar = document.getElementById("sectionFilterBar");
+    const detailView = document.getElementById("detailView");
+    const feedView = document.getElementById("feedView");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailMeta = document.getElementById("detailMeta");
+    const detailBody = document.getElementById("detailBody");
+    const detailCover = document.getElementById("detailCover");
+    const detailBackBtn = document.getElementById("detailBackBtn");
+    const heroEntryCount = document.getElementById("heroEntryCount");
+    const heroVisibleCount = document.getElementById("heroVisibleCount");
+    const heroLatestDate = document.getElementById("heroLatestDate");
+    const statusLabel = document.getElementById("statusLabel");
+    const metaLoginState = document.getElementById("metaLoginState");
+    const metaSyncState = document.getElementById("metaSyncState");
+    const pilotSignal = document.getElementById("pilotSignal");
+    const adminStateText = document.getElementById("adminStateText");
+    const adminSubText = document.getElementById("adminSubText");
+    const adminList = document.getElementById("adminList");
+    const writerEntryBtn = document.getElementById("writerEntryBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-    const adminLoginBtn = document.getElementById("adminLoginBtn");
-    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const openEditorBtn = document.getElementById("openEditorBtn");
+    const openLoginBtn = document.getElementById("openLoginBtn");
+    const heroOpenRecordsBtn = document.getElementById("heroOpenRecordsBtn");
+    const heroOpenSearchBtn = document.getElementById("heroOpenSearchBtn");
+    const searchKeyword = document.getElementById("searchKeyword");
+    const searchDate = document.getElementById("searchDate");
+    const searchApplyBtn = document.getElementById("searchApplyBtn");
+    const searchResetBtn = document.getElementById("searchResetBtn");
+    const searchSummary = document.getElementById("searchSummary");
+    const loginModal = document.getElementById("loginModal");
+    const editorModal = document.getElementById("editorModal");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
     const adminEmailInput = document.getElementById("adminEmailInput");
     const adminPasswordInput = document.getElementById("adminPasswordInput");
-    const loginStatus = document.getElementById("loginStatus");
-    const newEntryBtn = document.getElementById("newEntryBtn");
-    const addSectionEntryBtn = document.getElementById("addSectionEntryBtn");
+    const loginStatusText = document.getElementById("loginStatusText");
+    const editorModalTitle = document.getElementById("editorModalTitle");
+    const entryDateInput = document.getElementById("entryDateInput");
+    const entrySectionSelect = document.getElementById("entrySectionSelect");
+    const entryTitleInput = document.getElementById("entryTitleInput");
+    const entryBodyInput = document.getElementById("entryBodyInput");
+    const entryImageUrlInput = document.getElementById("entryImageUrlInput");
+    const entryImageFileInput = document.getElementById("entryImageFileInput");
+    const imageDropzone = document.getElementById("imageDropzone");
+    const imagePreviewWrap = document.getElementById("imagePreviewWrap");
+    const clearImagesBtn = document.getElementById("clearImagesBtn");
+    const entryVisibilitySelect = document.getElementById("entryVisibilitySelect");
+    const editorStatusText = document.getElementById("editorStatusText");
+    const saveEntryBtn = document.getElementById("saveEntryBtn");
+    const mainPanelTitle = document.getElementById("mainPanelTitle");
+    const mainPanelSub = document.getElementById("mainPanelSub");
 
-    const pilotStatusText = document.getElementById("pilotStatusText");
-    const pilotLastUpdate = document.getElementById("pilotLastUpdate");
-    const pilotArchiveLogs = document.getElementById("pilotArchiveLogs");
-    const pilotVisualFiles = document.getElementById("pilotVisualFiles");
-    const pilotSystemNote = document.getElementById("pilotSystemNote");
-    const pilotLatestLog = document.getElementById("pilotLatestLog");
+    function normalizeSection(value) {
+      const raw = String(value || "").trim().toLowerCase();
+      if (!raw) return "other";
 
-    function escapeHtml(str=""){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+      const map = {
+        daily: "daily",
+        diary: "daily",
+        日常: "daily",
+        important: "important",
+        "大切な人": "important",
+        "大事な人": "important",
+        "好きな人": "important",
+        "喜欢的人": "important",
+        favorite: "favorite",
+        favourites: "favorite",
+        "好きなもの": "favorite",
+        "喜欢的东西": "favorite",
+        memory: "memory",
+        memories: "memory",
+        記憶: "memory",
+        other: "other",
+        その他: "other"
+      };
+
+      return map[raw] || raw;
     }
 
-    function setLoginStatus(text, type=""){
-      loginStatus.textContent = text;
-      loginStatus.classList.remove("ok","err");
-      if(type) loginStatus.classList.add(type);
+    function sectionLabel(section) {
+      const key = normalizeSection(section);
+      return SECTION_META[key]?.label || SECTION_META.other.label;
     }
 
-    function withTimeout(promise, ms, message){
-      return Promise.race([
-        promise,
-        new Promise((_, reject) => {
-          setTimeout(() => reject(new Error(message)), ms);
-        })
-      ]);
+    function sectionBadge(section) {
+      const key = normalizeSection(section);
+      return SECTION_META[key]?.badge || SECTION_META.other.badge;
     }
 
-    async function getVisiblePostsQuery() {
-      const { data: sessionData } = await supabaseClient.auth.getSession();
-      const hasSession = !!sessionData.session;
-
-      if (hasSession) {
-        return supabaseClient
-          .from("posts")
-          .select("*")
-          .order("entry_date", { ascending: false })
-          .order("created_at", { ascending: false });
-      }
-
-      return supabaseClient
-        .from("posts")
-        .select("*")
-        .eq("is_public", true)
-        .order("entry_date", { ascending: false })
-        .order("created_at", { ascending: false });
-    }
-
-    async function loadEntriesFromSupabase() {
-      try{
-        const query = await getVisiblePostsQuery();
-        const { data, error } = await query;
-
-        if (error) {
-          console.error("读取 posts 失败:", error);
-          alert("读取失败: " + error.message);
-          return [];
-        }
-
-        return (data || []).map(item => ({
-          id: item.id,
-          section: item.section,
-          date: item.entry_date,
-          title: item.title || "",
-          content: item.content || "",
-          image: item.image_url || "",
-          is_public: item.is_public,
-          author_id: item.author_id || "",
-          createdAt: item.created_at ? new Date(item.created_at).getTime() : 0
-        }));
-      }catch(err){
-        console.error("loadEntriesFromSupabase exception:", err);
-        alert("读取发生异常: " + (err?.message || err));
-        return [];
-      }
-    }
-
-    function formatDateText(dateStr){
-      if(!dateStr) return "--";
+    function formatDate(dateStr) {
+      if (!dateStr) return "-";
       const d = new Date(dateStr);
-      if(Number.isNaN(d.getTime())) return dateStr;
-      return d.toISOString().slice(0,10);
+      if (Number.isNaN(d.getTime())) return String(dateStr);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}.${m}.${day}`;
     }
 
-    function updatePilotPanel(){
-      const count = entries.length;
-      const imageCount = entries.filter(x => x.image && x.image.trim()).length;
-      const latest = [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt)[0];
-
-      pilotStatusText.textContent = isAdminLoggedIn ? "OWNER MODE: ACTIVE" : "OWNER MODE: STANDBY";
-      pilotArchiveLogs.textContent = String(count);
-      pilotVisualFiles.textContent = String(imageCount);
-      pilotLastUpdate.textContent = latest ? formatDateText(latest.date) : "--";
-      pilotLatestLog.textContent = latest ? (latest.title || "無題の記録") : "NO ENTRY YET";
-      pilotSystemNote.textContent = count > 0 ? "MEMORY LINK STABLE" : "ARCHIVE WAITING FOR FIRST LOG";
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
-    async function refreshEntries() {
-      entries = await loadEntriesFromSupabase();
-      renderSectionCards();
-      renderAdminList(document.querySelector(".filter-btn.active")?.dataset.filter || "all");
-      if (currentPage === "section") {
-        renderSectionPage(currentSection);
-      }
-      updatePilotPanel();
+    function bodyPreview(text, max = 120) {
+      const plain = String(text || "").replace(/\s+/g, " ").trim();
+      if (!plain) return "本文はまだありません。";
+      return plain.length > max ? plain.slice(0, max) + "…" : plain;
     }
 
-    function renderSectionCards(){
-      const wrap = document.getElementById("sectionCards");
-      wrap.innerHTML = Object.entries(SECTIONS).map(([key, data]) => `
-        <article class="metal-card" data-tilt>
-          <div class="card-topline">
-            <div class="dot"></div>
-            <span>${escapeHtml(data.line)}</span>
-            <div class="line"></div>
-          </div>
-          <h2 class="card-title">${escapeHtml(data.label)}</h2>
-          <div class="card-text">${escapeHtml(data.desc)}</div>
-          <div style="margin-top:18px">
-            <button class="btn primary" onclick="openSection('${key}')">この区画へ入る</button>
-          </div>
-        </article>
-      `).join("");
-      setupTilt();
+    function setSyncState(text) {
+      metaSyncState.textContent = text || "Idle";
     }
 
-    function listBySection(section){
-      return [...entries]
-        .filter(x => x.section === section)
-        .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+    function setLoginStatus(text, mode = "info") {
+      loginStatusText.textContent = text;
+      loginStatusText.style.color = mode === "err" ? "#b40000" : "";
     }
 
-    function renderSectionPage(section){
-      currentSection = section;
-      const meta = SECTIONS[section];
-
-      document.getElementById("sectionTag").innerHTML = `<small>${meta.code}</small><b>${meta.label}</b>`;
-      document.getElementById("sectionLineTitle").textContent = meta.line;
-      document.getElementById("sectionBigTitle").textContent = meta.label;
-      document.getElementById("sectionDesc").textContent = meta.desc;
-      document.getElementById("sectionEntryTitle").textContent = `${meta.label} LOGS`;
-
-      const list = listBySection(section);
-      const entriesEl = document.getElementById("sectionEntries");
-      const galleryEl = document.getElementById("sectionGallery");
-
-      if(!list.length){
-        entriesEl.innerHTML = `<div class="empty">まだ記録がありません。<br>「記録を追加」から書き始められます。</div>`;
-      }else{
-        entriesEl.innerHTML = list.map(item => `
-          <article class="entry">
-            <div class="entry-head">
-              <div>
-                <div class="entry-meta">
-                  <span>${escapeHtml(item.date || "")}</span>
-                  <span class="badge">${escapeHtml(SECTIONS[item.section].label)}</span>
-                  ${item.is_public ? `<span class="badge">PUBLIC</span>` : `<span class="badge">PRIVATE</span>`}
-                </div>
-                <h4>${escapeHtml(item.title || "無題の記録")}</h4>
-              </div>
-            </div>
-            <p>${escapeHtml(item.content || "")}</p>
-            ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}
-            ${isAdminLoggedIn ? `
-            <div class="entry-actions">
-              <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-              <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
-            </div>` : ""}
-          </article>
-        `).join("");
-      }
-
-      const imgList = list.filter(x => x.image && x.image.trim());
-      if(!imgList.length){
-        galleryEl.innerHTML = `<div class="empty" style="grid-column:1/-1">まだ画像がありません。</div>`;
-      }else{
-        galleryEl.innerHTML = imgList.map(item => `
-          <article class="gallery-item">
-            <img src="${escapeHtml(item.image)}" alt="" loading="lazy" onerror="this.style.display='none'">
-            <div class="gallery-info">
-              <h4>${escapeHtml(item.title || "画像記録")}</h4>
-              <small>${escapeHtml(item.date || "")}</small>
-            </div>
-          </article>
-        `).join("");
-      }
-      setupTilt();
-      syncAdminButtons();
+    function setEditorStatus(text, mode = "info") {
+      editorStatusText.textContent = text;
+      editorStatusText.style.color = mode === "err" ? "#b40000" : "";
     }
 
-    function renderAdminFilters(){
-      const wrap = document.getElementById("adminFilters");
-      wrap.innerHTML = `
-        <button class="filter-btn active" data-filter="all">すべて</button>
-        ${Object.entries(SECTIONS).map(([key,val]) =>
-          `<button class="filter-btn" data-filter="${key}">${escapeHtml(val.label)}</button>`
-        ).join("")}
+    function openModal(el) {
+      el.classList.add("active");
+      el.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(el) {
+      el.classList.remove("active");
+      el.setAttribute("aria-hidden", "true");
+    }
+
+    function closeAllModals() {
+      closeModal(loginModal);
+      closeModal(editorModal);
+    }
+
+    function updateViewButtons() {
+      document.querySelectorAll(".switch-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === state.currentView);
+      });
+    }
+
+    function showFeedView() {
+      state.currentView = "feed";
+      feedView.classList.remove("hidden");
+      detailView.classList.remove("active");
+      detailView.style.display = "none";
+      feedView.style.display = "";
+      mainPanelTitle.textContent = "記録フィード";
+      mainPanelSub.textContent = "公開されている記録を一覧表示します。カードをクリックすると詳細が開きます。";
+      updateViewButtons();
+    }
+
+    function showDetailView(entry) {
+      state.currentView = "detail";
+      state.currentEntry = entry;
+      feedView.style.display = "none";
+      detailView.style.display = "block";
+      detailView.classList.add("active");
+      updateViewButtons();
+
+      detailTitle.textContent = entry.title || "タイトルなし";
+      detailBody.textContent = entry.body || "";
+      detailMeta.innerHTML = `
+        <span class="record-chip">${sectionLabel(entry.section)}</span>
+        <span class="record-chip">${formatDate(entry.entry_date || entry.created_at)}</span>
+        <span class="record-chip">${entry.is_public ? "PUBLIC" : "PRIVATE"}</span>
       `;
 
-      wrap.querySelectorAll(".filter-btn").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          wrap.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-          btn.classList.add("active");
-          renderAdminList(btn.dataset.filter);
+      const images = getEntryImages(entry);
+      if (images.length > 0) {
+        detailCover.src = images[0];
+        detailCover.classList.remove("hidden");
+      } else {
+        detailCover.src = "";
+        detailCover.classList.add("hidden");
+      }
+
+      mainPanelTitle.textContent = "記録詳細";
+      mainPanelSub.textContent = "画像のあとに本文を表示しています。";
+    }
+
+    function getEntryImages(entry) {
+      if (!entry) return [];
+      if (Array.isArray(entry.image_urls)) {
+        return entry.image_urls.filter(Boolean);
+      }
+      if (typeof entry.image_urls === "string") {
+        try {
+          const parsed = JSON.parse(entry.image_urls);
+          if (Array.isArray(parsed)) return parsed.filter(Boolean);
+        } catch (_) {}
+      }
+      if (entry.image_url) return [entry.image_url];
+      return [];
+    }
+
+    function renderSectionFilters() {
+      const sections = ["all", "daily", "important", "favorite", "memory", "other"];
+      sectionFilterBar.innerHTML = sections.map(section => `
+        <button type="button" class="filter-btn ${state.currentSection === section ? "active" : ""}" data-section="${section}">
+          ${SECTION_META[section].label}
+        </button>
+      `).join("");
+
+      sectionFilterBar.querySelectorAll("[data-section]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.currentSection = btn.dataset.section;
+          renderSectionFilters();
+          applySearchAndRender();
         });
       });
     }
 
-    function renderAdminList(filter="all"){
-      const list = [...entries]
-        .filter(x => filter === "all" ? true : x.section === filter)
-        .sort((a,b)=> new Date(b.date) - new Date(a.date) || b.createdAt - a.createdAt);
+    function filterEntries(entries) {
+      const keyword = state.searchKeyword.trim().toLowerCase();
+      const date = state.searchDate;
+      return entries.filter(entry => {
+        const sec = normalizeSection(entry.section);
+        if (state.currentSection !== "all" && sec !== state.currentSection) return false;
 
-      const el = document.getElementById("adminList");
-      if(!list.length){
-        el.innerHTML = `<div class="empty">まだ記録がありません。</div>`;
-        return;
-      }
+        if (keyword) {
+          const pool = [
+            entry.title,
+            entry.body,
+            entry.section,
+            sectionLabel(entry.section),
+            entry.image_url,
+            ...(Array.isArray(entry.image_urls) ? entry.image_urls : [])
+          ].join(" ").toLowerCase();
 
-      el.innerHTML = list.map(item => `
-        <article class="admin-item">
-          <div class="admin-main">
-            <div class="entry-meta">
-              <span>${escapeHtml(item.date || "")}</span>
-              <span class="badge">${escapeHtml(SECTIONS[item.section].label)}</span>
-              ${item.is_public ? `<span class="badge">PUBLIC</span>` : `<span class="badge">PRIVATE</span>`}
-            </div>
-            <h4>${escapeHtml(item.title || "無題の記録")}</h4>
-          </div>
-          <div class="admin-actions">
-            ${isAdminLoggedIn ? `
-            <button class="mini-btn" onclick="openEdit('${item.id}')">編集</button>
-            <button class="mini-btn danger" onclick="removeEntry('${item.id}')">削除</button>
-            ` : `<span class="hint">ログイン後に編集可能</span>`}
-          </div>
-        </article>
-      `).join("");
-    }
+          if (!pool.includes(keyword)) return false;
+        }
 
-    function showPage(name){
-      currentPage = name;
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      const targetPage = document.getElementById(`page-${name}`);
-      if (targetPage) {
-        targetPage.classList.add("active");
-      } else {
-        document.getElementById("page-home").classList.add("active");
-        currentPage = "home";
-      }
+        if (date) {
+          const entryDate = (entry.entry_date || entry.created_at || "").slice(0, 10);
+          if (entryDate !== date) return false;
+        }
 
-      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.page === currentPage);
+        return true;
       });
     }
 
-    async function switchPage(name){
-      await triggerDoorTransition();
-      showPage(name);
-      window.scrollTo({top:0, behavior:"smooth"});
-      syncAdminButtons();
-    }
-
-    async function openSection(section){
-      renderSectionPage(section);
-      await switchPage("section");
-    }
-
-    function openModal(section="archive", item=null){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
-        return;
-      }
-      modalWrap.classList.add("show");
-      modalWrap.dataset.editId = item?.id || "";
-      modalTitle.textContent = item ? "EDIT RECORD" : "NEW RECORD";
-      entrySection.value = item?.section || section;
-      entryDate.value = item?.date || new Date().toISOString().slice(0,10);
-      entryTitle.value = item?.title || "";
-      entryContent.value = item?.content || "";
-      entryImage.value = item?.image || "";
-    }
-
-    function closeModal(){
-      modalWrap.classList.remove("show");
-      modalWrap.dataset.editId = "";
-    }
-
-    async function publishEntry(imageOnly = false){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
+    function renderRecordGrid() {
+      if (!state.filteredEntries.length) {
+        recordGrid.innerHTML = `
+          <div class="empty-state">
+            条件に一致する記録がありません。キーワードや日付、セクションを変更してもう一度探してください。
+          </div>
+        `;
         return;
       }
 
-      const editId = modalWrap.dataset.editId;
-      const section = entrySection.value;
-      const date = entryDate.value || new Date().toISOString().slice(0,10);
-      const title = entryTitle.value.trim();
-      const content = entryContent.value.trim();
-      const image = entryImage.value.trim();
+      recordGrid.innerHTML = state.filteredEntries.map(entry => {
+        const images = getEntryImages(entry);
+        const firstImage = images[0] || "";
+        return `
+          <article class="record-card" data-entry-id="${entry.id}">
+            <div class="record-thumb">
+              ${firstImage ? `<img src="${escapeHtml(firstImage)}" alt="${escapeHtml(entry.title || "record image")}" loading="lazy">` : ""}
+              <div class="thumb-badge">${sectionBadge(entry.section)}</div>
+            </div>
+            <div class="record-body">
+              <h4 class="record-title">${escapeHtml(entry.title || "タイトルなし")}</h4>
+              <div class="record-meta">
+                <span class="record-chip">${escapeHtml(sectionLabel(entry.section))}</span>
+                <span class="record-chip">${escapeHtml(formatDate(entry.entry_date || entry.created_at))}</span>
+                <span class="record-chip">${entry.is_public ? "PUBLIC" : "PRIVATE"}</span>
+              </div>
+              <p class="record-desc">${escapeHtml(bodyPreview(entry.body, 140))}</p>
+              <div class="record-footer">
+                <span>${images.length > 0 ? `${images.length} IMAGE` : "NO IMAGE"}</span>
+                <span class="record-arrow">OPEN</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
 
-      if(imageOnly && !image){
-        alert("画像URLを入力してください。");
+      recordGrid.querySelectorAll(".record-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const entry = state.filteredEntries.find(item => String(item.id) === String(card.dataset.entryId));
+          if (entry) showDetailView(entry);
+        });
+      });
+    }
+
+    function renderAdminList(filter = state.currentAdminFilter) {
+      state.currentAdminFilter = filter;
+      document.querySelectorAll(".filter-btn[data-filter]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filter);
+      });
+
+      let list = [...state.entries];
+      if (filter === "public") list = list.filter(item => item.is_public);
+      if (filter === "private") list = list.filter(item => !item.is_public);
+
+      if (!list.length) {
+        adminList.innerHTML = `<div class="empty-state" style="grid-column:auto">該当する記録はありません。</div>`;
         return;
       }
 
-      if(!imageOnly && !title && !content && !image){
-        alert("タイトル・内容・画像のうち、少なくとも一つを入力してください。");
-        return;
-      }
+      adminList.innerHTML = list.map(entry => `
+        <div class="admin-item">
+          <h4>${escapeHtml(entry.title || "タイトルなし")}</h4>
+          <small>${escapeHtml(sectionLabel(entry.section))} / ${escapeHtml(formatDate(entry.entry_date || entry.created_at))} / ${entry.is_public ? "PUBLIC" : "PRIVATE"}</small>
+          <small>${escapeHtml(bodyPreview(entry.body, 80))}</small>
+          <div class="admin-item-actions">
+            <button type="button" class="tiny-btn edit" data-action="edit" data-id="${entry.id}">編集</button>
+            <button type="button" class="tiny-btn publish" data-action="toggle" data-id="${entry.id}">
+              ${entry.is_public ? "非公開化" : "公開"}
+            </button>
+            <button type="button" class="tiny-btn delete" data-action="delete" data-id="${entry.id}">削除</button>
+          </div>
+        </div>
+      `).join("");
 
-      try{
-        const { data: sessionData } = await supabaseClient.auth.getSession();
-        const user = sessionData.session?.user;
-
-        if (!user) {
-          alert("当前没有登录管理员账号");
-          return;
+      adminList.querySelectorAll("[data-action]").forEach(btn => {
+        const id = btn.dataset.id;
+        if (btn.dataset.action === "edit") {
+          btn.addEventListener("click", () => openEditorById(id));
+        } else if (btn.dataset.action === "toggle") {
+          btn.addEventListener("click", () => toggleVisibility(id));
+        } else if (btn.dataset.action === "delete") {
+          btn.addEventListener("click", () => deleteEntry(id));
         }
+      });
+    }
 
-        if(editId){
-          const { error } = await supabaseClient
-            .from("posts")
-            .update({
-              section,
-              entry_date: date,
-              title: title || (imageOnly ? "画像記録" : "無題の記録"),
-              content,
-              image_url: image,
-              author_id: user.id
-            })
-            .eq("id", editId);
+    function updateHeroStats() {
+      heroEntryCount.textContent = String(state.entries.length);
+      heroVisibleCount.textContent = String(state.filteredEntries.length);
+      const latest = state.entries[0];
+      heroLatestDate.textContent = latest ? formatDate(latest.entry_date || latest.created_at) : "-";
+    }
 
-          if (error) {
-            console.error(error);
-            alert("更新失败: " + error.message);
-            return;
+    function updateSearchSummary() {
+      const parts = [];
+      if (state.searchKeyword) parts.push(`キーワード: ${state.searchKeyword}`);
+      if (state.searchDate) parts.push(`日付: ${state.searchDate}`);
+      if (state.currentSection !== "all") parts.push(`セクション: ${sectionLabel(state.currentSection)}`);
+
+      if (!parts.length) {
+        searchSummary.textContent = `フィルターなしで全体を表示しています。${state.filteredEntries.length} 件を表示中。`;
+      } else {
+        searchSummary.textContent = `${parts.join(" / ")} / ${state.filteredEntries.length} 件ヒット`;
+      }
+    }
+
+    function applySearchAndRender() {
+      state.filteredEntries = filterEntries(state.entries);
+      renderRecordGrid();
+      updateHeroStats();
+      updateSearchSummary();
+      renderAdminList();
+    }
+
+    async function loadEntriesFromSupabase() {
+      setSyncState("Loading");
+      const hasSession = !!state.authSession;
+
+      let query = supabaseClient
+        .from("posts")
+        .select("*")
+        .order("entry_date", { ascending: false })
+        .order("created_at", { ascending: false });
+
+      if (!hasSession) {
+        query = query.eq("is_public", true);
+      }
+
+      const { data, error } = await query;
+      if (error) {
+        console.error("読み込み失敗:", error);
+        setSyncState("Error");
+        return [];
+      }
+
+      setSyncState("Synced");
+      return (data || []).map(item => ({
+        ...item,
+        section: normalizeSection(item.section)
+      }));
+    }
+
+    function updateAuthUI(session = state.authSession) {
+      state.authSession = session || null;
+      const loggedIn = !!state.authSession;
+
+      statusLabel.textContent = loggedIn ? "WRITER MODE" : "GUEST MODE";
+      metaLoginState.textContent = loggedIn ? "Writer" : "Guest";
+      pilotSignal.textContent = loggedIn ? "SIGNAL LINKED" : "SIGNAL OPEN";
+      adminStateText.textContent = loggedIn ? "現在は記録編集モードです。" : "現在は閲覧モードです。";
+      adminSubText.textContent = loggedIn
+        ? "新しい記録の追加、編集、公開設定の変更ができます。"
+        : "記録を編集するにはログインが必要です。";
+
+      logoutBtn.classList.toggle("hidden", !loggedIn);
+      openLoginBtn.classList.toggle("hidden", loggedIn);
+    }
+
+    function resetEditorForm() {
+      state.editingId = null;
+      state.imageFiles = [];
+      editorModalTitle.textContent = "新しい記録を追加";
+      entryDateInput.value = new Date().toISOString().slice(0, 10);
+      entrySectionSelect.value = "daily";
+      entryTitleInput.value = "";
+      entryBodyInput.value = "";
+      entryImageUrlInput.value = "";
+      entryVisibilitySelect.value = "public";
+      imagePreviewWrap.innerHTML = "";
+      entryImageFileInput.value = "";
+      setEditorStatus("新規作成モードです。");
+    }
+
+    function renderImagePreviews() {
+      const urlValue = entryImageUrlInput.value.trim();
+      const previews = [];
+
+      if (urlValue) {
+        previews.push({
+          type: "url",
+          src: urlValue
+        });
+      }
+
+      state.imageFiles.forEach((item, idx) => {
+        previews.push({
+          type: "file",
+          src: item.preview,
+          index: idx
+        });
+      });
+
+      if (!previews.length) {
+        imagePreviewWrap.innerHTML = "";
+        return;
+      }
+
+      imagePreviewWrap.innerHTML = previews.map(item => `
+        <div class="image-preview-item">
+          <img src="${escapeHtml(item.src)}" alt="preview">
+          ${item.type === "file"
+            ? `<button type="button" class="image-preview-remove" data-remove-image="${item.index}">×</button>`
+            : `<button type="button" class="image-preview-remove" data-remove-url="1">×</button>`
           }
+        </div>
+      `).join("");
+
+      imagePreviewWrap.querySelectorAll("[data-remove-image]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const index = Number(btn.dataset.removeImage);
+          if (!Number.isNaN(index)) {
+            const removed = state.imageFiles[index];
+            if (removed?.preview?.startsWith("blob:")) URL.revokeObjectURL(removed.preview);
+            state.imageFiles.splice(index, 1);
+            renderImagePreviews();
+          }
+        });
+      });
+
+      imagePreviewWrap.querySelectorAll("[data-remove-url]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          entryImageUrlInput.value = "";
+          renderImagePreviews();
+        });
+      });
+    }
+
+    async function fileToDataUrl(file, maxSize = 1600, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > maxSize || height > maxSize) {
+              const ratio = Math.min(maxSize / width, maxSize / height);
+              width = Math.round(width * ratio);
+              height = Math.round(height * ratio);
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const out = canvas.toDataURL("image/jpeg", quality);
+            resolve(out);
+          };
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function collectEditorImages() {
+      const images = [];
+      const urlValue = entryImageUrlInput.value.trim();
+      if (urlValue) images.push(urlValue);
+
+      for (const item of state.imageFiles) {
+        if (item.dataUrl) {
+          images.push(item.dataUrl);
         } else {
-          const { error } = await supabaseClient
-            .from("posts")
-            .insert({
-              section,
-              entry_date: date,
-              title: title || (imageOnly ? "画像記録" : "無題の記録"),
-              content,
-              image_url: image,
-              is_public: true,
-              author_id: user.id
-            });
-
-          if (error) {
-            console.error(error);
-            alert("保存失败: " + error.message);
-            return;
-          }
+          const dataUrl = await fileToDataUrl(item.file);
+          item.dataUrl = dataUrl;
+          images.push(dataUrl);
         }
+      }
 
+      return images.filter(Boolean);
+    }
+
+    async function addFilesToState(fileList) {
+      const files = Array.from(fileList || []).filter(file => file && file.type && file.type.startsWith("image/"));
+      if (!files.length) return;
+
+      for (const file of files) {
+        const preview = URL.createObjectURL(file);
+        state.imageFiles.push({ file, preview, dataUrl: null });
+      }
+
+      renderImagePreviews();
+    }
+
+    function openEditor(entry = null) {
+      if (!state.authSession) {
+        openModal(loginModal);
+        setLoginStatus("ログインしてください。");
+        return;
+      }
+
+      if (!entry) {
+        resetEditorForm();
+      } else {
+        state.editingId = entry.id;
+        editorModalTitle.textContent = "記録を編集";
+        entryDateInput.value = (entry.entry_date || entry.created_at || new Date().toISOString()).slice(0, 10);
+        entrySectionSelect.value = normalizeSection(entry.section);
+        entryTitleInput.value = entry.title || "";
+        entryBodyInput.value = entry.body || "";
+        entryImageUrlInput.value = entry.image_url || "";
+        entryVisibilitySelect.value = entry.is_public ? "public" : "private";
+        state.imageFiles.forEach(item => {
+          if (item?.preview?.startsWith("blob:")) URL.revokeObjectURL(item.preview);
+        });
+        state.imageFiles = [];
+        renderImagePreviews();
+        setEditorStatus("編集モードです。");
+      }
+
+      openModal(editorModal);
+    }
+
+    function openEditorById(id) {
+      const entry = state.entries.find(item => String(item.id) === String(id));
+      if (entry) openEditor(entry);
+    }
+
+    async function handleLogin() {
+      const email = adminEmailInput.value.trim();
+      const password = adminPasswordInput.value;
+
+      if (!email || !password) {
+        setLoginStatus("メールアドレスとパスワードを入力してください。", "err");
+        return;
+      }
+
+      loginSubmitBtn.disabled = true;
+      setLoginStatus("ログイン中です…");
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+
+        state.authSession = data?.session || null;
+        updateAuthUI(state.authSession);
+        closeModal(loginModal);
+        setLoginStatus("ログイン成功。");
         await refreshEntries();
-        closeModal();
-        await triggerDoorTransition();
-      }catch(err){
-        console.error("publishEntry exception:", err);
-        alert("保存发生异常: " + (err?.message || err));
+        openEditor();
+      } catch (err) {
+        console.error("login error:", err);
+        setLoginStatus("ログイン失敗: " + (err?.message || err), "err");
+      } finally {
+        loginSubmitBtn.disabled = false;
       }
     }
 
-    async function removeEntry(id){
-      if (!isAdminLoggedIn) {
-        alert("管理者ログインが必要です。");
+    async function handleLogout() {
+      logoutBtn.disabled = true;
+      try {
+        const attempts = [
+          () => supabaseClient.auth.signOut({ scope: "global" }),
+          () => supabaseClient.auth.signOut({ scope: "local" }),
+          () => supabaseClient.auth.signOut()
+        ];
+
+        for (const run of attempts) {
+          try {
+            const result = await run();
+            if (!result?.error) break;
+            const msg = String(result.error.message || "");
+            if (!/session/i.test(msg)) {
+              console.warn("signOut warning:", result.error);
+            }
+          } catch (e) {
+            console.warn("signOut attempt failed:", e);
+          }
+        }
+
+        Object.keys(localStorage).forEach(key => {
+          if (key.includes("supabase") || key.includes("sb-")) {
+            try { localStorage.removeItem(key); } catch (_) {}
+          }
+        });
+
+        state.authSession = null;
+        updateAuthUI(null);
+        closeAllModals();
+        await refreshEntries();
+      } finally {
+        logoutBtn.disabled = false;
+      }
+    }
+
+    async function publishEntry() {
+      if (!state.authSession) {
+        setEditorStatus("保存するにはログインが必要です。", "err");
+        openModal(loginModal);
+        return;
+      }
+
+      const title = entryTitleInput.value.trim();
+      const body = entryBodyInput.value.trim();
+
+      if (!title && !body) {
+        setEditorStatus("タイトルか本文を入力してください。", "err");
+        return;
+      }
+
+      saveEntryBtn.disabled = true;
+      const originalText = saveEntryBtn.textContent;
+      saveEntryBtn.textContent = "保存中...";
+      setEditorStatus("保存しています…");
+
+      try {
+        let session = state.authSession;
+        if (!session) {
+          const { data: sessionData } = await supabaseClient.auth.getSession();
+          session = sessionData?.session || null;
+          state.authSession = session;
+        }
+
+        if (!session) {
+          const { data: userData } = await supabaseClient.auth.getUser();
+          if (userData?.user) {
+            session = { user: userData.user };
+            state.authSession = session;
+          }
+        }
+
+        if (!session?.user?.id) {
+          throw new Error("ログイン状態を確認できませんでした。");
+        }
+
+        const images = await collectEditorImages();
+        const payload = {
+          user_id: session.user.id,
+          title,
+          body,
+          section: normalizeSection(entrySectionSelect.value),
+          entry_date: entryDateInput.value || new Date().toISOString().slice(0, 10),
+          image_url: images[0] || null,
+          image_urls: images.length ? images : null,
+          is_public: entryVisibilitySelect.value === "public",
+          updated_at: new Date().toISOString()
+        };
+
+        let result;
+        if (state.editingId) {
+          result = await supabaseClient
+            .from("posts")
+            .update(payload)
+            .eq("id", state.editingId)
+            .eq("user_id", session.user.id)
+            .select()
+            .single();
+        } else {
+          payload.created_at = new Date().toISOString();
+          result = await supabaseClient
+            .from("posts")
+            .insert(payload)
+            .select()
+            .single();
+        }
+
+        if (result.error) throw result.error;
+
+        setEditorStatus("保存しました。");
+        closeModal(editorModal);
+        resetEditorForm();
+        refreshEntries().catch(err => console.error("refresh after save failed:", err));
+      } catch (err) {
+        console.error("publish error:", err);
+        setEditorStatus("保存失敗: " + (err?.message || err), "err");
+      } finally {
+        saveEntryBtn.disabled = false;
+        saveEntryBtn.textContent = originalText;
+      }
+    }
+
+    async function toggleVisibility(id) {
+      if (!state.authSession?.user?.id) {
+        openModal(loginModal);
+        return;
+      }
+
+      const entry = state.entries.find(item => String(item.id) === String(id));
+      if (!entry) return;
+
+      const { error } = await supabaseClient
+        .from("posts")
+        .update({
+          is_public: !entry.is_public,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", id)
+        .eq("user_id", state.authSession.user.id);
+
+      if (error) {
+        console.error("toggle visibility failed:", error);
+        return;
+      }
+
+      await refreshEntries();
+    }
+
+    async function deleteEntry(id) {
+      if (!state.authSession?.user?.id) {
+        openModal(loginModal);
         return;
       }
 
       const ok = confirm("この記録を削除しますか？");
       if (!ok) return;
 
-      try{
-        const { error } = await supabaseClient
-          .from("posts")
-          .delete()
-          .eq("id", id);
+      const { error } = await supabaseClient
+        .from("posts")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", state.authSession.user.id);
 
-        if (error) {
-          console.error(error);
-          alert("削除失败: " + error.message);
-          return;
-        }
-
-        await refreshEntries();
-        if(currentPage === "section"){
-          renderSectionPage(currentSection);
-        }
-        spawnSteam(8);
-        playClickSound();
-      }catch(err){
-        console.error("removeEntry exception:", err);
-        alert("删除发生异常: " + (err?.message || err));
-      }
-    }
-
-    function openEdit(id){
-      const item = entries.find(x => String(x.id) === String(id));
-      if(item) openModal(item.section, item);
-    }
-
-    window.openSection = openSection;
-    window.openEdit = openEdit;
-    window.removeEntry = removeEntry;
-
-    async function updateAuthUI() {
-      try{
-        const { data, error } = await supabaseClient.auth.getSession();
-        if (error) {
-          console.error("getSession error:", error);
-        }
-
-        isAdminLoggedIn = !!data?.session;
-        authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
-        loginBtn.classList.toggle("hidden", isAdminLoggedIn);
-        logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-        adminLoginBtn.classList.toggle("hidden", isAdminLoggedIn);
-        adminLogoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
-
-        adminEmailInput.disabled = isAdminLoggedIn;
-        adminPasswordInput.disabled = isAdminLoggedIn;
-
-        if(isAdminLoggedIn){
-          setLoginStatus("管理员已登录，编辑权限已开启。", "ok");
-        }else{
-          setLoginStatus("未登录。管理员功能锁定中。", "");
-        }
-
-        updatePilotPanel();
-        syncAdminButtons();
-      }catch(err){
-        console.error("updateAuthUI exception:", err);
-        setLoginStatus("登录状态读取失败：" + (err?.message || err), "err");
-      }
-    }
-
-    function syncAdminButtons() {
-      newEntryBtn.disabled = !isAdminLoggedIn;
-      addSectionEntryBtn.disabled = !isAdminLoggedIn;
-    }
-
-    async function adminLoginFlow() {
-      const email = adminEmailInput.value.trim();
-      const password = adminPasswordInput.value;
-
-      if (!email || !password) {
-        setLoginStatus("请输入管理员邮箱和密码。", "err");
-        alert("请输入管理员邮箱和密码");
+      if (error) {
+        console.error("delete failed:", error);
         return;
       }
 
-      adminLoginBtn.disabled = true;
-      setLoginStatus("正在登录，请稍等……");
-
-      try {
-        const result = await withTimeout(
-          supabaseClient.auth.signInWithPassword({ email, password }),
-          12000,
-          "登录请求超时，请检查网络、Supabase 配置，或稍后重试。"
-        );
-
-        if (result.error) {
-          console.error("login error:", result.error);
-          setLoginStatus("登录失败：" + result.error.message, "err");
-          alert("登录失败: " + result.error.message);
-          return;
-        }
-
-        const sessionData = result.data?.session;
-        const userData = result.data?.user;
-
-        if (!sessionData && !userData) {
-          setLoginStatus("登录失败：没有拿到登录会话。", "err");
-          alert("登录失败：没有拿到登录会话。");
-          return;
-        }
-
-        await updateAuthUI();
-      
-        if (!verifySession.session) {
-          setLoginStatus("登录后 session 未建立。", "err");
-          alert("登录后 session 未建立。");
-          return;
-        }
-
-        adminPasswordInput.value = "";
-        setLoginStatus("管理者ログイン成功", "ok");
-        alert("管理者ログイン成功");
-      } catch (err) {
-        console.error("adminLoginFlow exception:", err);
-        setLoginStatus("登录发生异常：" + (err?.message || err), "err");
-        alert("登录发生异常: " + (err?.message || err));
-      } finally {
-        adminLoginBtn.disabled = false;
-      }
+      await refreshEntries();
     }
 
-    async function adminLogoutFlow() {
-      adminLogoutBtn.disabled = true;
-      setLoginStatus("正在退出登录……");
-
-      try {
-        const { error } = await withTimeout(
-          supabaseClient.auth.signOut(),
-          10000,
-          "登出请求超时，请稍后重试。"
-        );
-
-        if (error) {
-          console.error(error);
-          setLoginStatus("ログアウト失敗：" + error.message, "err");
-          alert("ログアウト失敗: " + error.message);
-          return;
-        }
-
-        setLoginStatus("ログアウトしました");
-        alert("ログアウトしました");
-        await updateAuthUI();
-        await refreshEntries();
-      } catch (err) {
-        console.error("adminLogoutFlow exception:", err);
-        setLoginStatus("登出发生异常：" + (err?.message || err), "err");
-        alert("登出发生异常: " + (err?.message || err));
-      } finally {
-        adminLogoutBtn.disabled = false;
-      }
-    }
-
-    function ensureAudio(){
-      if(!audioCtx){
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if(audioCtx.state === "suspended"){
-        audioCtx.resume();
-      }
-    }
-
-    function playClickSound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(260, t);
-      osc.frequency.exponentialRampToValueAtTime(130, t + 0.06);
-
-      filter.type = "lowpass";
-      filter.frequency.value = 1600;
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.04, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + 0.09);
-    }
-
-    function playDoorSound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(110, t);
-      osc.frequency.exponentialRampToValueAtTime(48, t + 0.28);
-
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(620, t);
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.12, t + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(t);
-      osc.stop(t + 0.32);
-    }
-
-    function playVerifySound(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-
-      const osc1 = audioCtx.createOscillator();
-      const gain1 = audioCtx.createGain();
-      osc1.type = "triangle";
-      osc1.frequency.setValueAtTime(520, t);
-      osc1.frequency.exponentialRampToValueAtTime(780, t + 0.12);
-      gain1.gain.setValueAtTime(0.0001, t);
-      gain1.gain.exponentialRampToValueAtTime(0.028, t + 0.02);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-      osc1.connect(gain1);
-      gain1.connect(audioCtx.destination);
-      osc1.start(t);
-      osc1.stop(t + 0.16);
-
-      const osc2 = audioCtx.createOscillator();
-      const gain2 = audioCtx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(860, t + 0.08);
-      osc2.frequency.exponentialRampToValueAtTime(1120, t + 0.18);
-      gain2.gain.setValueAtTime(0.0001, t + 0.08);
-      gain2.gain.exponentialRampToValueAtTime(0.018, t + 0.10);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, t + 0.20);
-      osc2.connect(gain2);
-      gain2.connect(audioCtx.destination);
-      osc2.start(t + 0.08);
-      osc2.stop(t + 0.20);
-    }
-
-    function playBootHum(){
-      ensureAudio();
-      const t = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(80, t);
-      osc.frequency.exponentialRampToValueAtTime(58, t + 0.5);
-
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(520, t);
-
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.02, t + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + 0.56);
-    }
-
-    function playSteamSound(){
-      ensureAudio();
-      const duration = 0.68;
-      const bufferSize = audioCtx.sampleRate * duration;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      for(let i=0;i<bufferSize;i++){
-        data[i] = (Math.random()*2-1) * (1 - i / bufferSize);
-      }
-
-      const source = audioCtx.createBufferSource();
-      const filter = audioCtx.createBiquadFilter();
-      const gain = audioCtx.createGain();
-
-      source.buffer = buffer;
-      filter.type = "bandpass";
-      filter.frequency.value = 1000;
-
-      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.03, audioCtx.currentTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-
-      source.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      source.start();
-      source.stop(audioCtx.currentTime + duration);
-    }
-
-    function createRipple(x,y){
-      const ripple = document.createElement("div");
-      ripple.className = "click-ripple";
-      ripple.style.left = x + "px";
-      ripple.style.top = y + "px";
-      document.body.appendChild(ripple);
-      setTimeout(()=> ripple.remove(), 720);
-    }
-
-    function spawnSteam(count=10){
-      playSteamSound();
-      for(let i=0;i<count;i++){
-        const s = document.createElement("div");
-        s.className = "steam";
-        const size = 180 + Math.random()*100;
-        s.style.width = size + "px";
-        s.style.height = size + "px";
-        s.style.left = Math.random()*100 + "vw";
-        s.style.animationDuration = (1.3 + Math.random()*0.6) + "s";
-        s.style.opacity = (0.22 + Math.random()*0.28).toFixed(2);
-        steamLayer.appendChild(s);
-        setTimeout(()=> s.remove(), 2100);
-      }
-    }
-
-    function triggerDoorTransition(){
-      if(doorBusy) return Promise.resolve();
-      doorBusy = true;
-
-      return new Promise(resolve=>{
-        doorOverlay.classList.remove("opening", "closing");
-        doorOverlay.classList.add("active", "closing");
-        playDoorSound();
-        spawnSteam(6);
-
-        setTimeout(()=>{
-          doorOverlay.classList.remove("closing");
-          doorOverlay.classList.add("opening");
-          playDoorSound();
-        }, 520);
-
-        setTimeout(()=>{
-          doorOverlay.classList.remove("active","opening","closing");
-          doorBusy = false;
-          resolve();
-        }, 1040);
-      });
-    }
-
-    async function runBootSequence(){
-      let progress = 0;
-      const totalDuration = 1800;
-      const stepTime = 45;
-      const increment = 100 / (totalDuration / stepTime);
-
-      playBootHum();
-
-      await new Promise(resolve=>{
-        const timer = setInterval(()=>{
-          progress += increment + Math.random() * 2.2;
-          if(progress > 100) progress = 100;
-
-          const p = Math.floor(progress);
-          bootBar.style.width = p + "%";
-          bootPercent.textContent = p + "%";
-
-          if(p >= 100){
-            clearInterval(timer);
-            bootBar.style.width = "100%";
-            bootPercent.textContent = "100%";
-            resolve();
-          }
-        }, stepTime);
-      });
-
-      bootVerify.classList.add("show");
-      playVerifySound();
-
-      await new Promise(r => setTimeout(r, 260));
-
-      doorOverlay.classList.remove("opening","closing");
-      doorOverlay.classList.add("active","closing");
-      playDoorSound();
-      spawnSteam(8);
-
-      await new Promise(r => setTimeout(r, 420));
-
-      bootOverlay.classList.add("hidden");
-
-      doorOverlay.classList.remove("closing");
-      doorOverlay.classList.add("opening");
-      playDoorSound();
-
-      await new Promise(r => setTimeout(r, 500));
-
-      doorOverlay.classList.remove("active","opening","closing");
-    }
-
-    async function resetUIToDefault() {
-      currentPage = "home";
-      currentSection = "archive";
-      doorBusy = false;
-
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById("page-home").classList.add("active");
-
-      document.querySelectorAll(".nav button[data-page]").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.page === "home");
-      });
-
-      modalWrap.classList.remove("show");
-      modalWrap.dataset.editId = "";
-
-      doorOverlay.classList.remove("active", "opening", "closing");
-
-      bootOverlay.classList.remove("hidden");
-      bootBar.style.width = "0%";
-      bootPercent.textContent = "0%";
-      bootVerify.classList.remove("show");
-
-      adminPasswordInput.value = "";
-      setLoginStatus("正在初始化页面……");
-    }
-
-    let tiltRAF = null;
-    function setupTilt(){
-      document.querySelectorAll("[data-tilt]").forEach(card=>{
-        if(card.dataset.tiltBound === "1") return;
-        card.dataset.tiltBound = "1";
-
-        card.addEventListener("mousemove", e=>{
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const ry = ((x / rect.width) - 0.5) * 6;
-          const rx = ((y / rect.height) - 0.5) * -6;
-
-          if(!tiltRAF){
-            tiltRAF = requestAnimationFrame(()=>{
-              card.style.transform = `perspective(1500px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-              tiltRAF = null;
-            });
-          }
-        });
-
-        card.addEventListener("mouseleave", ()=>{
-          card.style.transform = "perspective(1500px) rotateX(0deg) rotateY(0deg)";
-        });
-      });
-    }
-
-    async function initApp(forceBoot = true) {
-      if (appInitialized) return;
-      appInitialized = true;
-
-      try {
-        await resetUIToDefault();
-        renderAdminFilters();
-        setupTilt();
-
-        if (forceBoot) {
-          await runBootSequence();
-        } else {
-          bootOverlay.classList.add("hidden");
-        }
-
-        await updateAuthUI();
-        await refreshEntries();
-        syncAdminButtons();
-        showPage("home");
-        window.scrollTo({ top: 0, behavior: "auto" });
-        setLoginStatus(isAdminLoggedIn ? "管理员已登录，编辑权限已开启。" : "未登录。管理员功能锁定中。");
-      } catch (err) {
-        console.error("initApp exception:", err);
-        alert("页面初始化失败: " + (err?.message || err));
-      }
-    }
-
-    function bindStaticEvents(){
-      document.addEventListener("mousemove", e=>{
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      });
-
-      document.addEventListener("mousedown", ()=> cursor.classList.add("active"));
-      document.addEventListener("mouseup", ()=> cursor.classList.remove("active"));
-
-      document.addEventListener("click", e=>{
-        createRipple(e.clientX, e.clientY);
-        if(e.target.closest("button, a, .metal-card, .entry, .gallery-item")) {
-          playClickSound();
-        }
-      });
-
-      document.querySelectorAll(".nav button[data-page]").forEach(btn=>{
-        btn.addEventListener("click", ()=> switchPage(btn.dataset.page));
-      });
-
-      loginBtn.addEventListener("click", async ()=>{
-        await switchPage("admin");
-        setTimeout(() => {
-          adminEmailInput.focus();
-        }, 80);
-        setLoginStatus("请在下方输入管理员邮箱和密码后登录。");
-      });
-
-      logoutBtn.addEventListener("click", adminLogoutFlow);
-      adminLoginBtn.addEventListener("click", adminLoginFlow);
-      adminLogoutBtn.addEventListener("click", adminLogoutFlow);
-
-      newEntryBtn.addEventListener("click", ()=> openModal(currentSection));
-      document.getElementById("backHomeBtn").addEventListener("click", ()=> switchPage("home"));
-      addSectionEntryBtn.addEventListener("click", ()=> openModal(currentSection));
-
-      document.getElementById("closeModal").addEventListener("click", closeModal);
-      modalWrap.addEventListener("click", e=>{
-        if(e.target === modalWrap) closeModal();
-      });
-
-      document.getElementById("publishEntryBtn").addEventListener("click", ()=> publishEntry(false));
-      document.getElementById("publishImageOnlyBtn").addEventListener("click", ()=> publishEntry(true));
-
-      adminPasswordInput.addEventListener("keydown", e=>{
-        if(e.key === "Enter") adminLoginFlow();
-      });
-    }
-
-    function bindAuthListenerOnce(){
-      if(authListenerBound) return;
-      authListenerBound = true;
-
-      supabaseClient.auth.onAuthStateChange(async () => {
+    function startRealtime() {
+      if (state.realtimeChannel) {
         try {
-          await updateAuthUI();
-          await refreshEntries();
-          syncAdminButtons();
-        } catch (err) {
-          console.error("onAuthStateChange exception:", err);
+          supabaseClient.removeChannel(state.realtimeChannel);
+        } catch (_) {}
+        state.realtimeChannel = null;
+      }
+
+      state.realtimeChannel = supabaseClient
+        .channel("posts-live")
+        .on("postgres_changes", {
+          event: "*",
+          schema: "public",
+          table: "posts"
+        }, async () => {
+          try {
+            await refreshEntries();
+          } catch (err) {
+            console.error("realtime refresh failed:", err);
+          }
+        })
+        .subscribe(status => {
+          console.log("Realtime:", status);
+          if (status === "SUBSCRIBED") setSyncState("Realtime");
+        });
+    }
+
+    function stopRealtime() {
+      if (state.realtimeChannel) {
+        try {
+          supabaseClient.removeChannel(state.realtimeChannel);
+        } catch (_) {}
+        state.realtimeChannel = null;
+      }
+    }
+
+    document.querySelectorAll("[data-close-modal]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.closeModal;
+        const el = document.getElementById(id);
+        if (el) closeModal(el);
+      });
+    });
+
+    document.querySelectorAll(".switch-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.view === "feed") {
+          showFeedView();
+        } else if (state.currentEntry) {
+          showDetailView(state.currentEntry);
         }
+      });
+    });
+
+    document.querySelectorAll(".filter-btn[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        renderAdminList(btn.dataset.filter);
+      });
+    });
+
+    writerEntryBtn.addEventListener("click", () => {
+      if (state.authSession) {
+        openEditor();
+      } else {
+        setLoginStatus("ログインしてください。");
+        openModal(loginModal);
+      }
+    });
+
+    openEditorBtn.addEventListener("click", () => {
+      if (state.authSession) {
+        openEditor();
+      } else {
+        setLoginStatus("ログインしてください。");
+        openModal(loginModal);
+      }
+    });
+
+    openLoginBtn.addEventListener("click", () => {
+      setLoginStatus("ログイン情報を入力してください。");
+      openModal(loginModal);
+    });
+
+    logoutBtn.addEventListener("click", handleLogout);
+    loginSubmitBtn.addEventListener("click", handleLogin);
+    saveEntryBtn.addEventListener("click", publishEntry);
+
+    detailBackBtn.addEventListener("click", showFeedView);
+
+    heroOpenRecordsBtn.addEventListener("click", () => {
+      document.querySelector(".section-shell")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      showFeedView();
+    });
+
+    heroOpenSearchBtn.addEventListener("click", () => {
+      searchKeyword.focus();
+      document.querySelector(".search-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    searchApplyBtn.addEventListener("click", () => {
+      state.searchKeyword = searchKeyword.value.trim();
+      state.searchDate = searchDate.value;
+      applySearchAndRender();
+    });
+
+    searchResetBtn.addEventListener("click", () => {
+      searchKeyword.value = "";
+      searchDate.value = "";
+      state.searchKeyword = "";
+      state.searchDate = "";
+      state.currentSection = "all";
+      renderSectionFilters();
+      applySearchAndRender();
+    });
+
+    entryImageUrlInput.addEventListener("input", renderImagePreviews);
+
+    entryImageFileInput.addEventListener("change", async (e) => {
+      await addFilesToState(e.target.files);
+      entryImageFileInput.value = "";
+    });
+
+    clearImagesBtn.addEventListener("click", () => {
+      state.imageFiles.forEach(item => {
+        if (item?.preview?.startsWith("blob:")) URL.revokeObjectURL(item.preview);
+      });
+      state.imageFiles = [];
+      entryImageUrlInput.value = "";
+      renderImagePreviews();
+    });
+
+    ["dragenter", "dragover"].forEach(eventName => {
+      imageDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        imageDropzone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+      imageDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        imageDropzone.classList.remove("dragover");
+      });
+    });
+
+    imageDropzone.addEventListener("drop", async (e) => {
+      const files = e.dataTransfer?.files;
+      await addFilesToState(files);
+    });
+
+    window.addEventListener("paste", async (e) => {
+      if (!editorModal.classList.contains("active")) return;
+      const items = Array.from(e.clipboardData?.items || []);
+      const files = items
+        .filter(item => item.type && item.type.startsWith("image/"))
+        .map(item => item.getAsFile())
+        .filter(Boolean);
+
+      if (files.length) {
+        await addFilesToState(files);
+      }
+    });
+
+    const cursor = document.getElementById("cursor");
+    let cursorEnabled = false;
+
+    function createRipple(x, y) {
+      const ripple = document.createElement("span");
+      ripple.className = "click-ripple";
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      document.body.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 520);
+    }
+
+    function initCursor() {
+      const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+      if (isCoarse) {
+        cursor.style.display = "none";
+        cursorEnabled = false;
+        return;
+      }
+
+      cursorEnabled = true;
+      cursor.style.display = "block";
+
+      window.addEventListener("mousemove", (e) => {
+        if (!cursorEnabled) return;
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      });
+
+      window.addEventListener("mousedown", () => {
+        if (!cursorEnabled) return;
+        cursor.classList.add("active");
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (!cursorEnabled) return;
+        cursor.classList.remove("active");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (!cursorEnabled) return;
+        createRipple(e.clientX, e.clientY);
       });
     }
 
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
+    async function boot() {
+      renderSectionFilters();
+      updateAuthUI(null);
+      resetEditorForm();
+      showFeedView();
+
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        state.authSession = data?.session || null;
+        updateAuthUI(state.authSession);
+      } catch (err) {
+        console.warn("initial session read failed:", err);
+      }
+
+      await refreshEntries();
+      startRealtime();
+
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === "INITIAL_SESSION") return;
+        state.authSession = session || null;
+        updateAuthUI(state.authSession);
+        await refreshEntries();
+      });
+
+      initCursor();
     }
 
-    entryDate.value = new Date().toISOString().slice(0,10);
-    bindStaticEvents();
-    bindAuthListenerOnce();
-
-    window.addEventListener("load", async ()=>{
-      await initApp(true);
+    window.addEventListener("beforeunload", () => {
+      stopRealtime();
+      state.imageFiles.forEach(item => {
+        if (item?.preview?.startsWith("blob:")) URL.revokeObjectURL(item.preview);
+      });
     });
 
-    window.addEventListener("pageshow", async (event) => {
-      if (event.persisted) {
-        appInitialized = false;
-        await initApp(false);
-      }
-    });
+    boot();
   </script>
 </body>
 </html>
