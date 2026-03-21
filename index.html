@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>私の記録 / アーカイブ</title>
+  <!-- BUILD: 2026-03-21-fix2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
@@ -2125,6 +2126,9 @@
       }
     });
 
+    const BUILD_VERSION = "2026-03-21-fix2";
+    console.log("Diary site build:", BUILD_VERSION);
+
     async function getActiveUser(){
       try {
         const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
@@ -2964,7 +2968,8 @@
 
         if (result?.error) {
           console.error(result.error);
-          alert((editId ? "更新失败: " : "保存失败: ") + result.error.message);
+          const detailParts = [result.error.message, result.error.details, result.error.hint].filter(Boolean);
+          alert((editId ? "更新失败: " : "保存失败: ") + detailParts.join(" | "));
           return;
         }
 
@@ -2989,7 +2994,9 @@
             ? "ログイン状態が切れています。もう一度ログインしてください。"
             : /row-level security|policy|permission denied|not allowed/i.test(rawMsg)
               ? "Supabase の権限設定で保存が拒否されています。posts テーブルの RLS / policy を確認してください。"
-              : (rawMsg || "不明なエラー");
+              : /relation .*posts.* does not exist|Could not find the table/i.test(rawMsg)
+                ? "Supabase 側に posts テーブルが見つかりません。テーブル名と schema を確認してください。"
+                : (rawMsg || "不明なエラー");
         alert("保存发生异常: " + msg);
       } finally {
         publishBtn.disabled = prevPublishDisabled;
