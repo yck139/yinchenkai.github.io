@@ -2126,7 +2126,7 @@
       }
     });
 
-    const BUILD_VERSION = "2026-03-21-fix5";
+    const BUILD_VERSION = "2026-03-21-fix6";
     console.log("Diary site build:", BUILD_VERSION);
 
     async function getActiveUser(){
@@ -2907,7 +2907,7 @@
     });
 
     async function publishEntry(imageOnly = false){
-      if (!isAdminLoggedIn) {
+      if (!isAdminLoggedIn && !authSession?.user?.id) {
         alert("管理者ログインが必要です。");
         return;
       }
@@ -2950,17 +2950,17 @@
       }
 
       try{
-        console.log("publishEntry start", { imageOnly, editId, section, date, titleLength: title.length, contentLength: content.length, imageLength: image ? image.length : 0 });
-        const user = await getActiveUser();
-        console.log("publishEntry active user", user?.id || null);
+        const user = authSession?.user || await getActiveUser();
+        console.log("publishEntry start", { imageOnly, editId, section, userId: user?.id || null, date, titleLength: title.length, contentLength: content.length, imageLength: image ? image.length : 0 });
 
         if (!user?.id) {
-          console.warn("publishEntry: no active user, keeping current UI state.");
-          alert("保存する前に、もう一度ログインしてください。ログイン直後なら数秒待って再試行してください。");
+          alert("当前登录状态暂时不可用，请等2秒后再试。页面不会自动退出登录。");
           return;
         }
 
         authSession = { ...(authSession || {}), user };
+        isAdminLoggedIn = true;
+        syncAdminButtons();
 
         const payload = {
           section,
@@ -2968,7 +2968,8 @@
           title: title || (imageOnly ? "画像記録" : "無題の記録"),
           content,
           image_url: image,
-          author_id: user.id
+          author_id: user.id,
+          is_public: true
         };
 
         let result;
@@ -2977,8 +2978,7 @@
             supabaseClient
               .from("posts")
               .update(payload)
-              .eq("id", editId)
-              .select(),
+              .eq("id", editId),
             8000,
             "POST_SAVE_TIMEOUT"
           );
@@ -2986,8 +2986,7 @@
           result = await withTimeout(
             supabaseClient
               .from("posts")
-              .insert({ ...payload, is_public: true })
-              .select(),
+              .insert(payload),
             8000,
             "POST_SAVE_TIMEOUT"
           );
@@ -3004,11 +3003,12 @@
         currentSection = section;
         closeModal();
 
-        refreshEntries().then(() => {
+        try {
+          await refreshEntries();
           if(currentPage === "section") renderSectionPage(section);
-        }).catch(err => {
-          console.error("refreshEntries after save failed:", err);
-        });
+        } catch (refreshErr) {
+          console.error("refreshEntries after save failed:", refreshErr);
+        }
 
         triggerDoorTransition().catch(err => {
           console.error("triggerDoorTransition after save failed:", err);
@@ -3017,13 +3017,13 @@
         console.error("publishEntry exception:", err);
         const rawMsg = String(err?.message || err || "");
         const msg = /POST_SAVE_TIMEOUT/i.test(rawMsg)
-          ? "保存请求超时了。数据库可能没有响应，或者 RLS / policy 把写入卡住了。"
+          ? "保存请求超时了。数据库没有及时返回。"
           : /AUTH_GET_SESSION_TIMEOUT|AUTH_GET_USER_TIMEOUT/i.test(rawMsg)
-            ? "登录状态读取超时，请重新登录后再试。"
+            ? "登录状态读取超时了，但页面不会自动退出登录。请稍等后重试。"
             : /Failed to fetch|fetch/i.test(rawMsg)
               ? "ネットワーク接続または Supabase 側への接続に失敗しました。"
               : /JWT|session|token/i.test(rawMsg)
-                ? "ログイン状態が切れています。もう一度ログインしてください。"
+                ? "保存时会话校验失败了，但页面已保留登录状态。请稍后重试。"
                 : /row-level security|policy|permission denied|not allowed/i.test(rawMsg)
                   ? "Supabase の権限設定で保存が拒否されています。posts テーブルの RLS / policy を確認してください。"
                   : /relation .*posts.* does not exist|Could not find the table/i.test(rawMsg)
@@ -3084,6 +3084,8 @@
     async function updateAuthUI(sessionOverride) {
       try{
         let session = sessionOverride;
+        let usedCachedSession = false;
+
         if (sessionOverride === undefined) {
           try {
             const { data, error } = await withTimeout(
@@ -3097,13 +3099,23 @@
             session = data?.session || null;
           } catch (sessionErr) {
             console.error("updateAuthUI getSession timeout:", sessionErr);
-            session = null;
-            setLoginStatus("登录状态读取超时，已按未登录模式进入。", "err");
+            if (authSession?.user?.id) {
+              session = authSession;
+              usedCachedSession = true;
+            } else {
+              session = null;
+              setLoginStatus("登录状态读取超时，已按未登录模式进入。", "err");
+            }
           }
         }
 
+        if (!session?.user?.id && authSession?.user?.id && !explicitLogoutInProgress) {
+          session = authSession;
+          usedCachedSession = true;
+        }
+
         authSession = session || null;
-        isAdminLoggedIn = !!authSession;
+        isAdminLoggedIn = !!authSession?.user?.id;
         authStatus.textContent = isAdminLoggedIn ? "ADMIN" : "GUEST";
         loginBtn.classList.toggle("hidden", isAdminLoggedIn);
         logoutBtn.classList.toggle("hidden", !isAdminLoggedIn);
@@ -3114,7 +3126,7 @@
         adminPasswordInput.disabled = isAdminLoggedIn;
 
         if(isAdminLoggedIn){
-          setLoginStatus("管理员已登录，编辑权限已开启。", "ok");
+          setLoginStatus(usedCachedSession ? "管理员已登录（缓存会话保持中）。" : "管理员已登录，编辑权限已开启。", "ok");
         }else if (!String(loginStatus.textContent || "").includes("超时")){
           setLoginStatus("未登录。管理员功能锁定中。", "");
         }
@@ -3123,11 +3135,17 @@
         syncAdminButtons();
       }catch(err){
         console.error("updateAuthUI exception:", err);
+        if (authSession?.user?.id && !explicitLogoutInProgress) {
+          isAdminLoggedIn = true;
+          setLoginStatus("登录状态刷新失败，但已保留当前登录状态。", "err");
+          syncAdminButtons();
+          return;
+        }
         setLoginStatus("登录状态读取失败：" + (err?.message || err), "err");
       }
     }
 
-    function syncAdminButtons() {
+function syncAdminButtons() {
       newEntryBtn.disabled = !isAdminLoggedIn;
       addSectionEntryBtn.disabled = !isAdminLoggedIn;
     }
@@ -3181,6 +3199,7 @@
     }
 
     async function adminLogoutFlow() {
+      explicitLogoutInProgress = true;
       adminLogoutBtn.disabled = true;
       logoutBtn.disabled = true;
       setLoginStatus("正在退出登录……");
@@ -3232,6 +3251,7 @@
         setLoginStatus("登出发生异常：" + (err?.message || err), "err");
         alert("登出发生异常: " + (err?.message || err));
       } finally {
+        explicitLogoutInProgress = false;
         adminLogoutBtn.disabled = false;
         logoutBtn.disabled = false;
       }
@@ -3694,7 +3714,12 @@
 
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === "INITIAL_SESSION") return;
+        console.log("onAuthStateChange:", event, session?.user?.id || null);
         try {
+          if (!session?.user?.id && authSession?.user?.id && !explicitLogoutInProgress) {
+            console.warn("Ignoring transient empty auth event, keeping cached session.");
+            return;
+          }
           authSession = session || null;
           await updateAuthUI(authSession);
           await refreshEntries();
